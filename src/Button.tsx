@@ -53,7 +53,7 @@ export const Button = ({ x, y }: ButtonProps) => {
         }
         if (e.button === 0) {
           // Left click
-          if (!game?.isRevealed[x][y]) {
+          if (!game?.isRevealed[x][y] && !game?.isFlagged[x][y]) {
             updateGame((game) => game?.reveal(x, y));
           } else {
             const neighborFlagCount = game

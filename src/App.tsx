@@ -1,5 +1,5 @@
 import { Button } from "./Button";
-import { useGame } from "./GameContext";
+import { updateGame, useGame } from "./GameContext";
 import Timer from "./Timer";
 import Options from "./Options";
 
@@ -10,6 +10,9 @@ function App() {
     <div className="App">
       <h1>Minesweeper</h1>
       <Options />
+      <button onClick={() => updateGame((game) => game?.quickStart())}>
+        Quick Start
+      </button>
       <div className="game-wrapper">
         <div>
           <Timer />
@@ -27,6 +30,15 @@ function App() {
             )}
           </div>
         </div>
+      </div>
+      <div className="footer">
+        <pre>Version: 1.0.1</pre>
+        <pre>
+          Made by MasterGordon -{" "}
+          <a target="_blank" href="https://github.com/MasterGordon/minesweeper">
+            Source Code
+          </a>
+        </pre>
       </div>
     </div>
   );

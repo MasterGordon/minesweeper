@@ -128,4 +128,17 @@ export class Game {
     const mines = neighbors.filter((n) => n).length;
     return mines;
   }
+
+  quickStart() {
+    for (let i = 0; i < this.getWidth(); i++) {
+      for (let j = 0; j < this.getHeight(); j++) {
+        const value = this.getValue(i, j);
+        const isMine = this.isMine(i, j);
+        if (value === 0 && !isMine) {
+          this.reveal(i, j);
+          return;
+        }
+      }
+    }
+  }
 }
