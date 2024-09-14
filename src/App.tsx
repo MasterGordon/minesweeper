@@ -1,30 +1,28 @@
 import { Button } from "./Button";
-import { updateGame, useGame } from "./GameContext";
 import Timer from "./Timer";
 import Options from "./Options";
+import useGameStore from "./GameState";
 
 function App() {
-  const game = useGame();
+  const game = useGameStore();
 
   return (
     <div className="App">
       <h1>Minesweeper</h1>
       <Options />
-      <button onClick={() => updateGame((game) => game?.quickStart())}>
-        Quick Start
-      </button>
+      <button onClick={() => game.quickStart()}>Quick Start</button>
       <div className="game-wrapper">
         <div>
           <Timer />
           <div
             className="game-board"
             style={{
-              gridTemplateColumns: `repeat(${game?.getWidth()}, 1fr)`,
-              gridTemplateRows: `repeat(${game?.getHeight()}, 1fr)`,
+              gridTemplateColumns: `repeat(${game.getWidth()}, 1fr)`,
+              gridTemplateRows: `repeat(${game.getHeight()}, 1fr)`,
             }}
           >
-            {game?.mines[0].map((_, y) =>
-              game?.mines.map((_, x) => (
+            {game.mines[0].map((_, y) =>
+              game.mines.map((_, x) => (
                 <Button key={`${x},${y}`} x={x} y={y} />
               )),
             )}
