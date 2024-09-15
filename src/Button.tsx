@@ -67,14 +67,23 @@ export const Button = ({ x, y }: ButtonProps) => {
               .filter((n) => n).length;
             const value = game.getValue(x, y);
             if (neighborFlagCount === value) {
-              if (!game.isFlagged[x - 1]?.[y]) game.reveal(x - 1, y);
-              if (!game.isFlagged[x - 1]?.[y - 1]) game.reveal(x - 1, y - 1);
-              if (!game.isFlagged[x - 1]?.[y + 1]) game.reveal(x - 1, y + 1);
-              if (!game.isFlagged[x]?.[y - 1]) game.reveal(x, y - 1);
-              if (!game.isFlagged[x]?.[y + 1]) game.reveal(x, y + 1);
-              if (!game.isFlagged[x + 1]?.[y - 1]) game.reveal(x + 1, y - 1);
-              if (!game.isFlagged[x + 1]?.[y]) game.reveal(x + 1, y);
-              if (!game.isFlagged[x + 1]?.[y + 1]) game.reveal(x + 1, y + 1);
+              const currentStage = game.stage;
+              if (!game.isFlagged[x - 1]?.[y] && currentStage == game.stage)
+                game.reveal(x - 1, y);
+              if (!game.isFlagged[x - 1]?.[y - 1] && currentStage == game.stage)
+                game.reveal(x - 1, y - 1);
+              if (!game.isFlagged[x - 1]?.[y + 1] && currentStage == game.stage)
+                game.reveal(x - 1, y + 1);
+              if (!game.isFlagged[x]?.[y - 1] && currentStage == game.stage)
+                game.reveal(x, y - 1);
+              if (!game.isFlagged[x]?.[y + 1] && currentStage == game.stage)
+                game.reveal(x, y + 1);
+              if (!game.isFlagged[x + 1]?.[y - 1] && currentStage == game.stage)
+                game.reveal(x + 1, y - 1);
+              if (!game.isFlagged[x + 1]?.[y] && currentStage == game.stage)
+                game.reveal(x + 1, y);
+              if (!game.isFlagged[x + 1]?.[y + 1] && currentStage == game.stage)
+                game.reveal(x + 1, y + 1);
             }
           }
         } else if (e.button === 2 && !game.isRevealed[x][y]) {

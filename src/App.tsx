@@ -62,7 +62,7 @@ function App() {
       </button>
       {showScores && (
         <div>
-          {scores.map((score) => (
+          {scores.slice(0, 10).map((score) => (
             <p key={score.user}>
               {score.user} - {score.stage}
             </p>
@@ -88,7 +88,7 @@ function App() {
         </div>
       </div>
       <div className="footer">
-        <pre>Version: 1.1.2</pre>
+        <pre>Version: 1.1.3</pre>
         <pre>
           Made by MasterGordon -{" "}
           <a target="_blank" href="https://github.com/MasterGordon/minesweeper">
