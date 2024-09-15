@@ -88,7 +88,7 @@ function App() {
         </div>
       </div>
       <div className="footer">
-        <pre>Version: 1.1.0</pre>
+        <pre>Version: 1.1.2</pre>
         <pre>
           Made by MasterGordon -{" "}
           <a target="_blank" href="https://github.com/MasterGordon/minesweeper">

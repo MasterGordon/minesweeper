@@ -209,6 +209,7 @@ const useGameStore = create<GameState>((set, get) => ({
       minesCount: mines,
       isGameOver: false,
       startTime: Date.now(),
+      stage: 1,
     });
   },
   isMine: (x: number, y: number) => {
@@ -259,7 +260,7 @@ const useGameStore = create<GameState>((set, get) => ({
     );
   },
   triggerPostGame: () => {
-    const { isGameOver, getHasWon, expandBoard } = get();
+    const { getHasWon, expandBoard } = get();
     if (getHasWon()) {
       expandBoard();
     }

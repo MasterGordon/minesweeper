@@ -70,7 +70,13 @@ const Timer = () => {
             : game.isGameOver
               ? "😢"
               : emoteByStage[game.stage] || "😐"}
-          {game.getHasWon() && <Confetti mode="boom" particleCount={301} />}
+          {game.stage > 1 && (
+            <Confetti
+              mode="boom"
+              particleCount={20 * game.stage}
+              key={game.stage}
+            />
+          )}
         </p>
         <p style={{ width: "100px", textAlign: "right" }}>
           {Math.max(
