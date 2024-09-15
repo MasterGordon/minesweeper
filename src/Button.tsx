@@ -31,6 +31,12 @@ export const Button = ({ x, y }: ButtonProps) => {
     content = <Flag fill="red" />;
   }
   if (content === "0") content = "";
+  if (
+    window.location.href.includes("xray") &&
+    game.isMine(x, y) &&
+    !game.isFlagged[x][y]
+  )
+    content = <Bomb />;
 
   return (
     <div
@@ -57,7 +63,7 @@ export const Button = ({ x, y }: ButtonProps) => {
             game.reveal(x, y);
           } else {
             const neighborFlagCount = game
-              ?.getNeighborFlags(x, y)
+              .getNeighborFlags(x, y)
               .filter((n) => n).length;
             const value = game.getValue(x, y);
             if (neighborFlagCount === value) {

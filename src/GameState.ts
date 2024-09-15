@@ -9,6 +9,8 @@ interface GameState {
   startTime: number;
   width: number;
   height: number;
+  stage: number;
+  name: string;
 
   initializeGame: (width: number, height: number, mines: number) => void;
   flag: (x: number, y: number) => void;
@@ -25,6 +27,9 @@ interface GameState {
   getWidth: () => number;
   getHeight: () => number;
   isTouched: () => boolean;
+  triggerPostGame: () => void;
+  expandBoard: () => void;
+  setName: (name: string) => void;
 }
 
 const useGameStore = create<GameState>((set, get) => ({
@@ -36,6 +41,8 @@ const useGameStore = create<GameState>((set, get) => ({
   startTime: Date.now(),
   width: 0,
   height: 0,
+  stage: 1,
+  name: localStorage.getItem("name") || "No Name",
 
   initializeGame: (width, height, mines) => {
     mines = Math.min(mines, width * height);
@@ -78,10 +85,12 @@ const useGameStore = create<GameState>((set, get) => ({
       isFlagged[x][y] = !isFlagged[x][y];
       return { isFlagged };
     });
+    const { triggerPostGame } = get();
+    triggerPostGame();
   },
 
   reveal: (x, y) => {
-    const { mines, isRevealed, isGameOver, getValue } = get();
+    const { mines, isRevealed, isGameOver, getValue, triggerPostGame } = get();
     if (isGameOver || !get().isValid(x, y) || isRevealed[x][y]) return;
 
     const newRevealed = [...isRevealed];
@@ -92,7 +101,10 @@ const useGameStore = create<GameState>((set, get) => ({
     } else {
       set({ isRevealed: newRevealed });
       const value = getValue(x, y);
-      if (value === 0) {
+      const neighborFlagCount = get()
+        .getNeighborFlags(x, y)
+        .filter((n) => n).length;
+      if (value === 0 && neighborFlagCount === 0) {
         const revealNeighbors = (nx: number, ny: number) => {
           if (get().isValid(nx, ny) && !isRevealed[nx]?.[ny]) {
             get().reveal(nx, ny);
@@ -109,6 +121,7 @@ const useGameStore = create<GameState>((set, get) => ({
         revealNeighbors(x + 1, y + 1);
       }
     }
+    triggerPostGame();
   },
 
   getValue: (x, y) => {
@@ -134,6 +147,7 @@ const useGameStore = create<GameState>((set, get) => ({
       for (let j = 0; j < height; j++) {
         if (!isRevealed[i][j] && !isFlagged[i][j]) return false;
         if (mines[i][j] && !isFlagged[i][j]) return false;
+        if (isFlagged[i][j] && !mines[i][j]) return false;
       }
     }
 
@@ -243,6 +257,127 @@ const useGameStore = create<GameState>((set, get) => ({
       isRevealed.flat().filter((flag) => flag).length > 0 ||
       isFlagged.flat().filter((flag) => flag).length > 0
     );
+  },
+  triggerPostGame: () => {
+    const { isGameOver, getHasWon, expandBoard } = get();
+    if (getHasWon()) {
+      expandBoard();
+    }
+  },
+  expandBoard: () => {
+    const { width, height, stage, mines, isFlagged, isRevealed } = get();
+    const dir = stage % 2 === 0 ? "down" : "right";
+    // Expand the board by the current board size 8x8 -> 16x8
+    if (dir === "down") {
+      const newHeight = Math.floor(height * 1.5);
+      const newWidth = width;
+      const newMinesCount = Math.floor(
+        width * height * 0.5 * (0.2 + 0.003 * stage),
+      );
+      // expand mines array
+      const newMines = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      const newIsRevealed = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      const newIsFlagged = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      for (let i = 0; i < newWidth; i++) {
+        for (let j = 0; j < newHeight; j++) {
+          const x = i;
+          const y = j;
+          if (mines[x]?.[y]) {
+            newMines[i][j] = true;
+          }
+          if (isRevealed[x]?.[y]) {
+            newIsRevealed[i][j] = true;
+          }
+          if (isFlagged[x]?.[y]) {
+            newIsFlagged[i][j] = true;
+          }
+        }
+      }
+      // generate new mines
+      let remainingMines = newMinesCount;
+      while (remainingMines > 0) {
+        const x = Math.floor(Math.random() * width);
+        const y = height + Math.floor(Math.random() * (newHeight - height));
+        if (!newMines[x][y]) {
+          newMines[x][y] = true;
+          remainingMines--;
+        }
+      }
+      set({
+        width: newWidth,
+        height: newHeight,
+        mines: newMines,
+        minesCount: newMinesCount,
+        stage: stage + 1,
+        isRevealed: newIsRevealed,
+        isFlagged: newIsFlagged,
+      });
+    }
+    if (dir === "right") {
+      const newWidth = Math.floor(width * 1.5);
+      const newHeight = height;
+      const newMinesCount = Math.floor(
+        width * height * 0.5 * (0.2 + 0.003 * stage),
+      );
+      // expand mines array
+      const newMines = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      const newIsRevealed = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      const newIsFlagged = Array.from({ length: newWidth }, () =>
+        new Array(newHeight).fill(false),
+      );
+      for (let i = 0; i < newWidth; i++) {
+        for (let j = 0; j < newHeight; j++) {
+          const x = i;
+          const y = j;
+          if (mines[x]?.[y]) {
+            newMines[i][j] = true;
+          }
+          if (isRevealed[x]?.[y]) {
+            newIsRevealed[i][j] = true;
+          }
+          if (isFlagged[x]?.[y]) {
+            newIsFlagged[i][j] = true;
+          }
+        }
+      }
+      // generate new mines
+      let remainingMines = newMinesCount;
+      while (remainingMines > 0) {
+        const x = width + Math.floor(Math.random() * (newWidth - width));
+        const y = Math.floor(Math.random() * height);
+        if (!newMines[x][y]) {
+          newMines[x][y] = true;
+          remainingMines--;
+        }
+      }
+      set({
+        width: newWidth,
+        height: newHeight,
+        mines: newMines,
+        minesCount: newMinesCount,
+        stage: stage + 1,
+        isRevealed: newIsRevealed,
+        isFlagged: newIsFlagged,
+      });
+    }
+    const newMinesCount = get()
+      .mines.flat()
+      .filter((m) => m).length;
+    set({ minesCount: newMinesCount });
+  },
+  setName: (name) => {
+    localStorage.setItem("name", name);
+    set({ name });
   },
 }));
 

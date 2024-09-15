@@ -23,6 +23,7 @@
   font-weight: bold;
   font-family: monospace;
   box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
 }
 
 html {
@@ -56,4 +57,9 @@ body {
 
 pre {
   margin: 0;
+}
+
+.stage {
+  font-size: 1rem;
+  font-family: monospace;
 }
