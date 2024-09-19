@@ -29,7 +29,7 @@ function Options() {
       }
       game.resetGame(width, height, mines);
     }
-  }, [width, height, mines]);
+  }, [width, height, mines, game]);
 
   return (
     <div>

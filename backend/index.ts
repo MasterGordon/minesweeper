@@ -10,6 +10,7 @@ const loadScoreboard = async (): Promise<Scoreboard[]> => {
     const scoreboardFile = Bun.file("./scoreboard.json");
     const scoreboard = await scoreboardFile.json();
     return scoreboard;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return [];
   }

@@ -22,6 +22,8 @@ function useMaxToasts(max: number) {
       .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
   }, [toasts, max]);
 }
+
+useGameStore.getState().resetGame(4, 4, 2);
 function App() {
   const game = useGameStore();
   const [scores, setScores] = useState<Score[]>([]);
@@ -34,6 +36,7 @@ function App() {
       playSound();
       loseGame(game.name, game.stage);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.isGameOver]);
 
   useEffect(() => {
@@ -50,10 +53,6 @@ function App() {
         });
     }, 2000);
     return () => clearInterval(i);
-  }, []);
-
-  useEffect(() => {
-    game.resetGame(4, 4, 2);
   }, []);
 
   useMaxToasts(5);

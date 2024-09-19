@@ -8,7 +8,7 @@ const dbs: string[] = [];
 export const getTestDb = () => {
   const randomId = crypto.randomUUID();
   dbs.push(randomId);
-  fs.existsSync("temp_dbs") || fs.mkdirSync("temp_dbs");
+  if (!fs.existsSync("temp_dbs")) fs.mkdirSync("temp_dbs");
   const db = getDb(`temp_dbs/${randomId}.db`);
   migrate(db, { migrationsFolder: "./backend/drizzle" });
   return db;

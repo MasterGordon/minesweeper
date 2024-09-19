@@ -49,7 +49,7 @@ const Timer = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [game.isGameOver, game.getHasWon()]);
+  }, [game, game.isGameOver]);
 
   return (
     <>

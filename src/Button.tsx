@@ -8,6 +8,7 @@ interface ButtonProps {
   y: number;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const colorMap: Record<string, string> = {
   "1": "#049494",
   "2": "#8c9440",
