@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1726774158116,
+      "tag": "0000_nostalgic_next_avengers",
+      "breakpoints": true
+    }
+  ]
+}

@@ -35,6 +35,7 @@ body {
   margin: auto;
   max-width: 1400px;
   padding: 1rem;
+  font-family: monospace;
 }
 
 .timer {
@@ -62,4 +63,54 @@ pre {
 .stage {
   font-size: 1rem;
   font-family: monospace;
+}
+
+input {
+  font-size: 14px;
+  margin: 12px;
+  padding: 6px 12px 6px 12px;
+  border-radius: 0.7em;
+  background: #333;
+  color: #eee;
+  border: 1px solid rgb(251, 21, 242);
+
+}
+
+button {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 12px;
+  padding: 6px 12px 6px 12px;
+  border-radius: 0.7em;
+  background: -webkit-linear-gradient(225deg, rgb(251, 175, 21), rgb(251, 21, 242),             
+  rgb(21, 198, 251)) 0% 0% / 300% 300%;
+  background-size: 200% auto;
+}
+
+button:hover {
+  animation: gradient_move 1s ease infinite;
+}
+
+@keyframes gradient_move {
+  0%{background-position: 0% 92%}
+  50%{background-position: 100% 9%}
+  100%{background-position: 0% 92%}
+}
+
+/* .scores { */
+/*   position: fixed; */
+/*   top: 0; */
+/*   left: 0; */
+/*   padding: 1rem; */
+/* } */
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 1rem;
+}
+
+.scores {
+  text-align: right;
 }

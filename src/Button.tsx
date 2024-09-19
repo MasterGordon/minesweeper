@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import { Bomb, Flag } from "lucide-react";
 import useGameStore from "./GameState";
+import { useLongPress } from "@uidotdev/usehooks";
 
 interface ButtonProps {
   x: number;
@@ -19,75 +20,98 @@ export const colorMap: Record<string, string> = {
 };
 
 export const Button = ({ x, y }: ButtonProps) => {
-  const game = useGameStore();
+  const {
+    isRevealed,
+    isFlagged,
+    isMine,
+    getValue,
+    reveal,
+    flag,
+    getNeighborFlags,
+    isGameOver,
+    getHasWon,
+  } = useGameStore();
 
   let content: ReactNode = "";
 
-  if (game.isRevealed[x][y]) {
-    content = game.isMine(x, y) ? <Bomb /> : game.getValue(x, y).toString();
+  if (isRevealed[x][y]) {
+    content = isMine(x, y) ? <Bomb /> : getValue(x, y).toString();
   }
 
-  if (game.isFlagged[x][y]) {
+  const attrs = useLongPress(
+    () => {
+      if (isRevealed[x][y]) return;
+      flag(x, y);
+    },
+    {
+      threshold: 400,
+    },
+  );
+
+  if (isFlagged[x][y]) {
     content = <Flag fill="red" />;
   }
   if (content === "0") content = "";
   if (
+    import.meta.env.DEV &&
     window.location.href.includes("xray") &&
-    game.isMine(x, y) &&
-    !game.isFlagged[x][y]
+    isMine(x, y) &&
+    !isFlagged[x][y]
   )
     content = <Bomb />;
+
+  const touchStart = useRef<number>(0);
 
   return (
     <div
       className="mine-button"
+      {...attrs}
       style={{
-        background: game.isRevealed[x][y] ? "#444" : undefined,
-        borderRight: !game.isRevealed[x][y] ? "3px solid black" : undefined,
-        borderTop: !game.isRevealed[x][y] ? "3px solid #999" : undefined,
-        borderLeft: !game.isRevealed[x][y] ? "3px solid #999" : undefined,
-        borderBottom: !game.isRevealed[x][y] ? "3px solid black" : undefined,
-        color: game.isRevealed[x][y]
+        background: isRevealed[x][y] ? "#444" : undefined,
+        borderRight: !isRevealed[x][y] ? "3px solid black" : undefined,
+        borderTop: !isRevealed[x][y] ? "3px solid #999" : undefined,
+        borderLeft: !isRevealed[x][y] ? "3px solid #999" : undefined,
+        borderBottom: !isRevealed[x][y] ? "3px solid black" : undefined,
+        color: isRevealed[x][y]
           ? colorMap[String(content)] ?? "#eee"
           : undefined,
         fontSize: Number(content) > 0 ? "1.75rem" : undefined,
-        cursor: game.isRevealed[x][y] ? "default" : "pointer",
+        cursor: isRevealed[x][y] ? "default" : "pointer",
+      }}
+      onMouseDown={() => {
+        touchStart.current = Date.now();
       }}
       onMouseUp={(e) => {
-        if (game.getHasWon() || game.isGameOver) {
+        if (Date.now() - touchStart.current > 400 && !isRevealed[x][y]) {
+          flag(x, y);
+          return;
+        }
+        if (getHasWon() || isGameOver) {
           return;
         }
         if (e.button === 0) {
           // Left click
-          if (!game.isRevealed[x][y] && !game.isFlagged[x][y]) {
-            game.reveal(x, y);
+          if (isFlagged[x][y]) return;
+          if (!isRevealed[x][y]) {
+            reveal(x, y);
           } else {
-            const neighborFlagCount = game
-              .getNeighborFlags(x, y)
-              .filter((n) => n).length;
-            const value = game.getValue(x, y);
+            const neighborFlagCount = getNeighborFlags(x, y).filter(
+              (n) => n,
+            ).length;
+            const value = getValue(x, y);
             if (neighborFlagCount === value) {
-              const currentStage = game.stage;
-              if (!game.isFlagged[x - 1]?.[y] && currentStage == game.stage)
-                game.reveal(x - 1, y);
-              if (!game.isFlagged[x - 1]?.[y - 1] && currentStage == game.stage)
-                game.reveal(x - 1, y - 1);
-              if (!game.isFlagged[x - 1]?.[y + 1] && currentStage == game.stage)
-                game.reveal(x - 1, y + 1);
-              if (!game.isFlagged[x]?.[y - 1] && currentStage == game.stage)
-                game.reveal(x, y - 1);
-              if (!game.isFlagged[x]?.[y + 1] && currentStage == game.stage)
-                game.reveal(x, y + 1);
-              if (!game.isFlagged[x + 1]?.[y - 1] && currentStage == game.stage)
-                game.reveal(x + 1, y - 1);
-              if (!game.isFlagged[x + 1]?.[y] && currentStage == game.stage)
-                game.reveal(x + 1, y);
-              if (!game.isFlagged[x + 1]?.[y + 1] && currentStage == game.stage)
-                game.reveal(x + 1, y + 1);
+              if (!isFlagged[x - 1]?.[y]) if (reveal(x - 1, y)) return;
+              if (!isFlagged[x - 1]?.[y - 1]) if (reveal(x - 1, y - 1)) return;
+              if (!isFlagged[x - 1]?.[y + 1]) if (reveal(x - 1, y + 1)) return;
+              if (!isFlagged[x]?.[y - 1]) if (reveal(x, y - 1)) return;
+              if (!isFlagged[x]?.[y + 1]) if (reveal(x, y + 1)) return;
+              if (!isFlagged[x + 1]?.[y - 1]) if (reveal(x + 1, y - 1)) return;
+              if (!isFlagged[x + 1]?.[y]) if (reveal(x + 1, y)) return;
+              if (!isFlagged[x + 1]?.[y + 1]) if (reveal(x + 1, y + 1)) return;
             }
           }
-        } else if (e.button === 2 && !game.isRevealed[x][y]) {
-          game.flag(x, y);
+        } else if (e.button === 2 && !isRevealed[x][y]) {
+          flag(x, y);
         }
         e.preventDefault();
       }}

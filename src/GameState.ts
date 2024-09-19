@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { newGame } from "./ws";
 
 interface GameState {
   mines: boolean[][];
@@ -14,7 +15,7 @@ interface GameState {
 
   initializeGame: (width: number, height: number, mines: number) => void;
   flag: (x: number, y: number) => void;
-  reveal: (x: number, y: number) => void;
+  reveal: (x: number, y: number) => boolean;
   getValue: (x: number, y: number) => number;
   getHasWon: () => boolean;
   getMinesLeft: () => number;
@@ -27,7 +28,7 @@ interface GameState {
   getWidth: () => number;
   getHeight: () => number;
   isTouched: () => boolean;
-  triggerPostGame: () => void;
+  triggerPostGame: () => boolean;
   expandBoard: () => void;
   setName: (name: string) => void;
 }
@@ -91,13 +92,14 @@ const useGameStore = create<GameState>((set, get) => ({
 
   reveal: (x, y) => {
     const { mines, isRevealed, isGameOver, getValue, triggerPostGame } = get();
-    if (isGameOver || !get().isValid(x, y) || isRevealed[x][y]) return;
+    if (isGameOver || !get().isValid(x, y) || isRevealed[x][y]) return false;
 
     const newRevealed = [...isRevealed];
     newRevealed[x][y] = true;
 
     if (mines[x][y]) {
       set({ isGameOver: true, isRevealed: newRevealed });
+      return true;
     } else {
       set({ isRevealed: newRevealed });
       const value = getValue(x, y);
@@ -121,7 +123,7 @@ const useGameStore = create<GameState>((set, get) => ({
         revealNeighbors(x + 1, y + 1);
       }
     }
-    triggerPostGame();
+    return triggerPostGame();
   },
 
   getValue: (x, y) => {
@@ -176,6 +178,8 @@ const useGameStore = create<GameState>((set, get) => ({
     return x >= 0 && x < width && y >= 0 && y < height;
   },
   resetGame: (width: number, height: number, mines: number) => {
+    const { name } = get();
+    newGame(name);
     if (mines > width * height) {
       throw new Error("Too many mines");
     }
@@ -263,11 +267,16 @@ const useGameStore = create<GameState>((set, get) => ({
     const { getHasWon, expandBoard } = get();
     if (getHasWon()) {
       expandBoard();
+      return true;
     }
+    return false;
   },
   expandBoard: () => {
     const { width, height, stage, mines, isFlagged, isRevealed } = get();
-    const dir = stage % 2 === 0 ? "down" : "right";
+    let dir = stage % 2 === 0 ? "down" : "right";
+    if (stage > 11) {
+      dir = "down";
+    }
     // Expand the board by the current board size 8x8 -> 16x8
     if (dir === "down") {
       const newHeight = Math.floor(height * 1.5);

@@ -4,16 +4,27 @@ import explosion from "./sound/explosion.mp3";
 import useGameStore from "./GameState";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
+import { loseGame } from "./ws";
+import toast, { useToasterStore } from "react-hot-toast";
 
 interface Score {
   user: string;
   stage: number;
 }
 
+function useMaxToasts(max: number) {
+  const { toasts } = useToasterStore();
+
+  useEffect(() => {
+    toasts
+      .filter((t) => t.visible) // Only consider visible toasts
+      .filter((_, i) => i >= max) // Is toast index over limit?
+      .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
+  }, [toasts, max]);
+}
 function App() {
   const game = useGameStore();
   const [scores, setScores] = useState<Score[]>([]);
-  const [showScores, setShowScores] = useState(false);
   const [playSound] = useSound(explosion, {
     volume: 0.5,
   });
@@ -21,6 +32,7 @@ function App() {
   useEffect(() => {
     if (game.isGameOver) {
       playSound();
+      loseGame(game.name, game.stage);
     }
   }, [game.isGameOver]);
 
@@ -44,31 +56,35 @@ function App() {
     game.resetGame(4, 4, 2);
   }, []);
 
+  useMaxToasts(5);
+
   return (
     <div className="App">
-      <h1>
-        Minesweeper Endless{" "}
-        <button onClick={() => game.resetGame(4, 4, 2)}>Reset</button>
-      </h1>
-      <p>
-        Name:{" "}
-        <input
-          value={game.name}
-          onChange={(e) => game.setName(e.target.value)}
-        />
-      </p>
-      <button onClick={() => setShowScores(!showScores)}>
-        {showScores ? "Hide" : "Show"} Scores
-      </button>
-      {showScores && (
+      {import.meta.env.DEV && (
+        <button onClick={() => game.expandBoard()}>Expand</button>
+      )}
+      <div className="header">
         <div>
+          <h1>
+            Minesweeper Endless{" "}
+            <button onClick={() => game.resetGame(4, 4, 2)}>Reset</button>
+          </h1>
+          <p>
+            Name:{" "}
+            <input
+              value={game.name}
+              onChange={(e) => game.setName(e.target.value)}
+            />
+          </p>
+        </div>
+        <div className="scores">
           {scores.slice(0, 10).map((score) => (
             <p key={score.user}>
               {score.user} - {score.stage}
             </p>
           ))}
         </div>
-      )}
+      </div>
       <div className="game-wrapper">
         <div>
           <Timer />
@@ -88,7 +104,7 @@ function App() {
         </div>
       </div>
       <div className="footer">
-        <pre>Version: 1.1.3</pre>
+        <pre>Version: 1.1.6</pre>
         <pre>
           Made by MasterGordon -{" "}
           <a target="_blank" href="https://github.com/MasterGordon/minesweeper">
