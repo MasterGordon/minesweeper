@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { newGame } from "./ws";
 
 interface GameState {
+  showFeed: boolean;
   mines: boolean[][];
   minesCount: number;
   isRevealed: boolean[][];
@@ -13,7 +14,6 @@ interface GameState {
   stage: number;
   name: string;
 
-  initializeGame: (width: number, height: number, mines: number) => void;
   flag: (x: number, y: number) => void;
   reveal: (x: number, y: number) => boolean;
   getValue: (x: number, y: number) => number;
@@ -31,6 +31,7 @@ interface GameState {
   triggerPostGame: () => boolean;
   expandBoard: () => void;
   setName: (name: string) => void;
+  setShowFeed: (showFeed: boolean) => void;
 }
 
 const useGameStore = create<GameState>((set, get) => ({
@@ -44,41 +45,9 @@ const useGameStore = create<GameState>((set, get) => ({
   height: 0,
   stage: 1,
   name: localStorage.getItem("name") || "No Name",
-
-  initializeGame: (width, height, mines) => {
-    mines = Math.min(mines, width * height);
-
-    const minesArray = Array.from({ length: width }, () =>
-      new Array(height).fill(false),
-    );
-    const isRevealedArray = Array.from({ length: width }, () =>
-      new Array(height).fill(false),
-    );
-    const isFlaggedArray = Array.from({ length: width }, () =>
-      new Array(height).fill(false),
-    );
-
-    let remainingMines = mines;
-    while (remainingMines > 0) {
-      const x = Math.floor(Math.random() * width);
-      const y = Math.floor(Math.random() * height);
-      if (!minesArray[x][y]) {
-        minesArray[x][y] = true;
-        remainingMines--;
-      }
-    }
-
-    set({
-      width,
-      height,
-      mines: minesArray,
-      isRevealed: isRevealedArray,
-      isFlagged: isFlaggedArray,
-      minesCount: mines,
-      isGameOver: false,
-      startTime: Date.now(),
-    });
-  },
+  showFeed: !localStorage.getItem("showFeed")
+    ? true
+    : localStorage.getItem("showFeed") === "true",
 
   flag: (x, y) => {
     set((state) => {
@@ -388,6 +357,10 @@ const useGameStore = create<GameState>((set, get) => ({
   setName: (name) => {
     localStorage.setItem("name", name);
     set({ name });
+  },
+  setShowFeed: (showFeed) => {
+    localStorage.setItem("showFeed", showFeed.toString());
+    set({ showFeed });
   },
 }));
 

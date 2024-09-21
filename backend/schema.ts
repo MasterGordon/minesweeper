@@ -13,7 +13,7 @@ export const Game = sqliteTable("games", {
   gameState: text("gameState").notNull(),
   stage: integer("stage").notNull(),
   finished: integer("finished").notNull().default(0),
-  timestamp: integer("timestamp").notNull(),
+  started: integer("timestamp").notNull(),
 });
 
 export type UserType = Omit<typeof User.$inferSelect, "password"> & {

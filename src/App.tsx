@@ -23,7 +23,6 @@ function useMaxToasts(max: number) {
   }, [toasts, max]);
 }
 
-useGameStore.getState().resetGame(4, 4, 2);
 function App() {
   const game = useGameStore();
   const [scores, setScores] = useState<Score[]>([]);
@@ -38,6 +37,10 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.isGameOver]);
+  useEffect(() => {
+    game.resetGame(4, 4, 2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetch("https://mb.gordon.business")
@@ -74,6 +77,15 @@ function App() {
               value={game.name}
               onChange={(e) => game.setName(e.target.value)}
             />
+          </p>
+          <p>
+            Feed:{" "}
+            <button
+              onClick={() => game.setShowFeed(!game.showFeed)}
+              style={{ padding: "0.5rem" }}
+            >
+              {game.showFeed ? "Shown" : "Hidden"}
+            </button>
           </p>
         </div>
         <div className="scores">

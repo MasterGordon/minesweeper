@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import useGameStore from "./GameState";
 
 let ws: WebSocket;
 
@@ -11,6 +12,7 @@ export const connectWS = () => {
     if (data.user === name) {
       return;
     }
+    if (!useGameStore.getState().showFeed) return;
     switch (data.type) {
       case "new":
         toast(data.user + " started a new game", {

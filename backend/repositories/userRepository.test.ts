@@ -1,8 +1,8 @@
 import { describe, it, expect } from "bun:test";
 import { getTestDb } from "../database/getTestDb";
-import { getUser, loginUser, registerUser } from "./user";
+import { getUser, loginUser, registerUser } from "./userRepository";
 
-describe("User", () => {
+describe("UserRepository", () => {
   it("should register a user", async () => {
     const db = getTestDb();
     await registerUser(db, "TestUser", "test");

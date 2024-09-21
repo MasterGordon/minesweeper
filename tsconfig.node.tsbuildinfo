@@ -1,1 +1,0 @@
-{"root":["./vite.config.ts","./backend/index.ts","./backend/migrate.ts","./backend/schema.ts","./backend/test-setup.ts","./backend/database/db.ts","./backend/database/getDb.ts","./backend/database/getTestDb.ts","./backend/services/score.test.ts","./backend/services/score.ts"],"version":"5.6.2"}
