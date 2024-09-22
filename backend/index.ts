@@ -1,4 +1,4 @@
-import type { ServerWebSocket } from "bun";
+import { handleRequest } from "./router";
 
 const allowCors = {
   "Access-Control-Allow-Origin": "*",
@@ -6,7 +6,6 @@ const allowCors = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-const userName = new WeakMap<ServerWebSocket<unknown>, string>();
 const server = Bun.serve({
   async fetch(request: Request) {
     if (request.method === "OPTIONS") {
@@ -22,10 +21,10 @@ const server = Bun.serve({
       if (typeof message !== "string") {
         return;
       }
-      const user = userName.get(ws);
       try {
         const msg = JSON.parse(message);
-        console.log(msg);
+        console.log("Received message", msg);
+        handleRequest(msg, ws);
       } catch (e) {
         console.error("Faulty request", message, e);
         return;
@@ -37,3 +36,5 @@ const server = Bun.serve({
   },
   port: 8076,
 });
+
+console.log("Listening on port 8076");

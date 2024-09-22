@@ -19,7 +19,7 @@ export const gameController = createController({
     if (game.finished) return gameState;
     return serverToClientGame(gameState);
   }),
-  createGame: createEndpoint(z.undefined(), async (_, { user, db }) => {
+  createGame: createEndpoint(z.null(), async (_, { user, db }) => {
     if (!user) throw new UnauthorizedError("Unauthorized");
     const uuid = crypto.randomUUID() as string;
     const newGame: ServerGame = game.createGame({

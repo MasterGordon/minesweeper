@@ -12,12 +12,6 @@ export type Endpoint<TInput, TResponse> = {
   handler: (input: TInput, context: RequestContext) => Promise<TResponse>;
 };
 
-export type Request<TEndpoint extends Endpoint<any, any>> = {
-  method: "POST";
-  url: string;
-  body: z.infer<TEndpoint["validate"]>;
-};
-
 export const createEndpoint = <TInput, TResponse>(
   validate: z.ZodType<TInput>,
   handler: (input: TInput, context: RequestContext) => Promise<TResponse>,
