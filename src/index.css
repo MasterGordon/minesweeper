@@ -4,6 +4,16 @@
   --color-primary: hotpink;
   --bg-brand: -webkit-linear-gradient(225deg, rgb(251, 175, 21), rgb(251, 21, 242),             
   rgb(21, 198, 251)) 0% 0% / 100% 300%;
+  --bg-secondary: linear-gradient(90deg, #D9AFD9 0%, #97D9E1 100%) 0% 0% / 100% 300%;
+  --animate-gradientmove: gradientmove 1s ease 0s 1 normal forwards;
+  @keyframes gradientmove {
+    0%{background-position: 0% 0%}
+    100%{background-position: 0% 100%}
+  }
+}
+
+button {
+  cursor: pointer;
 }
 
 /* .game-board { */
@@ -99,11 +109,6 @@
 /*   animation: gradient_move 1s ease infinite; */
 /* } */
 /**/
-/* @keyframes gradient_move { */
-/*   0%{background-position: 0% 92%} */
-/*   50%{background-position: 100% 9%} */
-/*   100%{background-position: 0% 92%} */
-/* } */
 /**/
 /* .header { */
 /*   display: grid; */

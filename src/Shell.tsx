@@ -3,16 +3,16 @@ import { Button } from "./components/Button";
 import { motion } from "framer-motion";
 import {
   GitBranch,
-  Github,
   History,
   LayoutDashboard,
   Menu,
   Play,
   Settings,
-  Settings2,
 } from "lucide-react";
 import Hr from "./components/Hr";
 import NavLink from "./components/NavLink";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import Header from "./components/Header";
 
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
@@ -22,14 +22,10 @@ const Shell: React.FC = () => {
 
   const x = isOpen ? 0 : -drawerWidthWithPadding;
   const width = isOpen ? drawerWidthWithPadding : 0;
+  const isMobile = useMediaQuery("(max-width: 768px)");
   useEffect(() => {
-    const onResize = () => {
-      setIsOpen(window.innerWidth > 768);
-    };
-    window.addEventListener("resize", onResize);
-    onResize();
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+    setIsOpen(!isMobile);
+  }, [isMobile]);
 
   return (
     <div className="relative bg-black min-h-screen">
@@ -85,7 +81,8 @@ const Shell: React.FC = () => {
           layout
         />
         <motion.div className="flex flex-col gap-4 grow max-w-6xl mx-auto">
-          <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-12 sm:mt-0">
+          <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
+            <Header />
             <div className="bg-gray-950 p-4 rounded-lg w-full"></div>
             <div className="bg-gray-950 p-4 rounded-lg w-full"></div>
           </div>

@@ -3,15 +3,21 @@ import type { ServerWebSocket } from "bun";
 import type { Controller, Endpoint } from "./controller/controller";
 import { gameController } from "./controller/gameController";
 import { db } from "./database/db";
+import { userController } from "./controller/userController";
 
 const controllers = {
   game: gameController,
+  user: userController,
 } satisfies Record<string, Controller<any>>;
 
 const userName = new WeakMap<ServerWebSocket<unknown>, string>();
 
 export const setSessionUser = (ws: ServerWebSocket<unknown>, user: string) => {
   userName.set(ws, user);
+};
+
+export const resetSessionUser = (ws: ServerWebSocket<unknown>) => {
+  userName.delete(ws);
 };
 
 export const handleRequest = async (

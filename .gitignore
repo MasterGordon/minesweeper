@@ -24,3 +24,5 @@ temp_dbs
 *.njsproj
 *.sln
 *.sw?
+
+deploy.sh
