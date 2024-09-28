@@ -9,23 +9,25 @@ import {
 } from "./DropdownMenu";
 import { useLocation } from "wouter";
 import LoginButton from "./Auth/LoginButton";
-import { useWSQuery } from "../hooks";
+import { useWSMutation, useWSQuery } from "../hooks";
 import RegisterButton from "./Auth/RegisterButton";
 import banner from "../images/banner.png";
-import mine from "../images/mine.png";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
   const [, setLocation] = useLocation();
   const { data: username } = useWSQuery("user.getSelf", null);
+  const queryClient = useQueryClient();
+  const logout = useWSMutation("user.logout", () => {
+    queryClient.invalidateQueries();
+  });
+
   return (
     <div className="w-full flex gap-4">
       <div className="grow" />
-      <img src={banner} className="w-auto h-16" />
-      <img
-        src={mine}
-        className="w-auto h-16 drop-shadow-[0px_0px_10px_#fff] -rotate-12"
-      />
+      <img src={banner} className="w-auto h-16 hidden sm:block" />
       <div className="grow" />
+
       {username ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -42,7 +44,9 @@ const Header = () => {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout.mutate(null)}>
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (

@@ -11,9 +11,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "drizzle:schema": "drizzle-kit generate --dialect sqlite --schema ./backend/schema.ts --out ./backend/drizzle",
-    "drizzle:migrate": "bun run backend/migrate.ts"
+    "drizzle:migrate": "bun run backend/migrate.ts",
+    "nukedb": "rm sqlite.db && bun run backend/migrate.ts"
   },
   "dependencies": {
+    "@pixi/events": "^7.4.2",
+    "@pixi/react": "^7.1.2",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.1",
@@ -27,6 +30,8 @@
     "framer-motion": "^11.5.6",
     "jotai": "^2.10.0",
     "lucide-react": "^0.441.0",
+    "pixi-viewport": "^5.0.3",
+    "pixi.js": "^7.4.2",
     "react": "^18.3.1",
     "react-confetti-boom": "^1.0.0",
     "react-dom": "^18.3.1",

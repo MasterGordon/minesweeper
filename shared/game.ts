@@ -7,6 +7,7 @@ export const clientGame = z.object({
   height: z.number(),
   isRevealed: z.array(z.array(z.boolean())),
   isFlagged: z.array(z.array(z.boolean())),
+  isQuestionMark: z.array(z.array(z.boolean())),
   values: z.array(z.array(z.number())),
   minesCount: z.number(),
   lastClick: z.tuple([z.number(), z.number()]),
@@ -21,6 +22,7 @@ export const serverGame = z.object({
   height: z.number(),
   isRevealed: z.array(z.array(z.boolean())),
   isFlagged: z.array(z.array(z.boolean())),
+  isQuestionMark: z.array(z.array(z.boolean())),
   mines: z.array(z.array(z.boolean())),
   minesCount: z.number(),
   lastClick: z.tuple([z.number(), z.number()]),
@@ -31,6 +33,11 @@ export const serverGame = z.object({
 
 export type ClientGame = z.infer<typeof clientGame>;
 export type ServerGame = z.infer<typeof serverGame>;
+
+export const isServerGame = (game: ServerGame | ClientGame) => "mines" in game;
+export const isClientGame = (
+  game: ServerGame | ClientGame,
+): game is ClientGame => !("mines" in game);
 
 export const getValue = (mines: boolean[][], x: number, y: number) => {
   const neighbors = [
@@ -54,6 +61,7 @@ export const serverToClientGame = (game: ServerGame): ClientGame => {
     height: game.height,
     isRevealed: game.isRevealed,
     isFlagged: game.isFlagged,
+    isQuestionMark: game.isQuestionMark,
     minesCount: game.minesCount,
     values: game.mines.map((_, i) =>
       game.mines[0].map((_, j) => {

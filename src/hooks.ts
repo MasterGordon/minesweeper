@@ -14,6 +14,7 @@ export const useWSQuery = <
   action: `${TController}.${TAction}`,
   // @ts-expect-error We dont care since this is internal api
   payload: Routes[TController][TAction]["validate"]["_input"],
+  enabled?: boolean,
 ): UseQueryResult<
   // @ts-expect-error We dont care since this is internal api
   Awaited<ReturnType<Routes[TController][TAction]["handler"]>>
@@ -24,6 +25,7 @@ export const useWSQuery = <
       const result = await wsClient.dispatch(action, payload);
       return result;
     },
+    enabled,
   });
 };
 

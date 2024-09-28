@@ -8,11 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../Dialog";
+import { useQueryClient } from "@tanstack/react-query";
+import { useWSMutation } from "../../hooks";
+import { useAtom } from "jotai";
+import { loginTokenAtom } from "../../atoms";
+import PasswordInput from "./PasswordInput";
 
 const LoginButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
+  const login = useWSMutation("user.login");
+  const [, setToken] = useAtom(loginTokenAtom);
 
   useEffect(() => {
     setUsername("");
@@ -36,18 +45,29 @@ const LoginButton = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
           <label className="text-white/70 font-bold">Password</label>
-          <input
-            className="border-white/10 border-2 rounded-md p-2"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput value={password} onChange={setPassword} />
         </div>
+        {error && <p className="text-red-500">{error}</p>}
         <DialogFooter>
           <Button variant="ghost" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button variant="primary">Login</Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              login
+                .mutateAsync({ username, password })
+                .then((res) => {
+                  setToken(res.token);
+                  queryClient.invalidateQueries();
+                })
+                .catch((e) => {
+                  setError(e);
+                });
+            }}
+          >
+            Login
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

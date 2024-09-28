@@ -12,7 +12,7 @@ const signString = (payload: string) => {
 
 export const userController = createController({
   getSelf: createEndpoint(z.null(), async (_, { user }) => {
-    return user;
+    return user || null;
   }),
   login: createEndpoint(
     z.object({ username: z.string(), password: z.string() }),
@@ -47,7 +47,13 @@ export const userController = createController({
     resetSessionUser(ws);
   }),
   register: createEndpoint(
-    z.object({ username: z.string().max(15), password: z.string().min(6) }),
+    z.object({
+      username: z
+        .string()
+        .min(3, "Username must be at least 3 characters")
+        .max(15, "Username cannot be longer than 15 characters"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+    }),
     async (input, { db, ws }) => {
       await registerUser(db, input.username, input.password);
       const user = input.username;

@@ -1,4 +1,6 @@
 import type { Routes } from "../backend/router";
+import { Events } from "../shared/events";
+import { queryClient } from "./queryClient";
 
 const connectionString = import.meta.env.DEV
   ? "ws://localhost:8076/ws"
@@ -20,8 +22,13 @@ const createWSClient = () => {
   const ws = new WebSocket(connectionString);
   ws.onmessage = emitMessage;
   addMessageListener((event: MessageEvent) => {
-    const data = JSON.parse(event.data);
-    console.log(data);
+    const data = JSON.parse(event.data) as Events;
+    if (data.type === "updateGame") {
+      queryClient.invalidateQueries({
+        queryKey: ["game.getGameState", data.game],
+      });
+    }
+    console.log("Received message", data);
   });
 
   const dispatch = async <

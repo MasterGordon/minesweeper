@@ -4,6 +4,7 @@ import type { Controller, Endpoint } from "./controller/controller";
 import { gameController } from "./controller/gameController";
 import { db } from "./database/db";
 import { userController } from "./controller/userController";
+import { ZodError } from "zod";
 
 const controllers = {
   game: gameController,
@@ -24,8 +25,7 @@ export const handleRequest = async (
   message: unknown,
   ws: ServerWebSocket<unknown>,
 ) => {
-  // TODO: Remove this
-  const sessionUser = userName.get(ws) || "Gordon";
+  const sessionUser = userName.get(ws) || undefined;
   const ctx = {
     user: sessionUser,
     db,
@@ -50,8 +50,17 @@ export const handleRequest = async (
     const result = await endpoint.handler(input, ctx);
     ws.send(JSON.stringify({ id, payload: result }));
     return;
-  } catch (_) {
-    ws.send(JSON.stringify({ id, error: "Bad Request" }));
+  } catch (e) {
+    if (e instanceof ZodError) {
+      ws.send(
+        JSON.stringify({ id, error: e.issues[0].message, type: message.type }),
+      );
+    } else if (e instanceof Error) {
+      ws.send(JSON.stringify({ id, error: e.message, type: message.type }));
+    } else {
+      ws.send(JSON.stringify({ id, error: "Bad Request", type: message.type }));
+    }
+    console.error(e);
   }
 };
 

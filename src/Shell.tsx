@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
 import { motion } from "framer-motion";
 import {
@@ -17,8 +17,9 @@ import Header from "./components/Header";
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
 
-const Shell: React.FC = () => {
+const Shell: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const x = isOpen ? 0 : -drawerWidthWithPadding;
   const width = isOpen ? drawerWidthWithPadding : 0;
@@ -26,11 +27,29 @@ const Shell: React.FC = () => {
   useEffect(() => {
     setIsOpen(!isMobile);
   }, [isMobile]);
+  useEffect(() => {
+    const onOutsideClick = (e: MouseEvent) => {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(e.target as Node) &&
+        isMobile
+      ) {
+        setIsOpen(false);
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("click", onOutsideClick);
+    return () => {
+      document.removeEventListener("click", onOutsideClick);
+    };
+  });
 
   return (
-    <div className="relative bg-black min-h-screen">
+    <div className="bg-black min-h-screen">
       <motion.div
         className="bg-black p-4 absolute h-screen w-64 flex border-white/10 border-1"
+        ref={drawerRef}
         animate={{ x }}
         transition={{ type: "tween" }}
       >
@@ -74,17 +93,19 @@ const Shell: React.FC = () => {
           </Button>
         </div>
       </motion.div>
-      <motion.div className="flex">
+      <motion.div className="flex max-w-[100vw]">
         <motion.div
+          className="hidden md:block"
           animate={{ width: width }}
           transition={{ type: "tween" }}
           layout
         />
-        <motion.div className="flex flex-col gap-4 grow max-w-6xl mx-auto">
+        <motion.div className="flex flex-col gap-4 grow max-w-6xl mx-auto w-[calc(100vw-256px)]">
           <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
             <Header />
-            <div className="bg-gray-950 p-4 rounded-lg w-full"></div>
-            <div className="bg-gray-950 p-4 rounded-lg w-full"></div>
+            {children}
+            {/* <div className="bg-gray-950 p-4 rounded-lg w-full"></div> */}
+            {/* <div className="bg-gray-950 p-4 rounded-lg w-full"></div> */}
           </div>
         </motion.div>
       </motion.div>

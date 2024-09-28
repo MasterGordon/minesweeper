@@ -1,3 +1,4 @@
+import { on } from "./events";
 import { handleRequest } from "./router";
 
 const allowCors = {
@@ -35,6 +36,9 @@ const server = Bun.serve({
     },
   },
   port: 8076,
+});
+on((event) => {
+  server.publish("minesweeper-global", JSON.stringify(event));
 });
 
 console.log("Listening on port 8076");

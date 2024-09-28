@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createController, createEndpoint } from "./controller";
-import { getGame, upsertGameState } from "../repositories/gameRepository";
+import {
+  getCurrentGame,
+  getGame,
+  upsertGameState,
+} from "../repositories/gameRepository";
 import {
   serverGame,
   serverToClientGame,
@@ -42,4 +46,18 @@ export const gameController = createController({
     });
     return newGame;
   }),
+  reveal: createEndpoint(
+    z.object({ x: z.number(), y: z.number() }),
+    async ({ x, y }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const dbGame = await getCurrentGame(db, user);
+      const serverGame = JSON.parse(dbGame.gameState);
+      game.reveal(serverGame, x, y);
+      upsertGameState(db, serverGame);
+      emit({
+        type: "updateGame",
+        game: dbGame.uuid,
+      });
+    },
+  ),
 });
