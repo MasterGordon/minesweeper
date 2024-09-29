@@ -1,11 +1,14 @@
 import {
+  keepPreviousData,
   useMutation,
+  UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from "@tanstack/react-query";
 import { Routes } from "../backend/router";
 import { wsClient } from "./wsClient";
+import { z } from "zod";
 
 export const useWSQuery = <
   TController extends keyof Routes,
@@ -13,7 +16,7 @@ export const useWSQuery = <
 >(
   action: `${TController}.${TAction}`,
   // @ts-expect-error We dont care since this is internal api
-  payload: Routes[TController][TAction]["validate"]["_input"],
+  payload: z.input<Routes[TController][TAction]["validate"]>,
   enabled?: boolean,
 ): UseQueryResult<
   // @ts-expect-error We dont care since this is internal api
@@ -26,6 +29,7 @@ export const useWSQuery = <
       return result;
     },
     enabled,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -40,7 +44,13 @@ export const useWSMutation = <
       ReturnType<Routes[TController][TAction]["handler"]>
     >,
   ) => void,
-) => {
+): UseMutationResult<
+  // @ts-expect-error We dont care since this is internal api
+  Awaited<ReturnType<Routes[TController][TAction]["handler"]>>,
+  unknown,
+  // @ts-expect-error We dont care since this is internal api
+  Routes[TController][TAction]["validate"]["_input"]
+> => {
   return useMutation({
     // @ts-expect-error We dont care since this is internal api
     mutationFn: async (

@@ -1,14 +1,7 @@
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
 import { motion } from "framer-motion";
-import {
-  GitBranch,
-  History,
-  LayoutDashboard,
-  Menu,
-  Play,
-  Settings,
-} from "lucide-react";
+import { GitBranch, History, Home, Menu, Play, Settings } from "lucide-react";
 import Hr from "./components/Hr";
 import NavLink from "./components/NavLink";
 import { useMediaQuery } from "@uidotdev/usehooks";
@@ -48,7 +41,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="bg-black min-h-screen">
       <motion.div
-        className="bg-black p-4 absolute h-screen w-64 flex border-white/10 border-1"
+        className="bg-black p-4 fixed h-screen w-64 flex border-white/10 border-1"
         ref={drawerRef}
         animate={{ x }}
         transition={{ type: "tween" }}
@@ -61,8 +54,8 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           </h1>
           <Hr />
           <NavLink href="/">
-            <LayoutDashboard />
-            Dashboard
+            <Home />
+            Home
           </NavLink>
           <NavLink href="/play">
             <Play />
@@ -104,8 +97,6 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
             <Header />
             {children}
-            {/* <div className="bg-gray-950 p-4 rounded-lg w-full"></div> */}
-            {/* <div className="bg-gray-950 p-4 rounded-lg w-full"></div> */}
           </div>
         </motion.div>
       </motion.div>

@@ -1,3 +1,4 @@
+import { Assets, Texture } from "pixi.js";
 import { useEffect, useState } from "react";
 
 type Png = typeof import("*.png");
@@ -21,7 +22,7 @@ export interface Theme {
   8: LazySprite;
 }
 
-export type LoadedTheme = Record<Exclude<keyof Theme, "size">, string> & {
+export type LoadedTheme = Record<Exclude<keyof Theme, "size">, Texture> & {
   size: number;
 };
 
@@ -34,7 +35,9 @@ export const useTheme = (theme: Theme) => {
       const loadedEntries = await Promise.all(
         Object.entries(theme).map(async ([key, value]) => {
           const loaded =
-            typeof value === "function" ? (await value()).default : value;
+            typeof value === "function"
+              ? await Assets.load((await value()).default)
+              : value;
           return [key, loaded] as const;
         }),
       );

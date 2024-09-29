@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "af6e3102-34d0-4247-84ae-14f2d3d8fa4c",
+  "id": "2c470a78-d3d6-49b7-910c-eb8156e58a2c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "games": {
@@ -23,7 +23,7 @@
         },
         "gameState": {
           "name": "gameState",
-          "type": "text",
+          "type": "blob",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -51,7 +51,39 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_idx": {
+          "name": "user_idx",
+          "columns": [
+            "user"
+          ],
+          "isUnique": false
+        },
+        "started_idx": {
+          "name": "started_idx",
+          "columns": [
+            "timestamp"
+          ],
+          "isUnique": false
+        },
+        "user_started_idx": {
+          "name": "user_started_idx",
+          "columns": [
+            "user",
+            "timestamp"
+          ],
+          "isUnique": false
+        },
+        "full_idx": {
+          "name": "full_idx",
+          "columns": [
+            "user",
+            "timestamp",
+            "uuid"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "games_user_users_name_fk": {
           "name": "games_user_users_name_fk",
@@ -82,6 +114,29 @@
         },
         "password": {
           "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userSettings": {
+      "name": "userSettings",
+      "columns": {
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "settings": {
+          "name": "settings",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

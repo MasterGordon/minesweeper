@@ -1,6 +1,6 @@
 import React from "react";
 import * as PIXI from "pixi.js";
-import { Viewport as PixiViewport } from "pixi-viewport";
+import { IClampZoomOptions, Viewport as PixiViewport } from "pixi-viewport";
 import { PixiComponent, useApp } from "@pixi/react";
 import { BaseTexture, SCALE_MODES } from "pixi.js";
 BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
@@ -17,6 +17,9 @@ export interface ViewportProps {
     top: number;
     bottom: number;
   };
+  clampZoom?: IClampZoomOptions;
+  onViewportChange?: (viewport: PixiViewport) => void;
+  viewportRef?: React.RefObject<PixiViewport>;
 }
 
 export interface PixiComponentViewportProps extends ViewportProps {
@@ -45,6 +48,20 @@ const PixiComponentViewport = PixiComponent("Viewport", {
     if (props.clamp) {
       viewport.clamp(props.clamp);
     }
+    if (props.clampZoom) {
+      viewport.clampZoom(props.clampZoom);
+    }
+    viewport.on("moved", () => {
+      props.onViewportChange?.(viewport);
+    });
+    viewport.on("zoomed-end", () => {
+      props.onViewportChange?.(viewport);
+    });
+
+    if (props.viewportRef) {
+      // @ts-expect-error We dont care since this is internal api
+      props.viewportRef.current = viewport;
+    }
 
     return viewport;
   },
@@ -55,9 +72,16 @@ const PixiComponentViewport = PixiComponent("Viewport", {
   ) => {
     if (
       oldProps.width !== newProps.width ||
-      oldProps.height !== newProps.height
+      oldProps.height !== newProps.height ||
+      oldProps.worldWidth !== newProps.worldWidth ||
+      oldProps.worldHeight !== newProps.worldHeight
     ) {
-      viewport.resize(newProps.width, newProps.height);
+      viewport.resize(
+        newProps.width,
+        newProps.height,
+        newProps.worldWidth,
+        newProps.worldHeight,
+      );
     }
     if (oldProps.clamp !== newProps.clamp) {
       viewport.clamp(newProps.clamp);

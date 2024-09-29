@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ServerWebSocket } from "bun";
 import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
-import type { z } from "zod";
+import type { z, ZodType } from "zod";
 
 interface RequestContext {
   user?: string;
@@ -9,15 +9,22 @@ interface RequestContext {
   ws: ServerWebSocket<unknown>;
 }
 
-export type Endpoint<TInput, TResponse> = {
-  validate: z.ZodType<TInput>;
-  handler: (input: TInput, context: RequestContext) => Promise<TResponse>;
+export type Endpoint<TInputSchema extends ZodType, TResponse> = {
+  validate: TInputSchema;
+  handler: (
+    input: z.infer<TInputSchema>,
+    context: RequestContext,
+  ) => Promise<TResponse>;
 };
 
-export const createEndpoint = <TInput, TResponse>(
-  validate: z.ZodType<TInput>,
+export const createEndpoint = <
+  TInputSchema extends ZodType,
+  TResponse,
+  TInput = z.infer<TInputSchema>,
+>(
+  validate: TInputSchema,
   handler: (input: TInput, context: RequestContext) => Promise<TResponse>,
-): Endpoint<TInput, TResponse> => {
+): Endpoint<TInputSchema, TResponse> => {
   return { validate, handler };
 };
 

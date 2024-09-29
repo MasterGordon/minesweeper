@@ -1,8 +1,16 @@
 import { z } from "zod";
 import { createController, createEndpoint } from "./controller";
-import { loginUser, registerUser } from "../repositories/userRepository";
+import {
+  getUserCount,
+  getUserSettings,
+  loginUser,
+  registerUser,
+  upsertUserSettings,
+} from "../repositories/userRepository";
 import crypto from "crypto";
 import { resetSessionUser, setSessionUser } from "../router";
+import { userSettings } from "../../shared/user-settings";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
 
 const secret = process.env.SECRET!;
 
@@ -63,4 +71,20 @@ export const userController = createController({
       return { token: JSON.stringify({ session, sig }) };
     },
   ),
+  getSettings: createEndpoint(z.null(), async (_, { db, user }) => {
+    if (!user) throw new UnauthorizedError("Unauthorized");
+    const settings = await getUserSettings(db, user);
+    return settings;
+  }),
+  updateSettings: createEndpoint(userSettings, async (input, { db, user }) => {
+    if (!user) throw new UnauthorizedError("Unauthorized");
+    const settings = await getUserSettings(db, user);
+    const newSettings = { ...settings, ...input };
+    await upsertUserSettings(db, user, input);
+    return newSettings;
+  }),
+  getUserCount: createEndpoint(z.null(), async (_, { db }) => {
+    const count = await getUserCount(db);
+    return count;
+  }),
 });

@@ -3,6 +3,7 @@ import { createController, createEndpoint } from "./controller";
 import {
   getCurrentGame,
   getGame,
+  parseGameState,
   upsertGameState,
 } from "../repositories/gameRepository";
 import {
@@ -18,7 +19,7 @@ import { emit } from "../events";
 export const gameController = createController({
   getGameState: createEndpoint(z.string(), async (uuid, ctx) => {
     const game = await getGame(ctx.db, uuid);
-    const parsed = JSON.parse(game.gameState);
+    const parsed = parseGameState(game.gameState);
     const gameState = await serverGame.parseAsync(parsed);
     if (game.finished) return gameState;
     return serverToClientGame(gameState);
@@ -51,13 +52,79 @@ export const gameController = createController({
     async ({ x, y }, { db, user }) => {
       if (!user) throw new UnauthorizedError("Unauthorized");
       const dbGame = await getCurrentGame(db, user);
-      const serverGame = JSON.parse(dbGame.gameState);
-      game.reveal(serverGame, x, y);
+      const serverGame = parseGameState(dbGame.gameState);
+      const ts = serverGame.finished;
+      game.reveal(serverGame, x, y, true);
+      await upsertGameState(db, serverGame);
+      emit({
+        type: "updateGame",
+        game: dbGame.uuid,
+      });
+      if (ts === 0 && serverGame.finished !== 0) {
+        emit({
+          type: "loss",
+          stage: serverGame.stage,
+          user,
+        });
+      }
+    },
+  ),
+  placeFlag: createEndpoint(
+    z.object({ x: z.number(), y: z.number() }),
+    async ({ x, y }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const dbGame = await getCurrentGame(db, user);
+      const serverGame = parseGameState(dbGame.gameState);
+      const ts = serverGame.finished;
+      game.placeFlag(serverGame, x, y);
+      await upsertGameState(db, serverGame);
+      emit({
+        type: "updateGame",
+        game: dbGame.uuid,
+      });
+      if (ts === 0 && serverGame.finished !== 0) {
+        emit({
+          type: "loss",
+          stage: serverGame.stage,
+          user,
+        });
+      }
+    },
+  ),
+  placeQuestionMark: createEndpoint(
+    z.object({ x: z.number(), y: z.number() }),
+    async ({ x, y }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const dbGame = await getCurrentGame(db, user);
+      const serverGame = parseGameState(dbGame.gameState);
+      game.placeQuestionMark(serverGame, x, y);
+      await upsertGameState(db, serverGame);
+      emit({
+        type: "updateGame",
+        game: dbGame.uuid,
+      });
+    },
+  ),
+  clearTile: createEndpoint(
+    z.object({ x: z.number(), y: z.number() }),
+    async ({ x, y }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const dbGame = await getCurrentGame(db, user);
+      const serverGame = parseGameState(dbGame.gameState);
+      const ts = serverGame.finished;
+      game.clearTile(serverGame, x, y);
       upsertGameState(db, serverGame);
       emit({
         type: "updateGame",
         game: dbGame.uuid,
       });
+      if (ts === 0 && serverGame.finished !== 0) {
+        emit({
+          type: "loss",
+          stage: serverGame.stage,
+          user,
+        });
+      }
     },
   ),
 });

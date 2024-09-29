@@ -11,7 +11,6 @@ import { useLocation } from "wouter";
 import LoginButton from "./Auth/LoginButton";
 import { useWSMutation, useWSQuery } from "../hooks";
 import RegisterButton from "./Auth/RegisterButton";
-import banner from "../images/banner.png";
 import { useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
@@ -24,8 +23,6 @@ const Header = () => {
 
   return (
     <div className="w-full flex gap-4">
-      <div className="grow" />
-      <img src={banner} className="w-auto h-16 hidden sm:block" />
       <div className="grow" />
 
       {username ? (

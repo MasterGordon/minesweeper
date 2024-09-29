@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: hotpink;
+  --color-primary: rgb(251, 21, 242);
   --bg-brand: -webkit-linear-gradient(225deg, rgb(251, 175, 21), rgb(251, 21, 242),             
   rgb(21, 198, 251)) 0% 0% / 100% 300%;
   --bg-secondary: linear-gradient(90deg, #D9AFD9 0%, #97D9E1 100%) 0% 0% / 100% 300%;
@@ -14,6 +14,10 @@
 
 button {
   cursor: pointer;
+}
+
+.grid-border-b div:not(:nth-last-child(-n+3)) {
+  @apply border-b border-white/10;
 }
 
 /* .game-board { */

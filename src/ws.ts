@@ -8,7 +8,6 @@ export const connectWS = () => {
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const name = localStorage.getItem("name");
-    console.log(data);
     if (data.user === name) {
       return;
     }

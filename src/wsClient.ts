@@ -24,8 +24,13 @@ const createWSClient = () => {
   addMessageListener((event: MessageEvent) => {
     const data = JSON.parse(event.data) as Events;
     if (data.type === "updateGame") {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ["game.getGameState", data.game],
+      });
+    }
+    if (data.type === "loss") {
+      queryClient.invalidateQueries({
+        queryKey: ["scoreboard.getScoreBoard", 10],
       });
     }
     console.log("Received message", data);

@@ -2,6 +2,7 @@ import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 import { Game, type GameType } from "../schema";
 import { eq, sql, desc, and, not } from "drizzle-orm";
 import type { ServerGame } from "../../shared/game";
+import { decode, encode } from "@msgpack/msgpack";
 
 export const getGame = async (db: BunSQLiteDatabase, uuid: string) => {
   return (await db.select().from(Game).where(eq(Game.uuid, uuid)))[0];
@@ -69,8 +70,12 @@ export const upsertGameState = async (
     uuid,
     user,
     stage,
-    gameState: JSON.stringify(game),
+    gameState: Buffer.from(encode(game)),
     finished,
     started,
   });
+};
+
+export const parseGameState = (gameState: Buffer) => {
+  return decode(gameState) as ServerGame;
 };

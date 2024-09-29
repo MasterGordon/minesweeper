@@ -10,6 +10,7 @@ import { wsClient } from "./wsClient.ts";
 import { Route, Switch } from "wouter";
 import Endless from "./views/endless/Endless.tsx";
 import { queryClient } from "./queryClient.ts";
+import Home from "./views/home/Home.tsx";
 
 connectWS();
 
@@ -34,7 +35,20 @@ setup().then(() => {
         <Toaster position="top-right" reverseOrder={false} />
         <Shell>
           <Switch>
+            <Route path="/" component={Home} />
             <Route path="/play" component={Endless} />
+            <Route
+              path="/history"
+              component={() => (
+                <h2 className="text-white/80 text-2xl">Comming Soon</h2>
+              )}
+            />
+            <Route
+              path="/settings"
+              component={() => (
+                <h2 className="text-white/80 text-2xl">Comming Soon</h2>
+              )}
+            />
           </Switch>
           {/* <App /> */}
         </Shell>

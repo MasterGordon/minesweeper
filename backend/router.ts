@@ -5,10 +5,12 @@ import { gameController } from "./controller/gameController";
 import { db } from "./database/db";
 import { userController } from "./controller/userController";
 import { ZodError } from "zod";
+import { scoreboardController } from "./controller/scoreboardController";
 
 const controllers = {
   game: gameController,
   user: userController,
+  scoreboard: scoreboardController,
 } satisfies Record<string, Controller<any>>;
 
 const userName = new WeakMap<ServerWebSocket<unknown>, string>();
@@ -47,8 +49,10 @@ export const handleRequest = async (
     // @ts-expect-error controllers[controllerName] is a Controller
     const endpoint = controllers[controllerName][action] as Endpoint<any, any>;
     const input = endpoint.validate.parse(payload);
+    console.time(action);
     const result = await endpoint.handler(input, ctx);
     ws.send(JSON.stringify({ id, payload: result }));
+    console.timeEnd(action);
     return;
   } catch (e) {
     if (e instanceof ZodError) {
