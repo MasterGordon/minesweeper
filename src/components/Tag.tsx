@@ -16,7 +16,7 @@ const tagVariants = cva("font-semibold py-2 px-4 rounded-md flex gap-2", {
     },
     size: {
       default: "h-10 py-2 px-4",
-      sm: "h-9 px-3 rounded-md",
+      sm: "h-7 py-2 px-2 rounded-md text-xs",
       lg: "h-11 px-8 rounded-md",
     },
   },

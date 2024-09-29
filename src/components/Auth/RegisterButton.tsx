@@ -13,6 +13,7 @@ import { useAtom } from "jotai";
 import { loginTokenAtom } from "../../atoms";
 import { useQueryClient } from "@tanstack/react-query";
 import PasswordInput from "./PasswordInput";
+import { wsClient } from "../../wsClient";
 
 const RegisterButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,8 +58,11 @@ const RegisterButton = () => {
             onClick={() => {
               register
                 .mutateAsync({ username, password })
-                .then((res) => {
+                .then(async (res) => {
                   setToken(res.token);
+                  await wsClient.dispatch("user.loginWithToken", {
+                    token: JSON.parse(res.token),
+                  });
                   queryClient.invalidateQueries();
                 })
                 .catch((e) => {

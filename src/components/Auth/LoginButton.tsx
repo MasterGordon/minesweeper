@@ -13,6 +13,7 @@ import { useWSMutation } from "../../hooks";
 import { useAtom } from "jotai";
 import { loginTokenAtom } from "../../atoms";
 import PasswordInput from "./PasswordInput";
+import { wsClient } from "../../wsClient";
 
 const LoginButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,8 +58,11 @@ const LoginButton = () => {
             onClick={() => {
               login
                 .mutateAsync({ username, password })
-                .then((res) => {
+                .then(async (res) => {
                   setToken(res.token);
+                  await wsClient.dispatch("user.loginWithToken", {
+                    token: JSON.parse(res.token),
+                  });
                   queryClient.invalidateQueries();
                 })
                 .catch((e) => {

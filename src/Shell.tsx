@@ -6,6 +6,7 @@ import Hr from "./components/Hr";
 import NavLink from "./components/NavLink";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Header from "./components/Header";
+import { Tag } from "./components/Tag";
 
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
@@ -67,7 +68,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           </NavLink>
           <NavLink href="/settings">
             <Settings />
-            Settings
+            Settings <Tag size="sm">NEW</Tag>
           </NavLink>
           <Hr />
           <div className="grow" />

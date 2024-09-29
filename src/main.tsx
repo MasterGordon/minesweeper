@@ -11,6 +11,7 @@ import { Route, Switch } from "wouter";
 import Endless from "./views/endless/Endless.tsx";
 import { queryClient } from "./queryClient.ts";
 import Home from "./views/home/Home.tsx";
+import Settings from "./views/settings/Settings.tsx";
 
 connectWS();
 
@@ -43,12 +44,7 @@ setup().then(() => {
                 <h2 className="text-white/80 text-2xl">Comming Soon</h2>
               )}
             />
-            <Route
-              path="/settings"
-              component={() => (
-                <h2 className="text-white/80 text-2xl">Comming Soon</h2>
-              )}
-            />
+            <Route path="/settings" component={Settings} />
           </Switch>
           {/* <App /> */}
         </Shell>

@@ -22,6 +22,7 @@ const Endless = () => {
       setGameId(undefined);
     };
   }, [setGameId]);
+  console.log("set", setGameId);
 
   return game ? (
     <>

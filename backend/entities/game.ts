@@ -291,6 +291,7 @@ export const game = {
     if (finished) return;
     if (!isValid(serverGame, x, y)) return;
     if (isRevealed[x][y]) return;
+    serverGame.isFlagged[x][y] = false;
     serverGame.isQuestionMark[x][y] = true;
   },
   clearTile: (serverGame: ServerGame, x: number, y: number) => {

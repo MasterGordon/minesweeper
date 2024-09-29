@@ -239,11 +239,12 @@ const Tile = ({
     : false;
   const isFlagged = game.isFlagged[i][j];
   const isQuestionMark = game.isQuestionMark[i][j];
-  const base = isRevealed ? (
-    <Sprite key="b" texture={theme.revealed} />
-  ) : (
-    <Sprite key="b" texture={theme.tile} />
-  );
+  const base =
+    isRevealed || isMine ? (
+      <Sprite key="b" texture={theme.revealed} />
+    ) : (
+      <Sprite key="b" texture={theme.tile} />
+    );
   const extra = isLastPos ? <Sprite key="e" texture={theme.lastPos} /> : null;
   const touchStart = useRef<number>(0);
   const isMove = useRef<boolean>(false);

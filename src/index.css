@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: rgb(251, 21, 242);
+  --color-primary: #D9AFD9;
+  --color-input: color-mix(in srgb, var(--color-white, #fff) 20%, transparent);
+  --color-background: black;
   --bg-brand: -webkit-linear-gradient(225deg, rgb(251, 175, 21), rgb(251, 21, 242),             
   rgb(21, 198, 251)) 0% 0% / 100% 300%;
   --bg-secondary: linear-gradient(90deg, #D9AFD9 0%, #97D9E1 100%) 0% 0% / 100% 300%;
