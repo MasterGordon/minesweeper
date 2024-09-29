@@ -38,9 +38,12 @@ const Endless = () => {
         <LeaderboardButton label="View Leaderboard" />
       </div>
       <Board
-        key={game.uuid}
         theme={defaultTheme}
         game={game}
+        restartGame={async () => {
+          const gameId = await startGame.mutateAsync(null);
+          setGameId(gameId.uuid);
+        }}
         onLeftClick={(x, y) => {
           reveal.mutateAsync({ x, y });
         }}

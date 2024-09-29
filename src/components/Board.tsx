@@ -23,7 +23,7 @@ import { cursorXAtom, cursorYAtom } from "../atoms";
 import Coords from "./Coords";
 import { cn } from "../lib/utils";
 import { Button } from "./Button";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Maximize2, Minimize2, RotateCcw } from "lucide-react";
 import useSound from "use-sound";
 import explosion from "../sound/explosion.mp3";
 
@@ -32,6 +32,7 @@ interface BoardProps {
   game: ServerGame | ClientGame;
   onLeftClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
+  restartGame: () => void;
 }
 
 interface ViewportInfo {
@@ -51,7 +52,7 @@ const toViewportInfo = (viewport: PixiViewport) => {
 };
 
 const Board: React.FC<BoardProps> = (props) => {
-  const { game } = props;
+  const { game, restartGame } = props;
   const { data: user } = useWSQuery("user.getSelf", null);
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -124,18 +125,24 @@ const Board: React.FC<BoardProps> = (props) => {
         ref={ref}
       >
         <div className="relative">
-          <Button
-            variant="ghost"
-            onClick={() => setZenMode(!zenMode)}
-            className="absolute right-4 top-4 text-white/70"
-            size="sm"
-          >
-            {!zenMode ? (
-              <Maximize2 className="size-4" />
-            ) : (
-              <Minimize2 className="size-4" />
+          <div className="absolute right-4 top-4 text-white/70 flex gap-2">
+            {zenMode && (
+              <Button variant="ghost" onClick={() => restartGame()} size="sm">
+                <RotateCcw className="size-4" />
+              </Button>
             )}
-          </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setZenMode(!zenMode)}
+              size="sm"
+            >
+              {!zenMode ? (
+                <Maximize2 className="size-4" />
+              ) : (
+                <Minimize2 className="size-4" />
+              )}
+            </Button>
+          </div>
           {zenMode && (
             <div className="absolute top-4 left-4 w-full h-full text-white/70 font-mono text-lg">
               {game.minesCount - game.isFlagged.flat().filter((f) => f).length}
