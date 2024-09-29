@@ -3,8 +3,8 @@ import { Events } from "../shared/events";
 import { queryClient } from "./queryClient";
 
 const connectionString = import.meta.env.DEV
-  ? "ws://localhost:8076/ws"
-  : "wss://mb.gordon.business/ws";
+  ? "ws://localhost:8072/ws"
+  : "wss://mbv2.gordon.business/ws";
 
 const messageListeners = new Set<(event: MessageEvent) => void>();
 const addMessageListener = (listener: (event: MessageEvent) => void) => {

@@ -35,10 +35,10 @@ const server = Bun.serve({
       ws.subscribe("minesweeper-global");
     },
   },
-  port: 8076,
+  port: 8072,
 });
 on((event) => {
   server.publish("minesweeper-global", JSON.stringify(event));
 });
 
-console.log("Listening on port 8076");
+console.log("Listening on port 8072");
