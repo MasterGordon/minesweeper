@@ -48,11 +48,11 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
         transition={{ type: "tween" }}
       >
         <div className="w-full p-2 flex flex-col gap-6">
-          <h1 className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-3xl">
-            Minesweeper
-            <br />
+          <h2 className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-3xl">
             Business
-          </h1>
+            <br />
+            Minesweeper
+          </h2>
           <Hr />
           <NavLink href="/">
             <Home />
@@ -82,6 +82,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             className="absolute left-4 bg-black border-white/10 border-y-1 border-r-1 rounded-l-none"
             variant="ghost"
             onClick={() => setIsOpen((isOpen) => !isOpen)}
+            aria-label="Menu"
           >
             <Menu />
           </Button>

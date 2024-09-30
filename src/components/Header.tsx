@@ -12,13 +12,17 @@ import LoginButton from "./Auth/LoginButton";
 import { useWSMutation, useWSQuery } from "../hooks";
 import RegisterButton from "./Auth/RegisterButton";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAtom } from "jotai";
+import { loginTokenAtom } from "../atoms";
 
 const Header = () => {
   const [, setLocation] = useLocation();
   const { data: username } = useWSQuery("user.getSelf", null);
   const queryClient = useQueryClient();
+  const [, setToken] = useAtom(loginTokenAtom);
   const logout = useWSMutation("user.logout", () => {
-    queryClient.invalidateQueries();
+    setToken(undefined);
+    queryClient.resetQueries();
   });
 
   return (

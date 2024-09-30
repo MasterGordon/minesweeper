@@ -5,17 +5,30 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 
 interface SectionProps {
   text: string;
-  image: string;
+  image: OutputMetadata[];
   left?: boolean;
 }
 
 const Section = ({ text, image, left }: SectionProps) => {
   const ref = useRef<HTMLImageElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      if (wrapperRef.current) {
+        setWidth(wrapperRef.current.clientWidth);
+      }
+    });
+    if (wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current);
+    }
+    return () => resizeObserver.disconnect();
+  }, []);
   const { scrollYProgress } = useScroll({
     target: ref,
   });
@@ -44,18 +57,29 @@ const Section = ({ text, image, left }: SectionProps) => {
           ease: "easeInOut",
         }}
       >
-        <motion.img
-          ref={ref}
+        <div
+          ref={wrapperRef}
           style={{
-            translateY,
+            aspectRatio: `${image[0].width / image[0].height}`,
           }}
-          transition={{
-            type: "just",
-            delay: 0.5,
-          }}
-          src={image}
-          className="h-[80%]"
-        />
+          className="h-[80%] min-h-36"
+        >
+          <motion.img
+            alt=""
+            ref={ref}
+            style={{
+              translateY,
+            }}
+            transition={{
+              type: "just",
+              delay: 0.5,
+            }}
+            srcSet={image.map((i) => `${i.src} ${i.width}w`).join(", ")}
+            sizes={`${width}px`}
+            loading="lazy"
+            className="h-[80%]"
+          />
+        </div>
       </motion.div>
     </div>
   );

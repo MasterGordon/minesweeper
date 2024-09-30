@@ -61,9 +61,9 @@ const RegisterButton = () => {
                 .then(async (res) => {
                   setToken(res.token);
                   await wsClient.dispatch("user.loginWithToken", {
-                    token: JSON.parse(res.token),
+                    token: res.token,
                   });
-                  queryClient.invalidateQueries();
+                  await queryClient.resetQueries();
                 })
                 .catch((e) => {
                   setError(e);
