@@ -144,8 +144,10 @@ const Board: React.FC<BoardProps> = (props) => {
             </Button>
           </div>
           {zenMode && (
-            <div className="absolute top-4 left-4 w-full h-full text-white/70 font-mono text-lg">
+            <div className="absolute top-4 left-4 w-full h-full text-white/70 font-mono text-lg flex">
               {game.minesCount - game.isFlagged.flat().filter((f) => f).length}
+              {" | "}
+              Stage {game.stage}
             </div>
           )}
         </div>
