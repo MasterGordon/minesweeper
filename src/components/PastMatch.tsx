@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { ServerGame } from "../../shared/game";
 import { formatRelativeTime, formatTimeSpan } from "../../shared/time";
 import { Button } from "./Button";
@@ -27,7 +28,10 @@ const PastMatch = ({ game }: PastMatchProps) => {
           <div>Duration: {formatTimeSpan(game.finished - game.started)}</div>
         </div>
         <div className="flex justify-end">
-          <Button variant="outline">Show Board</Button>
+          {/* @ts-expect-error as is cheaply typed */}
+          <Button as={Link} href={`/play/${game.uuid}`} variant="outline">
+            Show Board
+          </Button>
         </div>
       </div>
     </div>

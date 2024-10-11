@@ -33,7 +33,9 @@ setup().then(() => {
         <Shell>
           <Switch>
             <Route path="/" component={Home} />
-            <Route path="/play" component={Endless} />
+            <Route path="/play/:gameId?">
+              {(params) => <Endless gameId={params.gameId} />}
+            </Route>
             <Route path="/history" component={MatchHistory} />
             <Route path="/settings" component={Settings} />
           </Switch>

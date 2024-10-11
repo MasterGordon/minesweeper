@@ -241,7 +241,7 @@ const Tile = ({
   const isFlagged = game.isFlagged[i][j];
   const isQuestionMark = game.isQuestionMark[i][j];
   const base =
-    isRevealed || isMine ? (
+    isRevealed || (isMine && !isFlagged) ? (
       <Sprite key="b" texture={theme.revealed} />
     ) : (
       <Sprite key="b" texture={theme.tile} />

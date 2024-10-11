@@ -7,7 +7,11 @@ import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
 import { Fragment, useEffect } from "react";
 
-const Endless = () => {
+interface EndlessProps {
+  gameId?: string;
+}
+
+const Endless: React.FC<EndlessProps> = (props) => {
   const [gameId, setGameId] = useAtom(gameIdAtom);
   const { data: game } = useWSQuery("game.getGameState", gameId!, !!gameId);
   const { data: settings } = useWSQuery("user.getSettings", null);
@@ -17,11 +21,15 @@ const Endless = () => {
   const placeFlag = useWSMutation("game.placeFlag");
   const placeQuestionMark = useWSMutation("game.placeQuestionMark");
   const clearTile = useWSMutation("game.clearTile");
+
   useEffect(() => {
+    if (props.gameId) {
+      setGameId(props.gameId);
+    }
     return () => {
       setGameId(undefined);
     };
-  }, [setGameId]);
+  }, [props.gameId, setGameId]);
 
   return game ? (
     <>
