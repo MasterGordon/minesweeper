@@ -3,6 +3,8 @@ import { createController, createEndpoint } from "./controller";
 import {
   getCurrentGame,
   getGame,
+  getGames,
+  getTotalGamesPlayed,
   parseGameState,
   upsertGameState,
 } from "../repositories/gameRepository";
@@ -125,6 +127,34 @@ export const gameController = createController({
           user,
         });
       }
+    },
+  ),
+  getGames: createEndpoint(
+    z.object({
+      page: z.number().default(0),
+      user: z.string(),
+    }),
+    async ({ page, user }, { db }) => {
+      const perPage = 20;
+      const offset = page * perPage;
+      const games = await getGames(db, user);
+      const parsedGames = games
+        .slice(offset, offset + perPage)
+        .map((game) => parseGameState(game.gameState));
+      const isLastPage = games.length <= offset + perPage;
+      return {
+        data: parsedGames,
+        nextPage: isLastPage ? undefined : page + 1,
+      };
+    },
+  ),
+  getTotalGamesPlayed: createEndpoint(
+    z.object({
+      user: z.string().optional(),
+    }),
+    async ({ user }, { db }) => {
+      const total = await getTotalGamesPlayed(db, user);
+      return total;
     },
   ),
 });

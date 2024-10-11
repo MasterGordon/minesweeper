@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { gameIdAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
 const Endless = () => {
   const [gameId, setGameId] = useAtom(gameIdAtom);
@@ -22,7 +22,6 @@ const Endless = () => {
       setGameId(undefined);
     };
   }, [setGameId]);
-  console.log("set", setGameId);
 
   return game ? (
     <>
@@ -81,10 +80,10 @@ const Endless = () => {
         </Button>
         <h2 className="text-white/80 text-lg mt-8">How to play</h2>
         <p className="text-white/90">
-          Endless minesweeper is just like regular minesweeper but you can't
-          win. Every time you clear the field you just proceed to the next
-          stage. Try to get as far as possible. You might be rewarded for great
-          performance!
+          Endless minesweeper is just like regular minesweeper but you
+          can&apos;t win. Every time you clear the field you just proceed to the
+          next stage. Try to get as far as possible. You might be rewarded for
+          great performance!
           <br />
           <br />
           Good luck!
@@ -96,7 +95,7 @@ const Endless = () => {
         </h2>
         <div className="grid grid-cols-[min-content_2fr_1fr] grid-border-b">
           {new Array(10).fill(0).map((_, i) => (
-            <>
+            <Fragment key={i}>
               <div className="p-4 text-white/80 text-right">{i + 1}.</div>
               <div className="p-4 text-white/90">
                 {leaderboard?.[i]?.user ?? "No User"}
@@ -104,7 +103,7 @@ const Endless = () => {
               <div className="p-4 text-white/90">
                 Stage {leaderboard?.[i]?.stage ?? 0}
               </div>
-            </>
+            </Fragment>
           ))}
         </div>
         <LeaderboardButton />

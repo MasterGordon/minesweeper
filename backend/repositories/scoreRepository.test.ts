@@ -14,7 +14,7 @@ describe("ScoreRepository", () => {
       user: "TestUser",
       uuid: crypto.randomUUID(),
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: Date.now(),
     });
@@ -22,7 +22,7 @@ describe("ScoreRepository", () => {
       user: "TestUser",
       uuid: crypto.randomUUID(),
       stage: 10,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: Date.now(),
     });
@@ -30,7 +30,7 @@ describe("ScoreRepository", () => {
       user: "TestUser",
       uuid: crypto.randomUUID(),
       stage: 20,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 0,
       started: Date.now(),
     });

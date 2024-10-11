@@ -33,7 +33,9 @@ const createWSClient = () => {
         queryKey: ["scoreboard.getScoreBoard", 10],
       });
     }
-    console.log("Received message", data);
+    if (import.meta.env.DEV) {
+      console.log("Received message", data);
+    }
   });
 
   const dispatch = async <

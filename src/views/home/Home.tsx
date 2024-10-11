@@ -13,23 +13,33 @@ import { Link } from "wouter";
 
 const Home = () => {
   const { data: userCount } = useWSQuery("user.getUserCount", null);
+  const { data: gameCount } = useWSQuery("game.getTotalGamesPlayed", {});
   const { data: username } = useWSQuery("user.getSelf", null);
-  const from = (userCount ?? 0) / 2;
-  const to = userCount ?? 0;
+  const usersFrom = (userCount ?? 0) / 2;
+  const usersTo = userCount ?? 0;
+  const gamesFrom = (gameCount ?? 0) / 2;
+  const gamesTo = gameCount ?? 0;
 
-  const count = useMotionValue(from);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const usersCount = useMotionValue(usersFrom);
+  const roundedUsers = useTransform(usersCount, (latest) => Math.round(latest));
+  const gamesCount = useMotionValue(gamesFrom);
+  const roundedGames = useTransform(gamesCount, (latest) => Math.round(latest));
 
   useEffect(() => {
-    const controls = animate(count, to, { duration: 1.5 });
+    const controls = animate(usersCount, usersTo, { duration: 1.5 });
     return controls.stop;
-  }, [count, to]);
+  }, [usersCount, usersTo]);
+  useEffect(() => {
+    const controls = animate(gamesCount, gamesTo, { duration: 1.5 });
+    return controls.stop;
+  }, [gamesCount, gamesTo]);
 
   return (
     <div className="flex flex-col gap-8 mb-32">
       <div className="flex flex-col gap-8 items-center py-48">
         <Tag variant="outline2">
-          <motion.span>{rounded}</motion.span> Users
+          <motion.span>{roundedUsers}</motion.span> Users Played{" "}
+          <motion.span>{roundedGames}</motion.span> Games
         </Tag>
         <h1 className="text-white/80 font-black font-mono text-3xl md:text-6xl text-center">
           Business Minesweeper

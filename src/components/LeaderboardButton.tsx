@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useWSQuery } from "../hooks";
 import { Button } from "./Button";
 import {
@@ -28,7 +29,7 @@ const LeaderboardButton = ({
           <DialogTitle>Leaderboard</DialogTitle>
           <div className="grid grid-cols-[min-content_2fr_1fr] grid-border-b">
             {leaderboard?.map((_, i) => (
-              <>
+              <Fragment key={i}>
                 <div className="p-4 text-white/80 text-right">{i + 1}.</div>
                 <div className="p-4 text-white/90">
                   {leaderboard?.[i]?.user ?? "No User"}
@@ -36,7 +37,7 @@ const LeaderboardButton = ({
                 <div className="p-4 text-white/90">
                   Stage {leaderboard?.[i]?.stage ?? 0}
                 </div>
-              </>
+              </Fragment>
             ))}
           </div>
         </DialogHeader>

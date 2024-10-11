@@ -91,8 +91,7 @@ const Board: React.FC<BoardProps> = (props) => {
     setTimeout(() => {
       if (viewportRef.current) onViewportChange(viewportRef.current);
     }, 200);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game.width, game.height]);
+  }, [game.width, game.height, onViewportChange]);
   useEffect(() => {
     if (!ref.current) return;
     setWidth(ref.current.clientWidth);

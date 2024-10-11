@@ -1,5 +1,6 @@
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useMutation,
   UseMutationResult,
   useQuery,
@@ -71,5 +72,28 @@ export const useWSInvalidation = <
   const queryClient = useQueryClient();
   return (action: `${TController}.${TAction}`) => {
     queryClient.invalidateQueries({ queryKey: [action] });
+  };
+};
+
+export const useInfiniteGames = (user: string | null | undefined) => {
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["game.getGames", { user }],
+      enabled: !!user,
+      queryFn: async ({ pageParam }) => {
+        const result = await wsClient.dispatch("game.getGames", {
+          user: user!,
+          page: pageParam,
+        });
+        return result;
+      },
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      initialPageParam: 0,
+    });
+  return {
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   };
 };
