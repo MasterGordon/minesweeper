@@ -11,6 +11,7 @@ import { queryClient } from "./queryClient.ts";
 import Home from "./views/home/Home.tsx";
 import Settings from "./views/settings/Settings.tsx";
 import MatchHistory from "./views/match-history/MatchHistory.tsx";
+import Collection from "./views/collection/Collection.tsx";
 
 const setup = async () => {
   const token = localStorage.getItem("loginToken");
@@ -38,6 +39,7 @@ setup().then(() => {
             </Route>
             <Route path="/history" component={MatchHistory} />
             <Route path="/settings" component={Settings} />
+            <Route path="/collection" component={Collection} />
           </Switch>
         </Shell>
         <ReactQueryDevtools initialIsOpen={false} />

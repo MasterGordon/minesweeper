@@ -8,15 +8,12 @@ import {
   parseGameState,
   upsertGameState,
 } from "../repositories/gameRepository";
-import {
-  serverGame,
-  serverToClientGame,
-  type ServerGame,
-} from "../../shared/game";
+import { serverToClientGame, type ServerGame } from "../../shared/game";
 import crypto from "crypto";
 import { game } from "../entities/game";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { emit } from "../events";
+import { serverGame } from "../../shared/gameType";
 
 export const gameController = createController({
   getGameState: createEndpoint(z.string(), async (uuid, ctx) => {

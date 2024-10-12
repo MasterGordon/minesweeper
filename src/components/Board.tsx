@@ -26,6 +26,16 @@ import { Button } from "./Button";
 import { Maximize2, Minimize2, RotateCcw } from "lucide-react";
 import useSound from "use-sound";
 import explosion from "../sound/explosion.mp3";
+import "@pixi/canvas-display";
+import "@pixi/canvas-extract";
+import "@pixi/canvas-graphics";
+import "@pixi/canvas-mesh";
+import "@pixi/canvas-particle-container";
+import "@pixi/canvas-prepare";
+import "@pixi/canvas-renderer";
+import "@pixi/canvas-sprite-tiling";
+import "@pixi/canvas-sprite";
+import "@pixi/canvas-text";
 
 interface BoardProps {
   theme: Theme;
@@ -33,6 +43,8 @@ interface BoardProps {
   onLeftClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   restartGame: () => void;
+  width?: number;
+  height?: number;
 }
 
 interface ViewportInfo {
@@ -88,7 +100,7 @@ const Board: React.FC<BoardProps> = (props) => {
     });
   }, []);
   useEffect(() => {
-    setTimeout(() => {
+    setInterval(() => {
       if (viewportRef.current) onViewportChange(viewportRef.current);
     }, 200);
   }, [game.width, game.height, onViewportChange]);
@@ -113,14 +125,25 @@ const Board: React.FC<BoardProps> = (props) => {
 
   const viewportRef = useRef<PixiViewport>(null);
   const [zenMode, setZenMode] = useState(false);
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.addEventListener("wheel", (e) => {
+        e.preventDefault();
+      });
+    }
+  }, [ref]);
 
   return (
     <div className="flex flex-col w-full">
       <div
         className={cn(
-          "w-full h-[70vh] overflow-hidden border-white/40 border-2 flex flex-col",
+          "w-full h-[70vh] overflow-hidden outline-white/40 outline-2 flex flex-col",
           zenMode && "fixed top-0 left-0 z-50 right-0 bottom-0 h-[100vh]",
         )}
+        style={{
+          width: props.width ? `${props.width}px` : undefined,
+          height: props.height ? `${props.height}px` : undefined,
+        }}
         ref={ref}
       >
         <div className="relative">
@@ -135,7 +158,7 @@ const Board: React.FC<BoardProps> = (props) => {
               onClick={() => setZenMode(!zenMode)}
               size="sm"
             >
-              {!zenMode ? (
+              {props.width || props.height ? undefined : !zenMode ? (
                 <Maximize2 className="size-4" />
               ) : (
                 <Minimize2 className="size-4" />
@@ -152,7 +175,7 @@ const Board: React.FC<BoardProps> = (props) => {
         </div>
         {theme && (
           <Stage
-            options={{ hello: true }}
+            options={{ hello: true, forceCanvas: !!props.width }}
             width={width}
             height={height}
             className="select-none"
@@ -163,12 +186,16 @@ const Board: React.FC<BoardProps> = (props) => {
               worldHeight={boardHeight}
               width={width}
               height={height}
-              clamp={{
-                left: -theme.size,
-                right: boardWidth + theme.size,
-                top: -theme.size,
-                bottom: boardHeight + theme.size,
-              }}
+              clamp={
+                props.width || props.height
+                  ? { left: 0, right: boardWidth, top: 0, bottom: boardHeight }
+                  : {
+                      left: -theme.size,
+                      right: boardWidth + theme.size,
+                      top: -theme.size,
+                      bottom: boardHeight + theme.size,
+                    }
+              }
               clampZoom={{
                 minScale: 1,
               }}
@@ -204,7 +231,7 @@ const Board: React.FC<BoardProps> = (props) => {
           </Stage>
         )}
       </div>
-      <Coords />
+      {!props.width && !props.height && <Coords />}
     </div>
   );
 };

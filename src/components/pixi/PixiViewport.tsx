@@ -1,5 +1,5 @@
 import React from "react";
-import * as PIXI from "pixi.js";
+import type { Application } from "pixi.js";
 import { IClampZoomOptions, Viewport as PixiViewport } from "pixi-viewport";
 import { PixiComponent, useApp } from "@pixi/react";
 import { BaseTexture, SCALE_MODES } from "pixi.js";
@@ -23,7 +23,7 @@ export interface ViewportProps {
 }
 
 export interface PixiComponentViewportProps extends ViewportProps {
-  app: PIXI.Application;
+  app: Application;
 }
 
 const PixiComponentViewport = PixiComponent("Viewport", {

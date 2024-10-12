@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { Routes } from "../backend/router";
 import { wsClient } from "./wsClient";
-import { z } from "zod";
+import type { z } from "zod";
 
 export const useWSQuery = <
   TController extends keyof Routes,

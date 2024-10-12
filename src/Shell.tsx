@@ -95,7 +95,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           transition={{ type: "tween" }}
           layout
         />
-        <motion.div className="flex flex-col gap-4 grow max-w-6xl mx-auto w-[calc(100vw-256px)]">
+        <motion.div className="flex flex-col gap-4 grow max-w-7xl mx-auto w-[calc(100vw-256px)]">
           <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
             <Header />
             {children}
