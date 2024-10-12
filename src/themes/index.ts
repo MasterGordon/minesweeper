@@ -1,16 +1,32 @@
 import { basicTheme } from "./basic";
 import { blackAndWhiteTheme } from "./black-and-white";
 import { catsTheme } from "./cats";
+import { circuitTheme } from "./circuit";
+import { circuitBinaryTheme } from "./circuit-binary";
+import { blueTheme } from "./colors/blue";
+import { greenTheme } from "./colors/green";
+import { orangeTheme } from "./colors/orange";
+import { pinkTheme } from "./colors/pink";
+import { purpleTheme } from "./colors/purple";
+import { redTheme } from "./colors/red";
+import { turquoiseTheme } from "./colors/turquoise";
+import { yellowTheme } from "./colors/yellow";
 import { defaultTheme } from "./default";
 import { dinoTheme } from "./dinos";
 import { eldenRingTheme } from "./elden-ring";
+import { farmTheme } from "./farm";
 import { flowersTheme } from "./flowers";
+import { halliGalliTheme } from "./halli-galli";
+import { insectsTheme } from "./insects";
+import { isaacTheme } from "./isaac";
 import { janitorTreshTheme } from "./janitor-tresh";
 import { leagueTeemoTheme } from "./league-teemo";
 import { leagueZiggsTheme } from "./league-ziggs";
 import { mineDogsTheme } from "./mine-dogs";
 import { minecraftNetherTheme } from "./minecraft-nether";
 import { minecraftOverworldTheme } from "./minecraft-overworld";
+import { MLGTheme } from "./MLG";
+import { poopTheme } from "./poop";
 import { retroWaveTheme } from "./retro-wave";
 import { romanceTheme } from "./romance";
 import { techiesDireTheme } from "./techies-dire";
@@ -18,6 +34,7 @@ import { techiesRadiantTheme } from "./techies-radiant";
 import { Theme } from "./Theme";
 import { tronBlueTheme } from "./tron-blue";
 import { tronOrangeTheme } from "./tron-orange";
+import { underwaterTheme } from "./underwater";
 
 interface ThemeEntry {
   name: string;
@@ -141,5 +158,107 @@ export const themes: ThemeEntry[] = [
     tags: ["Video Games"],
     id: "tron-orange",
     theme: tronOrangeTheme,
+  },
+  {
+    name: "Blue",
+    tags: [""],
+    id: "blue",
+    theme: blueTheme,
+  },
+  {
+    name: "Green",
+    tags: [""],
+    id: "green",
+    theme: greenTheme,
+  },
+  {
+    name: "Orange",
+    tags: [""],
+    id: "orange",
+    theme: orangeTheme,
+  },
+  {
+    name: "Pink",
+    tags: [""],
+    id: "pink",
+    theme: pinkTheme,
+  },
+  {
+    name: "Purple",
+    tags: [""],
+    id: "purple",
+    theme: purpleTheme,
+  },
+  {
+    name: "Red",
+    tags: [""],
+    id: "red",
+    theme: redTheme,
+  },
+  {
+    name: "Turquoise",
+    tags: [""],
+    id: "turquoise",
+    theme: turquoiseTheme,
+  },
+  {
+    name: "Yellow",
+    tags: [""],
+    id: "yellow",
+    theme: yellowTheme,
+  },
+  {
+    name: "Circuit",
+    tags: [""],
+    id: "circuit",
+    theme: circuitTheme,
+  },
+  {
+    name: "Circuit Binary",
+    tags: [""],
+    id: "circuit-biinary",
+    theme: circuitBinaryTheme,
+  },
+  {
+    name: "Farm",
+    tags: [""],
+    id: "farm",
+    theme: farmTheme,
+  },
+  {
+    name: "Halli Galli",
+    tags: ["No Numbers"],
+    id: "halli-galli",
+    theme: halliGalliTheme,
+  },
+  {
+    name: "Insects",
+    tags: ["No Numbers"],
+    id: "insects",
+    theme: insectsTheme,
+  },
+  {
+    name: "Binding of Isaac",
+    tags: ["Video Games"],
+    id: "isaac",
+    theme: isaacTheme,
+  },
+  {
+    name: "MLG",
+    tags: [""],
+    id: "mlg",
+    theme: MLGTheme,
+  },
+  {
+    name: "Poop",
+    tags: [""],
+    id: "poop",
+    theme: poopTheme,
+  },
+  {
+    name: "Underwater",
+    tags: [""],
+    id: "underwater",
+    theme: underwaterTheme,
   },
 ];
