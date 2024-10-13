@@ -3,6 +3,10 @@ import { blackAndWhiteTheme } from "./black-and-white";
 import { catsTheme } from "./cats";
 import { circuitTheme } from "./circuit";
 import { circuitBinaryTheme } from "./circuit-binary";
+import { dwarfFortressTheme } from "./color-palettes/dwarf-fortress";
+import { nauticalTheme } from "./color-palettes/nautical";
+import { shadowWarriorTheme } from "./color-palettes/shadow-warrior";
+import { upInSmokeTheme } from "./color-palettes/up-in-smoke";
 import { blueTheme } from "./colors/blue";
 import { greenTheme } from "./colors/green";
 import { orangeTheme } from "./colors/orange";
@@ -260,5 +264,29 @@ export const themes: ThemeEntry[] = [
     tags: [""],
     id: "underwater",
     theme: underwaterTheme,
+  },
+  {
+    name: "Nautical",
+    tags: [""],
+    id: "nautical",
+    theme: nauticalTheme,
+  },
+  {
+    name: "Up in Smoke",
+    tags: [""],
+    id: "up-in-smoke",
+    theme: upInSmokeTheme,
+  },
+  {
+    name: "Shadow Warrior",
+    tags: [""],
+    id: "shadow-warrior",
+    theme: shadowWarriorTheme,
+  },
+  {
+    name: "Dwarf Fortress",
+    tags: [""],
+    id: "dwarf-fortress",
+    theme: dwarfFortressTheme,
   },
 ];
