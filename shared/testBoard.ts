@@ -4,7 +4,7 @@ const rotate = (arr: boolean[][]) => {
   return arr[0].map((_, colIndex) => arr.map((row) => row[colIndex]));
 };
 
-export const testBoard: ServerGame = {
+export const testBoard: (theme: string) => ServerGame = (theme: string) => ({
   user: "TestUser",
   uuid: "C270D7CD-AF97-42CE-A6C9-CB765102CA17",
   width: 11,
@@ -38,4 +38,5 @@ export const testBoard: ServerGame = {
     [...Array<boolean>(11).fill(false)],
     [...Array<boolean>(11).fill(false)],
   ]),
-};
+  theme,
+});

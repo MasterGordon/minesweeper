@@ -1,4 +1,3 @@
-import { defaultTheme } from "../../themes/default";
 import Board from "../../components/Board";
 import { useWSMutation, useWSQuery } from "../../hooks";
 import { useAtom } from "jotai";
@@ -46,7 +45,6 @@ const Endless: React.FC<EndlessProps> = (props) => {
         <LeaderboardButton label="View Leaderboard" />
       </div>
       <Board
-        theme={defaultTheme}
         game={game}
         restartGame={async () => {
           const gameId = await startGame.mutateAsync(null);

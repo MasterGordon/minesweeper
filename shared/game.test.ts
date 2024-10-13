@@ -17,6 +17,7 @@ describe("Game", () => {
 
   it("should convert server to client game", () => {
     const serverGame: ServerGame = {
+      theme: "default",
       mines: [
         [false, false, true, true, true],
         [true, false, true, false, true],
@@ -52,6 +53,7 @@ describe("Game", () => {
       ],
     };
     expect(serverToClientGame(serverGame)).toEqual({
+      theme: "default",
       minesCount: 4,
       isRevealed: [
         [false, false, true, false, true],

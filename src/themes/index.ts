@@ -45,7 +45,7 @@ interface ThemeEntry {
   tags: string[];
   /** dont't ever change this! */
   id: string;
-  theme: Theme;
+  theme: Readonly<Theme>;
 }
 
 export const themes = [

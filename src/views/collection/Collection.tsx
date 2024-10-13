@@ -68,8 +68,7 @@ const Collection = () => {
                 </DropdownMenu>
               </div>
               <Board
-                game={testBoard}
-                theme={theme.theme}
+                game={testBoard(theme.id)}
                 onLeftClick={() => {}}
                 restartGame={() => {}}
                 onRightClick={() => {}}

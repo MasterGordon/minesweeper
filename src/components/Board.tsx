@@ -36,10 +36,10 @@ import "@pixi/canvas-renderer";
 import "@pixi/canvas-sprite-tiling";
 import "@pixi/canvas-sprite";
 import "@pixi/canvas-text";
+import { themes } from "../themes";
 
 interface BoardProps {
   className?: string;
-  theme: Theme;
   game: ServerGame | ClientGame;
   onLeftClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
@@ -120,7 +120,10 @@ const Board: React.FC<BoardProps> = (props) => {
     resizeObserver.observe(ref.current);
     return () => resizeObserver.disconnect();
   }, [onViewportChange]);
-  const theme = useTheme(props.theme);
+  const theme = useTheme(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    themes.find((t) => t.id === (game.theme as any))!.theme,
+  );
   const boardWidth = game.width * (theme?.size || 0);
   const boardHeight = game.height * (theme?.size || 0);
 

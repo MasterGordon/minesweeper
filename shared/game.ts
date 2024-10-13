@@ -39,5 +39,6 @@ export const serverToClientGame = (game: ServerGame): ClientGame => {
     lastClick: game.lastClick,
     started: game.started,
     stage: game.stage,
+    theme: game.theme,
   };
 };
