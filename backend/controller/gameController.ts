@@ -12,8 +12,11 @@ import { serverToClientGame, type ServerGame } from "../../shared/game";
 import crypto from "crypto";
 import { game } from "../entities/game";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { emit } from "../events";
+import { emit, emitToWS } from "../events";
 import { serverGame } from "../../shared/gameType";
+import { pickRandom } from "../../shared/utils";
+import { addGems } from "../repositories/gemsRepository";
+import { getCollection } from "../repositories/collectionRepository";
 
 export const gameController = createController({
   getGameState: createEndpoint(z.string(), async (uuid, ctx) => {
@@ -26,12 +29,14 @@ export const gameController = createController({
   createGame: createEndpoint(z.null(), async (_, { user, db }) => {
     if (!user) throw new UnauthorizedError("Unauthorized");
     const uuid = crypto.randomUUID() as string;
+    const collection = await getCollection(db, user);
     const newGame: ServerGame = game.createGame({
       uuid,
       user: user,
       mines: 2,
       width: 4,
       height: 4,
+      theme: pickRandom(collection.entries.filter((e) => e.selected)).id,
     });
     upsertGameState(db, newGame);
     emit({
@@ -48,7 +53,7 @@ export const gameController = createController({
   }),
   reveal: createEndpoint(
     z.object({ x: z.number(), y: z.number() }),
-    async ({ x, y }, { db, user }) => {
+    async ({ x, y }, { db, user, ws }) => {
       if (!user) throw new UnauthorizedError("Unauthorized");
       const dbGame = await getCurrentGame(db, user);
       const serverGame = parseGameState(dbGame.gameState);
@@ -64,13 +69,24 @@ export const gameController = createController({
           type: "loss",
           stage: serverGame.stage,
           user,
+          time: serverGame.finished - serverGame.started,
         });
+        const reward = game.getRewards(serverGame);
+        emitToWS(
+          {
+            type: "gemsRewarded",
+            stage: serverGame.stage,
+            gems: reward,
+          },
+          ws,
+        );
+        await addGems(db, user, reward);
       }
     },
   ),
   placeFlag: createEndpoint(
     z.object({ x: z.number(), y: z.number() }),
-    async ({ x, y }, { db, user }) => {
+    async ({ x, y }, { db, user, ws }) => {
       if (!user) throw new UnauthorizedError("Unauthorized");
       const dbGame = await getCurrentGame(db, user);
       const serverGame = parseGameState(dbGame.gameState);
@@ -86,7 +102,18 @@ export const gameController = createController({
           type: "loss",
           stage: serverGame.stage,
           user,
+          time: serverGame.finished - serverGame.started,
         });
+        const reward = game.getRewards(serverGame);
+        emitToWS(
+          {
+            type: "gemsRewarded",
+            stage: serverGame.stage,
+            gems: reward,
+          },
+          ws,
+        );
+        await addGems(db, user, reward);
       }
     },
   ),
@@ -106,7 +133,7 @@ export const gameController = createController({
   ),
   clearTile: createEndpoint(
     z.object({ x: z.number(), y: z.number() }),
-    async ({ x, y }, { db, user }) => {
+    async ({ x, y }, { db, user, ws }) => {
       if (!user) throw new UnauthorizedError("Unauthorized");
       const dbGame = await getCurrentGame(db, user);
       const serverGame = parseGameState(dbGame.gameState);
@@ -122,7 +149,18 @@ export const gameController = createController({
           type: "loss",
           stage: serverGame.stage,
           user,
+          time: serverGame.finished - serverGame.started,
         });
+        const reward = game.getRewards(serverGame);
+        emitToWS(
+          {
+            type: "gemsRewarded",
+            stage: serverGame.stage,
+            gems: reward,
+          },
+          ws,
+        );
+        await addGems(db, user, reward);
       }
     },
   ),

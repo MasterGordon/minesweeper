@@ -9,6 +9,7 @@ export type Events =
       type: "loss";
       user: string;
       stage: number;
+      time: number;
     }
   | {
       type: "updateGame";
@@ -19,4 +20,9 @@ export type Events =
       game: string;
       stage: number;
       started: number;
+    }
+  | {
+      type: "gemsRewarded";
+      stage: number;
+      gems: number;
     };

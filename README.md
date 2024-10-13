@@ -10,7 +10,8 @@ For local development you are required to have [bun](https://bun.sh/) installed.
 # Create a .env file for token signing
 echo "SECRET=SOME_RANDOM_STRING" > .env
 bun install
-bun run dev
+bun run drizzle:migrate
+bun dev
 ```
 
 ## 📦 Used Libraries

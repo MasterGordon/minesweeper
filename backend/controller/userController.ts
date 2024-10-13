@@ -11,6 +11,11 @@ import crypto from "crypto";
 import { resetSessionUser, setSessionUser } from "../router";
 import { userSettings } from "../../shared/user-settings";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { getGems } from "../repositories/gemsRepository";
+import {
+  getCollection,
+  upsertCollection,
+} from "../repositories/collectionRepository";
 
 const secret = process.env.SECRET!;
 
@@ -87,4 +92,45 @@ export const userController = createController({
     const count = await getUserCount(db);
     return count;
   }),
+  getOwnGems: createEndpoint(z.null(), async (_, { db, user }) => {
+    if (!user) throw new UnauthorizedError("Unauthorized");
+    const gems = await getGems(db, user);
+    return gems;
+  }),
+  getOwnCollection: createEndpoint(z.null(), async (_, { db, user }) => {
+    if (!user) throw new UnauthorizedError("Unauthorized");
+    const collection = await getCollection(db, user);
+    return collection;
+  }),
+  selectCollectionEntry: createEndpoint(
+    z.object({
+      id: z.string(),
+    }),
+    async ({ id }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const collection = await getCollection(db, user);
+      if (!collection.entries.some((e) => e.id === id)) {
+        throw new Error("Entry not found");
+      }
+      for (const entry of collection.entries) {
+        entry.selected = entry.id === id;
+      }
+      await upsertCollection(db, user, collection);
+    },
+  ),
+  addCollectionEntryToShuffle: createEndpoint(
+    z.object({
+      id: z.string(),
+    }),
+    async ({ id }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const collection = await getCollection(db, user);
+      const entry = collection.entries.find((e) => e.id === id);
+      if (!entry) {
+        throw new Error("Entry not found");
+      }
+      entry.selected = true;
+      await upsertCollection(db, user, collection);
+    },
+  ),
 });

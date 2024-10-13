@@ -38,8 +38,21 @@ export const UserSettings = sqliteTable("userSettings", {
   settings: text("settings").notNull(),
 });
 
+export const Gems = sqliteTable("gems", {
+  user: text("user").primaryKey().notNull(),
+  count: integer("count").notNull(),
+  totalCount: integer("totalCount").notNull(),
+});
+
+export const Collection = sqliteTable("collection", {
+  user: text("user").primaryKey().notNull(),
+  collection: blob("collection", { mode: "buffer" }).notNull(),
+});
+
 export type UserType = Omit<typeof User.$inferSelect, "password"> & {
   password?: undefined;
 };
 export type GameType = typeof Game.$inferSelect;
 export type UserSettingsType = typeof UserSettings.$inferSelect;
+export type GemsType = typeof Gems.$inferSelect;
+export type CollectionType = typeof Collection.$inferSelect;

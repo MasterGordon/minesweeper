@@ -3,7 +3,7 @@ import { blackAndWhiteTheme } from "./black-and-white";
 import { catsTheme } from "./cats";
 import { circuitTheme } from "./circuit";
 import { circuitBinaryTheme } from "./circuit-binary";
-import { dwarfFortressTheme } from "./color-palettes/crimson";
+import { crimson } from "./color-palettes/crimson";
 import { nauticalTheme } from "./color-palettes/nautical";
 import { shadowWarriorTheme } from "./color-palettes/shadow-warrior";
 import { upInSmokeTheme } from "./color-palettes/up-in-smoke";
@@ -48,7 +48,7 @@ interface ThemeEntry {
   theme: Theme;
 }
 
-export const themes: ThemeEntry[] = [
+export const themes = [
   {
     name: "Default",
     tags: ["Simple"],
@@ -220,7 +220,7 @@ export const themes: ThemeEntry[] = [
   {
     name: "Circuit Binary",
     tags: ["No Numbers"],
-    id: "circuit-biinary",
+    id: "circuit-binary",
     theme: circuitBinaryTheme,
   },
   {
@@ -287,6 +287,6 @@ export const themes: ThemeEntry[] = [
     name: "Crimson",
     tags: [],
     id: "crimson",
-    theme: dwarfFortressTheme,
+    theme: crimson,
   },
-];
+] as const satisfies ThemeEntry[];

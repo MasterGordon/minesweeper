@@ -12,6 +12,7 @@ import Home from "./views/home/Home.tsx";
 import Settings from "./views/settings/Settings.tsx";
 import MatchHistory from "./views/match-history/MatchHistory.tsx";
 import Collection from "./views/collection/Collection.tsx";
+import { AnimatePresence } from "framer-motion";
 
 const setup = async () => {
   const token = localStorage.getItem("loginToken");
@@ -32,15 +33,17 @@ setup().then(() => {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <Shell>
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/play/:gameId?">
-              {(params) => <Endless gameId={params.gameId} />}
-            </Route>
-            <Route path="/history" component={MatchHistory} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/collection" component={Collection} />
-          </Switch>
+          <AnimatePresence mode="wait">
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/play/:gameId?">
+                {(params) => <Endless gameId={params.gameId} />}
+              </Route>
+              <Route path="/history" component={MatchHistory} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/collection" component={Collection} />
+            </Switch>
+          </AnimatePresence>
         </Shell>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

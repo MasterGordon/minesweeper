@@ -21,6 +21,11 @@ declare module "*&as=metadata" {
   export default outputs;
 }
 
+declare module "*&inline" {
+  const outputs: string;
+  export default outputs;
+}
+
 declare module "*?as=metadata" {
   const outputs: OutputMetadata[];
   export default outputs;

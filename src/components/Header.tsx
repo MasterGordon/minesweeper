@@ -14,6 +14,7 @@ import RegisterButton from "./Auth/RegisterButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { loginTokenAtom } from "../atoms";
+import Gems from "./Gems";
 
 const Header = () => {
   const [, setLocation] = useLocation();
@@ -24,6 +25,7 @@ const Header = () => {
     setToken(undefined);
     queryClient.resetQueries();
   });
+  const { data: gems } = useWSQuery("user.getOwnGems", null);
 
   return (
     <div className="w-full flex gap-4">
@@ -31,13 +33,14 @@ const Header = () => {
 
       {username ? (
         <DropdownMenu>
+          {typeof gems?.count === "number" && <Gems count={gems?.count ?? 0} />}
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               <UserRound className="text-white/70" />
               <p className="text-white/70 font-bold">{username}</p>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="text-white/70 w-auto mt-2 bg-black">
+          <DropdownMenuContent>
             <DropdownMenuItem onClick={() => setLocation("/profile")}>
               Profile
             </DropdownMenuItem>

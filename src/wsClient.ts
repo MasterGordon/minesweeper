@@ -7,10 +7,12 @@ const connectionString = import.meta.env.DEV
   : "wss://mbv2.gordon.business/ws";
 
 const messageListeners = new Set<(event: MessageEvent) => void>();
-const addMessageListener = (listener: (event: MessageEvent) => void) => {
+export const addMessageListener = (listener: (event: MessageEvent) => void) => {
   messageListeners.add(listener);
 };
-const removeMessageListener = (listener: (event: MessageEvent) => void) => {
+export const removeMessageListener = (
+  listener: (event: MessageEvent) => void,
+) => {
   messageListeners.delete(listener);
 };
 
@@ -31,6 +33,11 @@ const createWSClient = () => {
     if (data.type === "loss") {
       queryClient.invalidateQueries({
         queryKey: ["scoreboard.getScoreBoard", 10],
+      });
+    }
+    if (data.type === "gemsRewarded") {
+      queryClient.invalidateQueries({
+        queryKey: ["user.getOwnGems", null],
       });
     }
     if (import.meta.env.DEV) {

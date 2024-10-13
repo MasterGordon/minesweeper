@@ -13,6 +13,7 @@ export const clientGame = z.object({
   lastClick: z.tuple([z.number(), z.number()]),
   started: z.number(),
   stage: z.number(),
+  theme: z.string().default("default"),
 });
 
 export const serverGame = z.object({
@@ -29,7 +30,18 @@ export const serverGame = z.object({
   started: z.number(),
   finished: z.number().default(0),
   stage: z.number(),
+  theme: z.string().default("default"),
 });
 
 export type ClientGame = z.infer<typeof clientGame>;
 export type ServerGame = z.infer<typeof serverGame>;
+
+export interface UserCollectionEntry {
+  id: string;
+  aquired: number;
+  selected: boolean;
+}
+
+export interface UserCollection {
+  entries: UserCollectionEntry[];
+}

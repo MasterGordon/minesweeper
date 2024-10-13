@@ -38,6 +38,7 @@ import "@pixi/canvas-sprite";
 import "@pixi/canvas-text";
 
 interface BoardProps {
+  className?: string;
   theme: Theme;
   game: ServerGame | ClientGame;
   onLeftClick: (x: number, y: number) => void;
@@ -139,6 +140,7 @@ const Board: React.FC<BoardProps> = (props) => {
         className={cn(
           "w-full h-[70vh] overflow-hidden outline-white/40 outline-2 flex flex-col",
           zenMode && "fixed top-0 left-0 z-50 right-0 bottom-0 h-[100vh]",
+          props.className,
         )}
         style={{
           width: props.width ? `${props.width}px` : undefined,

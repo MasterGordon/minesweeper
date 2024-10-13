@@ -7,6 +7,7 @@ interface CreateGameOptions {
   width: number;
   height: number;
   mines: number;
+  theme: string;
 }
 
 const isValid = (game: ServerGame, x: number, y: number) => {
@@ -48,15 +49,15 @@ const expandBoard = (serverGame: ServerGame) => {
   const { width, height, stage, mines, isFlagged, isRevealed, isQuestionMark } =
     serverGame;
   let dir = stage % 2 === 0 ? "down" : "right";
-  if (stage > 11) {
+  if (stage > 13) {
     dir = "down";
   }
   // Expand the board by the current board size 8x8 -> 16x8
   if (dir === "down") {
-    const newHeight = Math.floor(height * 1.5);
+    const newHeight = Math.floor(Math.min(height + 6, height * 1.5));
     const newWidth = width;
     const newMinesCount = Math.floor(
-      width * height * 0.5 * (0.2 + 0.003 * stage),
+      width * height * 0.5 * (0.2 + 0.0015 * stage),
     );
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
@@ -111,10 +112,10 @@ const expandBoard = (serverGame: ServerGame) => {
     });
   }
   if (dir === "right") {
-    const newWidth = Math.floor(width * 1.5);
+    const newWidth = Math.floor(Math.min(width + 6, width * 1.5));
     const newHeight = height;
     const newMinesCount = Math.floor(
-      width * height * 0.5 * (0.2 + 0.003 * stage),
+      width * height * 0.5 * (0.2 + 0.0015 * stage),
     );
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
@@ -216,6 +217,7 @@ export const game = {
       stage: 1,
       lastClick: [-1, -1],
       minesCount: mines,
+      theme: options.theme,
     };
   },
   reveal: (serverGame: ServerGame, x: number, y: number, initial = false) => {
@@ -304,5 +306,11 @@ export const game = {
     if (hasWon(serverGame)) {
       expandBoard(serverGame);
     }
+  },
+  getRewards: (serverGame: ServerGame) => {
+    const { finished, stage } = serverGame;
+    if (finished == 0) return 0;
+    if (stage < 2) return 0;
+    return Math.floor(Math.pow(2, stage * 0.8));
   },
 };

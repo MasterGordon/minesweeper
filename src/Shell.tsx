@@ -1,12 +1,21 @@
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
 import { motion } from "framer-motion";
-import { GitBranch, History, Home, Menu, Play, Settings } from "lucide-react";
+import {
+  GitBranch,
+  History,
+  Home,
+  Library,
+  Menu,
+  Play,
+  Settings,
+} from "lucide-react";
 import Hr from "./components/Hr";
 import NavLink from "./components/NavLink";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Header from "./components/Header";
 import { Tag } from "./components/Tag";
+import Feed from "./components/Feed/Feed";
 
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
@@ -66,10 +75,16 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             <History />
             History
           </NavLink>
+          <NavLink href="/collection">
+            <Library />
+            Collection <Tag size="sm">NEW</Tag>
+          </NavLink>
           <NavLink href="/settings">
             <Settings />
-            Settings <Tag size="sm">NEW</Tag>
+            Settings
           </NavLink>
+          <Hr />
+          <Feed />
           <Hr />
           <div className="grow" />
           <NavLink href="https://github.com/MasterGordon/minesweeper" external>
