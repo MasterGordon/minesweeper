@@ -3,7 +3,7 @@ import { blackAndWhiteTheme } from "./black-and-white";
 import { catsTheme } from "./cats";
 import { circuitTheme } from "./circuit";
 import { circuitBinaryTheme } from "./circuit-binary";
-import { dwarfFortressTheme } from "./color-palettes/dwarf-fortress";
+import { dwarfFortressTheme } from "./color-palettes/crimson";
 import { nauticalTheme } from "./color-palettes/nautical";
 import { shadowWarriorTheme } from "./color-palettes/shadow-warrior";
 import { upInSmokeTheme } from "./color-palettes/up-in-smoke";
@@ -165,67 +165,67 @@ export const themes: ThemeEntry[] = [
   },
   {
     name: "Blue",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "blue",
     theme: blueTheme,
   },
   {
     name: "Green",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "green",
     theme: greenTheme,
   },
   {
     name: "Orange",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "orange",
     theme: orangeTheme,
   },
   {
     name: "Pink",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "pink",
     theme: pinkTheme,
   },
   {
     name: "Purple",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "purple",
     theme: purpleTheme,
   },
   {
     name: "Red",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "red",
     theme: redTheme,
   },
   {
     name: "Turquoise",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "turquoise",
     theme: turquoiseTheme,
   },
   {
     name: "Yellow",
-    tags: [""],
+    tags: ["Monochrome"],
     id: "yellow",
     theme: yellowTheme,
   },
   {
     name: "Circuit",
-    tags: [""],
+    tags: [],
     id: "circuit",
     theme: circuitTheme,
   },
   {
     name: "Circuit Binary",
-    tags: [""],
+    tags: ["No Numbers"],
     id: "circuit-biinary",
     theme: circuitBinaryTheme,
   },
   {
     name: "Farm",
-    tags: [""],
+    tags: [],
     id: "farm",
     theme: farmTheme,
   },
@@ -249,44 +249,44 @@ export const themes: ThemeEntry[] = [
   },
   {
     name: "MLG",
-    tags: [""],
+    tags: [],
     id: "mlg",
     theme: MLGTheme,
   },
   {
     name: "Poop",
-    tags: [""],
+    tags: [],
     id: "poop",
     theme: poopTheme,
   },
   {
     name: "Underwater",
-    tags: [""],
+    tags: [],
     id: "underwater",
     theme: underwaterTheme,
   },
   {
     name: "Nautical",
-    tags: [""],
+    tags: [],
     id: "nautical",
     theme: nauticalTheme,
   },
   {
     name: "Up in Smoke",
-    tags: [""],
+    tags: [],
     id: "up-in-smoke",
     theme: upInSmokeTheme,
   },
   {
     name: "Shadow Warrior",
-    tags: [""],
+    tags: [],
     id: "shadow-warrior",
     theme: shadowWarriorTheme,
   },
   {
-    name: "Dwarf Fortress",
-    tags: [""],
-    id: "dwarf-fortress",
+    name: "Crimson",
+    tags: [],
+    id: "crimson",
     theme: dwarfFortressTheme,
   },
 ];
