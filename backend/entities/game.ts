@@ -54,7 +54,7 @@ const expandBoard = (serverGame: ServerGame) => {
   }
   // Expand the board by the current board size 8x8 -> 16x8
   if (dir === "down") {
-    const newHeight = Math.floor(Math.min(height + 6, height * 1.5));
+    const newHeight = Math.floor(Math.min(height + 7, height * 1.5));
     const newWidth = width;
     const newMinesCount = Math.floor(
       width * height * 0.5 * (0.2 + 0.0015 * stage),
@@ -112,7 +112,7 @@ const expandBoard = (serverGame: ServerGame) => {
     });
   }
   if (dir === "right") {
-    const newWidth = Math.floor(Math.min(width + 6, width * 1.5));
+    const newWidth = Math.floor(Math.min(width + 7, width * 1.5));
     const newHeight = height;
     const newMinesCount = Math.floor(
       width * height * 0.5 * (0.2 + 0.0015 * stage),

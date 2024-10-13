@@ -9,6 +9,7 @@ import {
   Menu,
   Play,
   Settings,
+  Store,
 } from "lucide-react";
 import Hr from "./components/Hr";
 import NavLink from "./components/NavLink";
@@ -74,6 +75,10 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           <NavLink href="/history">
             <History />
             History
+          </NavLink>
+          <NavLink href="/store">
+            <Store />
+            Store
           </NavLink>
           <NavLink href="/collection">
             <Library />
