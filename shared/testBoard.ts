@@ -33,7 +33,7 @@ export const testBoard: ServerGame = {
   ]),
   minesCount: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8,
   isQuestionMark: rotate([
-    [...Array<boolean>(11).fill(false)],
+    [false, true, ...Array<boolean>(9).fill(false)],
     [...Array<boolean>(11).fill(false)],
     [...Array<boolean>(11).fill(false)],
     [...Array<boolean>(11).fill(false)],
