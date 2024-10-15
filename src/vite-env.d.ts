@@ -26,6 +26,11 @@ declare module "*&inline" {
   export default outputs;
 }
 
+declare module "*.png" {
+  const outputs: string;
+  export default outputs;
+}
+
 declare module "*?as=metadata" {
   const outputs: OutputMetadata[];
   export default outputs;

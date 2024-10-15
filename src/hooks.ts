@@ -2,12 +2,12 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useMutation,
-  UseMutationResult,
+  type UseMutationResult,
   useQuery,
   useQueryClient,
-  UseQueryResult,
+  type UseQueryResult,
 } from "@tanstack/react-query";
-import { Routes } from "../backend/router";
+import type { Routes } from "../backend/router";
 import { wsClient } from "./wsClient";
 import type { z } from "zod";
 
