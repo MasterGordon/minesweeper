@@ -16,7 +16,7 @@ interface LeaderboardButtonProps {
 const LeaderboardButton = ({
   label = "View Full Leaderboard",
 }: LeaderboardButtonProps) => {
-  const { data: leaderboard } = useWSQuery("scoreboard.getScoreBoard", 10);
+  const { data: leaderboard } = useWSQuery("scoreboard.getScoreBoard", 100);
   return (
     <Dialog>
       <DialogTrigger asChild>

@@ -29,6 +29,8 @@ const Collection = () => {
             (e) => e.id === theme.id && e.selected,
           );
           const owned = collection?.entries.some((e) => e.id === theme.id);
+          const times =
+            collection?.entries.filter((e) => e.id === theme.id).length || 0;
           if (!owned) return null;
           return (
             <div key={theme.id}>
@@ -36,7 +38,10 @@ const Collection = () => {
                 <h3 className="text-white/90 text-lg">
                   {theme.name}
                   {owned && (
-                    <span className="text-white/70 text-sm"> (Owned)</span>
+                    <span className="text-white/70 text-sm">
+                      {" "}
+                      (Owned{times > 1 && ` ${times}x`})
+                    </span>
                   )}
                 </h3>
                 {owned && (
