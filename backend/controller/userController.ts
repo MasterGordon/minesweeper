@@ -147,7 +147,7 @@ export const userController = createController({
       if (!lootbox) {
         throw new Error("Lootbox not found");
       }
-      removeGems(db, user, lootbox.price);
+      await removeGems(db, user, lootbox.price);
       const result = weightedPickRandom(lootbox.items, (i) =>
         getWeight(i.rarity),
       );
