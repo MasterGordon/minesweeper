@@ -1,4 +1,5 @@
 import type { themes } from "../src/themes";
+import lootbox1 from "../src/assets/illustrations/lootbox1.png?w=360&inline";
 
 export const rarities = [
   {
@@ -23,11 +24,18 @@ export const rarities = [
   },
 ] as const;
 
-type Rarity = (typeof rarities)[number]["id"];
+export const getWeight = (rarity: Rarity) =>
+  rarities.find((r) => r.id === rarity)?.weight ?? 0;
+
+export type Rarity = (typeof rarities)[number]["id"];
 type ThemeId = (typeof themes)[number]["id"];
 
 interface Lootbox {
   name: string;
+  id: string;
+  price: number;
+  priceText: string;
+  image: string;
   items: {
     id: ThemeId;
     rarity: Rarity;
@@ -36,6 +44,10 @@ interface Lootbox {
 
 export const series1: Lootbox = {
   name: "Series 1",
+  id: "series1",
+  price: 5000,
+  priceText: "5.000",
+  image: lootbox1,
   items: [
     {
       id: "basic",
@@ -195,3 +207,5 @@ export const series1: Lootbox = {
     },
   ],
 };
+
+export const lootboxes = [series1];

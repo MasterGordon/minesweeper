@@ -28,9 +28,8 @@ const Collection = () => {
           const selected = collection?.entries.some(
             (e) => e.id === theme.id && e.selected,
           );
-          const owned = collection?.entries.some(
-            (e) => e.id === theme.id && e.selected,
-          );
+          const owned = collection?.entries.some((e) => e.id === theme.id);
+          if (!owned) return null;
           return (
             <div key={theme.id}>
               <div className="flex gap-4 justify-between">
@@ -40,32 +39,36 @@ const Collection = () => {
                     <span className="text-white/70 text-sm"> (Owned)</span>
                   )}
                 </h3>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm">
-                      <Ellipsis className="size-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent sideOffset={-12}>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        mutateSelected
-                          .mutateAsync({ id: theme.id })
-                          .then(() => refetch());
-                      }}
-                    >
-                      Select
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        mutateShuffle.mutateAsync({ id: theme.id })
-                      }
-                    >
-                      {" "}
-                      Add to shuffle
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {owned && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <Ellipsis className="size-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent sideOffset={-12}>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          mutateSelected
+                            .mutateAsync({ id: theme.id })
+                            .then(() => refetch());
+                        }}
+                      >
+                        Select
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          mutateShuffle
+                            .mutateAsync({ id: theme.id })
+                            .then(() => refetch())
+                        }
+                      >
+                        {" "}
+                        Add to shuffle
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
               <Board
                 game={testBoard(theme.id)}

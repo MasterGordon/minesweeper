@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { feedItemsAtom } from "../../atoms";
+import { feedItemsAtom, lootboxResultAtom } from "../../atoms";
 import FeedItemElement from "./FeedItem";
 import { useEffect } from "react";
 import { addMessageListener, removeMessageListener } from "../../wsClient";
@@ -9,6 +9,7 @@ import { useWSQuery } from "../../hooks";
 
 const Feed: React.FC = () => {
   const [items, setItems] = useAtom(feedItemsAtom);
+  const [, setLootboxResult] = useAtom(lootboxResultAtom);
   const { data: user } = useWSQuery("user.getSelf", null);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ const Feed: React.FC = () => {
   }, [setItems]);
 
   useEffect(() => {
-    const listener = (event: MessageEvent) => {
+    const listener = async (event: MessageEvent) => {
       const data = JSON.parse(event.data) as Events;
       const newItems = [...items];
       if (data.type === "new" && data.user !== user) {
@@ -49,11 +50,29 @@ const Feed: React.FC = () => {
           gems: data.gems,
         });
       }
+      if (data.type === "lootboxPurchased" && data.user !== user) {
+        newItems.push({
+          type: "lootboxPurchased",
+          id: crypto.randomUUID(),
+          decay: Date.now() + 20_000,
+          lootbox: data.lootbox,
+          user: data.user,
+          reward: data.reward,
+          rarity: data.rarity,
+        });
+        await new Promise((res) => setTimeout(res, 2_000));
+      }
+      if (data.type === "lootboxPurchased" && data.user === user) {
+        setLootboxResult({
+          lootbox: data.lootbox,
+          result: data.reward,
+        });
+      }
       setItems(newItems);
     };
     addMessageListener(listener);
     return () => removeMessageListener(listener);
-  }, [items, setItems, user]);
+  }, [items, setItems, setLootboxResult, user]);
 
   return (
     <div className="flex flex-col gap-4 w-full items-start h-[30%] overflow-y-hidden">

@@ -90,7 +90,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           </NavLink>
           <Hr />
           <Feed />
-          <Hr />
+          {/* <Hr /> */}
           <div className="grow" />
           <NavLink href="https://github.com/MasterGordon/minesweeper" external>
             <GitBranch />

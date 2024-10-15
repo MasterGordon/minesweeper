@@ -10,3 +10,8 @@ export const loginTokenAtom = atomWithStorage<string | undefined>(
 export const cursorXAtom = atom(0);
 export const cursorYAtom = atom(0);
 export const feedItemsAtom = atom<FeedItem[]>([]);
+interface LootboxResult {
+  result: string;
+  lootbox: string;
+}
+export const lootboxResultAtom = atom<LootboxResult | undefined>();

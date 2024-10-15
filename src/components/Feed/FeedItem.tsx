@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import { PropsWithChildren } from "react";
 import { formatTimeSpan } from "../../../shared/time";
 import GemsIcon from "../GemIcon";
+import { Rarity as RarityType } from "../../../shared/lootboxes";
+import { Rarity } from "../Rarity";
+import { themes } from "../../themes";
 
 interface BaseFeedItem {
   decay: number;
@@ -26,7 +29,19 @@ interface GemsEarnedItem extends BaseFeedItem {
   stage: number;
 }
 
-export type FeedItem = GameStartedItem | GameFinishedItem | GemsEarnedItem;
+interface LootboxPurchasedItem extends BaseFeedItem {
+  type: "lootboxPurchased";
+  lootbox: string;
+  user: string;
+  reward: string;
+  rarity: RarityType;
+}
+
+export type FeedItem =
+  | GameStartedItem
+  | GameFinishedItem
+  | GemsEarnedItem
+  | LootboxPurchasedItem;
 
 const FeedItemWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -57,6 +72,15 @@ const FeedItemElement: React.FC<{ item: FeedItem }> = ({ item }) => {
       return (
         <FeedItemWrapper>
           You got {item.gems} <GemsIcon /> for <span>stage {item.stage}</span>
+        </FeedItemWrapper>
+      );
+    case "lootboxPurchased":
+      return (
+        <FeedItemWrapper>
+          {item.user} got{" "}
+          <Rarity rarity={item.rarity}>
+            {themes.find((i) => i.id == item.reward)?.name}
+          </Rarity>
         </FeedItemWrapper>
       );
   }

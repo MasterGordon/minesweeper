@@ -11,11 +11,14 @@ import crypto from "crypto";
 import { resetSessionUser, setSessionUser } from "../router";
 import { userSettings } from "../../shared/user-settings";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { getGems } from "../repositories/gemsRepository";
+import { getGems, removeGems } from "../repositories/gemsRepository";
 import {
   getCollection,
   upsertCollection,
 } from "../repositories/collectionRepository";
+import { getWeight, lootboxes } from "../../shared/lootboxes";
+import { weightedPickRandom } from "../../shared/utils";
+import { emit } from "../events";
 
 const secret = process.env.SECRET!;
 
@@ -131,6 +134,37 @@ export const userController = createController({
       }
       entry.selected = true;
       await upsertCollection(db, user, collection);
+    },
+  ),
+  openLootbox: createEndpoint(
+    z.object({
+      id: z.string(),
+    }),
+    async ({ id }, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const collection = await getCollection(db, user);
+      const lootbox = lootboxes.find((l) => l.id === id);
+      if (!lootbox) {
+        throw new Error("Lootbox not found");
+      }
+      removeGems(db, user, lootbox.price);
+      const result = weightedPickRandom(lootbox.items, (i) =>
+        getWeight(i.rarity),
+      );
+      console.log(result);
+      collection.entries.push({
+        id: result.id,
+        aquired: Date.now(),
+        selected: false,
+      });
+      await upsertCollection(db, user, collection);
+      emit({
+        type: "lootboxPurchased",
+        user,
+        lootbox: lootbox.id,
+        reward: result.id,
+        rarity: result.rarity,
+      });
     },
   ),
 });

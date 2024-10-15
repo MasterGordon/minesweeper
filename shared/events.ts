@@ -1,3 +1,4 @@
+import type { Rarity } from "../shared/lootboxes";
 export type EventType = "new" | "finished" | "updateGame" | "updateStage";
 
 export type Events =
@@ -25,4 +26,11 @@ export type Events =
       type: "gemsRewarded";
       stage: number;
       gems: number;
+    }
+  | {
+      type: "lootboxPurchased";
+      lootbox: string;
+      reward: string;
+      user: string;
+      rarity: Rarity;
     };

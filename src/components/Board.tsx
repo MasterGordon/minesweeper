@@ -136,6 +136,17 @@ const Board: React.FC<BoardProps> = (props) => {
       });
     }
   }, [ref]);
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setZenMode(false);
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col w-full">

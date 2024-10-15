@@ -56,9 +56,11 @@ const createWSClient = () => {
   ): Promise<Awaited<ReturnType<Routes[TController][TAction]["handler"]>>> => {
     if (ws.readyState !== WebSocket.OPEN) {
       await new Promise<void>((res) => {
-        ws.onopen = () => {
+        const onOpen = () => {
+          ws.removeEventListener("open", onOpen);
           res();
         };
+        ws.addEventListener("open", onOpen);
       });
     }
     const requestId = crypto.randomUUID();
