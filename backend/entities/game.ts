@@ -311,6 +311,6 @@ export const game = {
     const { finished, stage } = serverGame;
     if (finished == 0) return 0;
     if (stage < 2) return 0;
-    return Math.floor(Math.pow(2, stage * 0.8));
+    return Math.floor(Math.pow(2, stage * 1.1));
   },
 };
