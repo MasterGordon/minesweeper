@@ -10,7 +10,7 @@ import {
 } from "../../components/Dialog";
 import GemsIcon from "../../components/GemIcon";
 import { themes } from "../../themes";
-import { useWSMutation } from "../../hooks";
+import { useWSMutation, useWSQuery } from "../../hooks";
 import { Rarity } from "../../components/Rarity";
 import { lootboxResultAtom } from "../../atoms";
 import { useAtom } from "jotai";
@@ -24,6 +24,7 @@ const Store = () => {
   const openLootbox = useWSMutation("user.openLootbox");
   const [lootboxResult, setLootboxResult] = useAtom(lootboxResultAtom);
   const currentLootbox = lootboxes.find((l) => l.id === lootboxResult?.lootbox);
+  const { refetch } = useWSQuery("user.getOwnGems", null);
 
   // this should be run only once per application lifetime
   useEffect(() => {
@@ -182,7 +183,11 @@ const Store = () => {
                   variant="outline"
                   size="default"
                   className="mx-auto items-center"
-                  onClick={() => openLootbox.mutateAsync({ id: lootbox.id })}
+                  onClick={() =>
+                    openLootbox
+                      .mutateAsync({ id: lootbox.id })
+                      .then(() => refetch())
+                  }
                 >
                   Buy for <b>{lootbox.priceText}</b> <GemsIcon />
                 </Button>
