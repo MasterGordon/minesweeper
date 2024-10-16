@@ -122,7 +122,7 @@ const Board: React.FC<BoardProps> = (props) => {
   }, [onViewportChange]);
   const theme = useTheme(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    themes.find((t) => t.id === (game.theme as any))!.theme,
+    themes.find((t) => t.id === (game.theme as any))!.theme
   );
   const boardWidth = game.width * (theme?.size || 0);
   const boardHeight = game.height * (theme?.size || 0);
@@ -154,7 +154,7 @@ const Board: React.FC<BoardProps> = (props) => {
         className={cn(
           "w-full h-[70vh] overflow-hidden outline-white/40 outline-2 flex flex-col",
           zenMode && "fixed top-0 left-0 z-50 right-0 bottom-0 h-[100vh]",
-          props.className,
+          props.className
         )}
         style={{
           width: props.width ? `${props.width}px` : undefined,
@@ -164,11 +164,9 @@ const Board: React.FC<BoardProps> = (props) => {
       >
         <div className="relative">
           <div className="absolute right-4 top-4 text-white/70 flex gap-2">
-            {zenMode && (
-              <Button variant="ghost" onClick={() => restartGame()} size="sm">
-                <RotateCcw className="size-4" />
-              </Button>
-            )}
+            <Button variant="ghost" onClick={() => restartGame()} size="sm">
+              <RotateCcw className="size-4" />
+            </Button>
             <Button
               variant="ghost"
               onClick={() => setZenMode(!zenMode)}
@@ -319,7 +317,7 @@ const Tile = ({
       y: theme.size * 0.5,
       anchor: 0.5,
     }),
-    [scale, theme.size],
+    [scale, theme.size]
   );
   let content: ReactNode = null;
   if (isFlagged) {
