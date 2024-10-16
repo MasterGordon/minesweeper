@@ -33,14 +33,11 @@ const Endless: React.FC<EndlessProps> = (props) => {
   return game ? (
     <>
       <div className="w-full flex text-white/90 gap-4">
-        <Button
-          onClick={async () => {
-            const gameId = await startGame.mutateAsync(null);
-            setGameId(gameId.uuid);
-          }}
-        >
-          Restart
-        </Button>
+        <div className="w-full h-full text-white/70 font-mono text-lg flex items-center">
+          {game.minesCount - game.isFlagged.flat().filter((f) => f).length}
+          {" | "}
+          Stage {game.stage}
+        </div>
         <div className="grow" />
         <LeaderboardButton label="View Leaderboard" />
       </div>

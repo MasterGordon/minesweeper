@@ -20,7 +20,7 @@ const LeaderboardButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fit text-white/80 self-center" variant="outline">
+        <Button className="w-fit text-white/80 self-center whitespace-nowrap" variant="outline">
           {label}
         </Button>
       </DialogTrigger>
