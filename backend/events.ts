@@ -1,28 +1,5 @@
-import type { ClientGame } from "../shared/game";
-
-export type EventType = "new" | "finished" | "updateGame" | "updateStage";
-
-type Events =
-  | {
-      type: "new";
-      user: string;
-    }
-  | {
-      type: "loss";
-      user: string;
-      stage: number;
-    }
-  | {
-      type: "updateGame";
-      game: string;
-      data: ClientGame;
-    }
-  | {
-      type: "updateStage";
-      game: string;
-      stage: number;
-      started: number;
-    };
+import type { ServerWebSocket } from "bun";
+import type { Events } from "../shared/events";
 
 const listeners = new Set<(event: Events) => void>();
 
@@ -36,4 +13,8 @@ export const off = (listener: (event: Events) => void) => {
 
 export const emit = (event: Events) => {
   listeners.forEach((listener) => listener(event));
+};
+
+export const emitToWS = (event: Events, ws: ServerWebSocket<unknown>) => {
+  ws.send(JSON.stringify(event));
 };

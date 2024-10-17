@@ -1,4 +1,5 @@
 # Logs
+.env
 logs
 *.log
 npm-debug.log*
@@ -24,3 +25,6 @@ temp_dbs
 *.njsproj
 *.sln
 *.sw?
+
+deploy.sh
+sqlite.db

@@ -24,5 +24,5 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["vite.config.ts", "backend/**/*.ts"]
+  "include": ["vite.config.ts", "backend/**/*.ts", "src", "backend"]
 }

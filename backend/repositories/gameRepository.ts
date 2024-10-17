@@ -2,6 +2,7 @@ import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 import { Game, type GameType } from "../schema";
 import { eq, sql, desc, and, not } from "drizzle-orm";
 import type { ServerGame } from "../../shared/game";
+import { decode, encode } from "@msgpack/msgpack";
 
 export const getGame = async (db: BunSQLiteDatabase, uuid: string) => {
   return (await db.select().from(Game).where(eq(Game.uuid, uuid)))[0];
@@ -12,7 +13,7 @@ export const getGames = async (db: BunSQLiteDatabase, user: string) => {
     .select()
     .from(Game)
     .where(and(eq(Game.user, user), not(eq(Game.finished, 0))))
-    .orderBy(Game.started, sql`desc`);
+    .orderBy(desc(Game.started));
 };
 
 export const getCurrentGame = async (db: BunSQLiteDatabase, user: string) => {
@@ -69,8 +70,31 @@ export const upsertGameState = async (
     uuid,
     user,
     stage,
-    gameState: JSON.stringify(game),
+    gameState: Buffer.from(encode(game)),
     finished,
     started,
   });
+};
+
+export const getTotalGamesPlayed = async (
+  db: BunSQLiteDatabase,
+  user?: string,
+) => {
+  if (user)
+    return (
+      await db
+        .select({ count: sql<number>`count(*)` })
+        .from(Game)
+        .where(and(eq(Game.user, user), not(eq(Game.finished, 0))))
+    )[0].count;
+  return (
+    await db
+      .select({ count: sql<number>`count(*)` })
+      .from(Game)
+      .where(not(eq(Game.finished, 0)))
+  )[0].count;
+};
+
+export const parseGameState = (gameState: Buffer) => {
+  return decode(gameState) as ServerGame;
 };

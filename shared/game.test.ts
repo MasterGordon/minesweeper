@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import { getValue, serverToClientGame } from "./game";
+import { getValue, ServerGame, serverToClientGame } from "./game";
 
 describe("Game", () => {
   it("should get value", () => {
@@ -16,7 +16,8 @@ describe("Game", () => {
   });
 
   it("should convert server to client game", () => {
-    const serverGame = {
+    const serverGame: ServerGame = {
+      theme: "default",
       mines: [
         [false, false, true, true, true],
         [true, false, true, false, true],
@@ -36,15 +37,23 @@ describe("Game", () => {
         [false, false, true, false, true],
         [true, false, false, false, false],
       ],
-      isGameOver: false,
       started: 1679599200000,
       finished: 0,
       lastClick: [0, 0] satisfies [number, number],
       uuid: "C270D7CD-AF97-42CE-A6C9-CB765102CA17",
       width: 5,
       height: 4,
+      user: "TestUser",
+      stage: 1,
+      isQuestionMark: [
+        [false, false, true, false, true],
+        [true, false, true, false, true],
+        [false, false, true, false, true],
+        [false, false, false, false, false],
+      ],
     };
     expect(serverToClientGame(serverGame)).toEqual({
+      theme: "default",
       minesCount: 4,
       isRevealed: [
         [false, false, true, false, true],
@@ -69,6 +78,14 @@ describe("Game", () => {
       uuid: "C270D7CD-AF97-42CE-A6C9-CB765102CA17",
       width: 5,
       height: 4,
+      user: "TestUser",
+      stage: 1,
+      isQuestionMark: [
+        [false, false, true, false, true],
+        [true, false, true, false, true],
+        [false, false, true, false, true],
+        [false, false, false, false, false],
+      ],
     });
   });
 });

@@ -1,36 +1,10 @@
-import { z } from "zod";
+import type { ServerGame, ClientGame } from "./gameType";
+export type { ServerGame, ClientGame } from "./gameType";
 
-export const clientGame = z.object({
-  user: z.string(),
-  uuid: z.string(),
-  width: z.number(),
-  height: z.number(),
-  isRevealed: z.array(z.array(z.boolean())),
-  isFlagged: z.array(z.array(z.boolean())),
-  values: z.array(z.array(z.number())),
-  minesCount: z.number(),
-  lastClick: z.tuple([z.number(), z.number()]),
-  started: z.number(),
-  stage: z.number(),
-});
-
-export const serverGame = z.object({
-  user: z.string(),
-  uuid: z.string(),
-  width: z.number(),
-  height: z.number(),
-  isRevealed: z.array(z.array(z.boolean())),
-  isFlagged: z.array(z.array(z.boolean())),
-  mines: z.array(z.array(z.boolean())),
-  minesCount: z.number(),
-  lastClick: z.tuple([z.number(), z.number()]),
-  started: z.number(),
-  finished: z.number().default(0),
-  stage: z.number(),
-});
-
-export type ClientGame = z.infer<typeof clientGame>;
-export type ServerGame = z.infer<typeof serverGame>;
+export const isServerGame = (game: ServerGame | ClientGame) => "mines" in game;
+export const isClientGame = (
+  game: ServerGame | ClientGame,
+): game is ClientGame => !("mines" in game);
 
 export const getValue = (mines: boolean[][], x: number, y: number) => {
   const neighbors = [
@@ -54,6 +28,7 @@ export const serverToClientGame = (game: ServerGame): ClientGame => {
     height: game.height,
     isRevealed: game.isRevealed,
     isFlagged: game.isFlagged,
+    isQuestionMark: game.isQuestionMark,
     minesCount: game.minesCount,
     values: game.mines.map((_, i) =>
       game.mines[0].map((_, j) => {
@@ -64,5 +39,6 @@ export const serverToClientGame = (game: ServerGame): ClientGame => {
     lastClick: game.lastClick,
     started: game.started,
     stage: game.stage,
+    theme: game.theme,
   };
 };

@@ -16,7 +16,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -25,7 +25,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -44,7 +44,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -52,7 +52,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid2",
       user: "TestUser",
       stage: 2,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: started + 1,
     });
@@ -61,7 +61,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid2",
       user: "TestUser",
       stage: 2,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: started + 1,
     });
@@ -76,7 +76,7 @@ describe("GameRepository", () => {
         uuid,
         user: "TestUser",
         stage: 1,
-        gameState: "ANY",
+        gameState: Buffer.from("ANY"),
         finished: 1,
         started,
       });
@@ -92,7 +92,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -101,7 +101,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -114,7 +114,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 1,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started,
     });
@@ -122,7 +122,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 2,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: started + 1,
     });
@@ -131,7 +131,7 @@ describe("GameRepository", () => {
       uuid: "TestUuid",
       user: "TestUser",
       stage: 2,
-      gameState: "ANY",
+      gameState: Buffer.from("ANY"),
       finished: 1,
       started: started + 1,
     });

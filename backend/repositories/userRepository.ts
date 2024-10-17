@@ -1,6 +1,10 @@
 import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
-import { User, type UserType } from "../schema";
+import { User, UserSettings, type UserType } from "../schema";
 import { eq, sql } from "drizzle-orm";
+import {
+  userSettings as userSettingsSchema,
+  type UserSettings as UserSettingsType,
+} from "../../shared/user-settings";
 
 export const registerUser = async (
   db: BunSQLiteDatabase,
@@ -45,4 +49,45 @@ export const getUser = async (
     .from(User)
     .where(eq(sql`lower(${User.name})`, name.toLowerCase()));
   return { ...user[0], password: undefined };
+};
+
+export const getUserSettings = async (
+  db: BunSQLiteDatabase,
+  user: string,
+): Promise<UserSettingsType | undefined> => {
+  const userSettings = await db
+    .select()
+    .from(UserSettings)
+    .where(eq(UserSettings.user, user));
+  const settings = userSettings[0]?.settings || "{}";
+  return userSettingsSchema.parse(JSON.parse(settings));
+};
+
+export const upsertUserSettings = async (
+  db: BunSQLiteDatabase,
+  user: string,
+  settings: UserSettingsType,
+) => {
+  const dbSettings = await db
+    .select()
+    .from(UserSettings)
+    .where(eq(UserSettings.user, user));
+  if (dbSettings.length > 0) {
+    await db
+      .update(UserSettings)
+      .set({
+        settings: JSON.stringify(settings),
+      })
+      .where(eq(UserSettings.user, user));
+  } else {
+    await db.insert(UserSettings).values({
+      user,
+      settings: JSON.stringify(settings),
+    });
+  }
+};
+
+export const getUserCount = async (db: BunSQLiteDatabase) => {
+  return (await db.select({ count: sql<number>`count(*)` }).from(User))[0]
+    .count;
 };
