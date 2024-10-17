@@ -21,8 +21,48 @@ const emitMessage = (event: MessageEvent) => {
 };
 
 const createWSClient = () => {
-  const ws = new WebSocket(connectionString);
-  ws.onmessage = emitMessage;
+  let ws = new WebSocket(connectionString);
+  let reconnectAttempts = 0;
+  const maxReconnectAttempts = 5;
+  let isAuthenticated = false;
+
+  const connect = () => {
+    ws = new WebSocket(connectionString);
+
+    ws.onopen = async () => {
+      reconnectAttempts = 0;
+      const token = localStorage.getItem("loginToken");
+      if (token) {
+        try {
+          await dispatch("user.loginWithToken", { token: JSON.parse(token) });
+          isAuthenticated = true;
+        } catch (e) {
+          console.error("Re-authentication failed", e);
+        }
+      }
+    };
+
+    ws.onmessage = emitMessage;
+
+    ws.onclose = () => {
+      if (reconnectAttempts < maxReconnectAttempts) {
+        setTimeout(() => {
+          reconnectAttempts++;
+          connect();
+        }, 1000 * reconnectAttempts);
+      } else {
+        console.error("Max reconnect attempts reached");
+      }
+    };
+
+    ws.onerror = (err) => {
+      console.error("WebSocket error", err);
+      ws.close();
+    };
+  };
+
+  connect();
+
   addMessageListener((event: MessageEvent) => {
     const data = JSON.parse(event.data) as Events;
     if (data.type === "updateGame") {
