@@ -15,7 +15,7 @@ const Endless: React.FC<EndlessProps> = (props) => {
   const { data: game } = useWSQuery("game.getGameState", gameId!, !!gameId);
   const { data: settings } = useWSQuery("user.getSettings", null);
   const startGame = useWSMutation("game.createGame");
-  const { data: leaderboard } = useWSQuery("scoreboard.getScoreBoard", 10);
+  const { data: leaderboard } = useWSQuery("scoreboard.getScoreBoard", 100);
   const reveal = useWSMutation("game.reveal");
   const placeFlag = useWSMutation("game.placeFlag");
   const placeQuestionMark = useWSMutation("game.placeQuestionMark");

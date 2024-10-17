@@ -1,5 +1,5 @@
 import type { Routes } from "../backend/router";
-import { Events } from "../shared/events";
+import type { Events } from "../shared/events";
 import { queryClient } from "./queryClient";
 
 const connectionString = import.meta.env.DEV

@@ -19,6 +19,7 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import { loadSeaAnemonePreset } from "@tsparticles/preset-sea-anemone";
 import { motion } from "framer-motion";
+import BounceImg from "../../components/BounceImg";
 
 const Store = () => {
   const openLootbox = useWSMutation("user.openLootbox");
@@ -112,7 +113,7 @@ const Store = () => {
                       </DialogHeader>
                       <div className="flex gap-4 flex-wrap flex-row">
                         <div className="flex flex-col gap-4 basis-md">
-                          <img
+                          <BounceImg
                             src={lootbox.image}
                             className="max-w-[360px] w-[min(360px,100%)]"
                           />
@@ -178,7 +179,7 @@ const Store = () => {
                     </DialogContent>
                   </Dialog>
                 </div>
-                <img src={lootbox.image} className="w-[360px]" />
+                <BounceImg src={lootbox.image} className="w-[360px]" />
                 <Button
                   variant="outline"
                   size="default"

@@ -45,7 +45,7 @@ const Feed: React.FC = () => {
         newItems.push({
           type: "gemsEarned",
           id: crypto.randomUUID(),
-          decay: Date.now() + 1000 * 3 + data.gems * 500,
+          decay: Date.now() + 1000 * 3 + data.stage * 1500,
           stage: data.stage,
           gems: data.gems,
         });
