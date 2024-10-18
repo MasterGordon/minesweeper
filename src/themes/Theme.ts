@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 type Png = typeof import("*.png");
 type LazySprite = () => Promise<Png>;
 
+interface WeightedLazySprites {
+  weight: number;
+  sprite: LazySprite;
+}
+
 export interface Theme {
   size: number;
-  mine: LazySprite;
-  tile: LazySprite;
+  mine: LazySprite | WeightedLazySprites[];
+  tile: LazySprite | WeightedLazySprites[];
   revealed: LazySprite;
-  flag: LazySprite;
+  flag: LazySprite | WeightedLazySprites[];
   questionMark: LazySprite;
   lastPos: LazySprite;
   1: LazySprite;
@@ -22,7 +27,17 @@ export interface Theme {
   8: LazySprite;
 }
 
-export type LoadedTheme = Record<Exclude<keyof Theme, "size">, Texture> & {
+export type LoadedTexture =
+  | Texture
+  | {
+      weight: number;
+      sprite: Texture;
+    }[];
+
+export type LoadedTheme = Record<
+  Exclude<keyof Theme, "size">,
+  LoadedTexture
+> & {
   size: number;
 };
 
@@ -34,13 +49,25 @@ export const useTheme = (theme: Theme) => {
     const loadTheme = async () => {
       const loadedEntries = await Promise.all(
         Object.entries(theme).map(async ([key, value]) => {
-          const loaded =
-            typeof value === "function"
-              ? await Assets.load((await value()).default)
-              : value;
+          let loaded = value;
+          if (typeof value === "function") {
+            loaded = await Assets.load((await value()).default);
+          }
+          if (Array.isArray(value)) {
+            loaded = await Promise.all(
+              loaded.map(async (sprite: WeightedLazySprites) => {
+                return {
+                  weight: sprite.weight,
+                  sprite: await Assets.load((await sprite.sprite()).default),
+                };
+              }),
+            );
+          }
+
           return [key, loaded] as const;
         }),
       );
+      console.log("loaded", Object.fromEntries(loadedEntries));
       setLoadedTheme(Object.fromEntries(loadedEntries) as LoadedTheme);
     };
     loadTheme();

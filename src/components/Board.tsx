@@ -1,20 +1,25 @@
 import {
-  ReactNode,
+  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { LoadedTheme, Theme, useTheme } from "../themes/Theme";
+import {
+  type LoadedTexture,
+  type LoadedTheme,
+  type Theme,
+  useTheme,
+} from "../themes/Theme";
 import { Container, Sprite, Stage, useTick } from "@pixi/react";
 import Viewport from "./pixi/PixiViewport";
 import type { Viewport as PixiViewport } from "pixi-viewport";
 import {
-  ClientGame,
+  type ClientGame,
   getValue,
   isServerGame,
-  ServerGame,
+  type ServerGame,
 } from "../../shared/game";
 import { useWSQuery } from "../hooks";
 import { Texture } from "pixi.js";
@@ -37,6 +42,7 @@ import "@pixi/canvas-sprite-tiling";
 import "@pixi/canvas-sprite";
 import "@pixi/canvas-text";
 import { themes } from "../themes";
+import { hashStr, weightedPickRandom } from "../../shared/utils";
 
 interface BoardProps {
   className?: string;
@@ -271,6 +277,20 @@ const Tile = ({
   onRightClick,
   onLeftClick,
 }: TileProps) => {
+  const resolveSprite = useCallback(
+    (lt: LoadedTexture) => {
+      if (Array.isArray(lt)) {
+        console.log("hash:", hashStr(game.uuid + ";" + x + ";" + y));
+        return weightedPickRandom(
+          lt,
+          (i) => i.weight,
+          (tw) => hashStr(game.uuid + ";" + x + ";" + y) * tw,
+        ).sprite;
+      }
+      return lt;
+    },
+    [game.uuid, x, y],
+  );
   const i = x;
   const j = y;
   const isRevealed = game.isRevealed[i][j];
@@ -285,11 +305,13 @@ const Tile = ({
   const isQuestionMark = game.isQuestionMark[i][j];
   const base =
     isRevealed || (isMine && !isFlagged) ? (
-      <Sprite key="b" texture={theme.revealed} />
+      <Sprite key="b" texture={resolveSprite(theme.revealed)} />
     ) : (
-      <Sprite key="b" texture={theme.tile} />
+      <Sprite key="b" texture={resolveSprite(theme.tile)} />
     );
-  const extra = isLastPos ? <Sprite key="e" texture={theme.lastPos} /> : null;
+  const extra = isLastPos ? (
+    <Sprite key="e" texture={resolveSprite(theme.lastPos)} />
+  ) : null;
   const touchStart = useRef<number>(0);
   const isMove = useRef<boolean>(false);
   const startX = useRef<number>(0);
@@ -323,14 +345,24 @@ const Tile = ({
   );
   let content: ReactNode = null;
   if (isFlagged) {
-    content = <Sprite key="c" texture={theme.flag} {...baseProps} />;
+    content = (
+      <Sprite key="c" texture={resolveSprite(theme.flag)} {...baseProps} />
+    );
   } else if (isMine) {
-    content = <Sprite key="c" texture={theme.mine} {...baseProps} />;
+    content = (
+      <Sprite key="c" texture={resolveSprite(theme.mine)} {...baseProps} />
+    );
   } else if (value !== -1 && isRevealed) {
     const img = theme[value.toString() as keyof Theme] as Texture;
     content = img ? <Sprite key="c" texture={img} {...baseProps} /> : null;
   } else if (isQuestionMark) {
-    content = <Sprite key="c" texture={theme.questionMark} {...baseProps} />;
+    content = (
+      <Sprite
+        key="c"
+        texture={resolveSprite(theme.questionMark)}
+        {...baseProps}
+      />
+    );
   }
   const [, setCursorX] = useAtom(cursorXAtom);
   const [, setCursorY] = useAtom(cursorYAtom);

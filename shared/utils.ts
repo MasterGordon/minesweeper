@@ -3,11 +3,19 @@ export const pickRandom = <T>(arr: T[]) => {
   return arr[index];
 };
 
+function bashHashStr(str: string) {
+  let hash = 5381,
+    i = str.length;
+
+  while (i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i);
+  }
+
+  return hash >>> 0;
+}
+
 export const hashStr = (str: string) => {
-  return [...str].reduce(
-    (hash, c) => (Math.imul(31, hash) + c.charCodeAt(0)) | 0,
-    0,
-  );
+  return Number(`0.${bashHashStr(str)}`);
 };
 
 export const weightedPickRandom = <T>(
