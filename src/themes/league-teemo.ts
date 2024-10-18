@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const leagueTeemoTheme: Theme = {
   size: 32,
@@ -6,8 +6,7 @@ export const leagueTeemoTheme: Theme = {
   tile: () => import("../assets/themes/league/tile-1.png"),
   revealed: () => import("../assets/themes/league/revealed.png"),
   flag: () => import("../assets/themes/league/teemo/flag.png"),
-  questionMark: () =>
-    import("../assets/themes/league/question-mark.png"),
+  questionMark: () => import("../assets/themes/league/question-mark.png"),
   lastPos: () => import("../assets/themes/league/last-pos.png"),
   1: () => import("../assets/themes/league/1.png"),
   2: () => import("../assets/themes/league/2.png"),

@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const techiesRadiantTheme: Theme = {
   size: 32,
@@ -6,7 +6,8 @@ export const techiesRadiantTheme: Theme = {
   tile: () => import("../assets/themes/techies/radiant/tile-1.png"),
   revealed: () => import("../assets/themes/techies/radiant/revealed-1.png"),
   flag: () => import("../assets/themes/techies/flag.png"),
-  questionMark: () => import("../assets/themes/techies/radiant/question-mark.png"),
+  questionMark: () =>
+    import("../assets/themes/techies/radiant/question-mark.png"),
   lastPos: () => import("../assets/themes/techies/radiant/last-pos.png"),
   1: () => import("../assets/themes/techies/radiant/1.png"),
   2: () => import("../assets/themes/techies/radiant/2.png"),

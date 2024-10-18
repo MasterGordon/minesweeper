@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const minecraftOverworldTheme: Theme = {
   size: 32,
@@ -6,7 +6,8 @@ export const minecraftOverworldTheme: Theme = {
   tile: () => import("../assets/themes/minecraft-overworld/tile.png"),
   revealed: () => import("../assets/themes/minecraft-overworld/revealed.png"),
   flag: () => import("../assets/themes/minecraft-overworld/flag.png"),
-  questionMark: () => import("../assets/themes/minecraft-overworld/question-mark.png"),
+  questionMark: () =>
+    import("../assets/themes/minecraft-overworld/question-mark.png"),
   lastPos: () => import("../assets/themes/minecraft-overworld/last-pos.png"),
   1: () => import("../assets/themes/minecraft-overworld/1.png"),
   2: () => import("../assets/themes/minecraft-overworld/2.png"),

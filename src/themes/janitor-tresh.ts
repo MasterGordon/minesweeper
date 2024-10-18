@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const janitorTreshTheme: Theme = {
   size: 32,

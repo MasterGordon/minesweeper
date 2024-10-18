@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const circuitTheme: Theme = {
   size: 32,

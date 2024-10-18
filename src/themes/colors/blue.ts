@@ -1,4 +1,4 @@
-import { Theme } from "../Theme";
+import type { Theme } from "../Theme";
 
 export const blueTheme: Theme = {
   size: 32,
@@ -6,7 +6,8 @@ export const blueTheme: Theme = {
   tile: () => import("../../assets/themes/colors/blue/tile.png"),
   revealed: () => import("../../assets/themes/colors/blue/revealed.png"),
   flag: () => import("../../assets/themes/colors/blue/flag.png"),
-  questionMark: () => import("../../assets/themes/colors/blue/question-mark.png"),
+  questionMark: () =>
+    import("../../assets/themes/colors/blue/question-mark.png"),
   lastPos: () => import("../../assets/themes/colors/blue/last-pos.png"),
   1: () => import("../../assets/themes/colors/blue/1.png"),
   2: () => import("../../assets/themes/colors/blue/2.png"),

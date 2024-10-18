@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const minecraftNetherTheme: Theme = {
   size: 32,
@@ -6,7 +6,8 @@ export const minecraftNetherTheme: Theme = {
   tile: () => import("../assets/themes/minecraft-nether/tile.png"),
   revealed: () => import("../assets/themes/minecraft-nether/revealed.png"),
   flag: () => import("../assets/themes/minecraft-nether/flag.png"),
-  questionMark: () => import("../assets/themes/minecraft-nether/question-mark.png"),
+  questionMark: () =>
+    import("../assets/themes/minecraft-nether/question-mark.png"),
   lastPos: () => import("../assets/themes/minecraft-nether/last-pos.png"),
   1: () => import("../assets/themes/minecraft-nether/1.png"),
   2: () => import("../assets/themes/minecraft-nether/2.png"),

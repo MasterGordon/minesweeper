@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const blackAndWhiteTheme: Theme = {
   size: 32,
@@ -6,7 +6,8 @@ export const blackAndWhiteTheme: Theme = {
   tile: () => import("../assets/themes/black-and-white/tile.png"),
   revealed: () => import("../assets/themes/black-and-white/revealed.png"),
   flag: () => import("../assets/themes/black-and-white/flag.png"),
-  questionMark: () => import("../assets/themes/black-and-white/question-mark.png"),
+  questionMark: () =>
+    import("../assets/themes/black-and-white/question-mark.png"),
   lastPos: () => import("../assets/themes/black-and-white/last-pos.png"),
   1: () => import("../assets/themes/black-and-white/1.png"),
   2: () => import("../assets/themes/black-and-white/2.png"),

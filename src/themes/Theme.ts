@@ -81,7 +81,6 @@ export const useTheme = (theme: Theme) => {
           return [key, loaded] as const;
         }),
       );
-      console.log("loaded", Object.fromEntries(loadedEntries));
       setLoadedTheme(Object.fromEntries(loadedEntries) as LoadedTheme);
     };
     loadTheme();

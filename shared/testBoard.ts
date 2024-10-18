@@ -1,4 +1,4 @@
-import { ServerGame } from "./gameType";
+import type { ServerGame } from "./gameType";
 
 const rotate = (arr: boolean[][]) => {
   return arr[0].map((_, colIndex) => arr.map((row) => row[colIndex]));

@@ -35,7 +35,7 @@ import { retroWaveTheme } from "./retro-wave";
 import { romanceTheme } from "./romance";
 import { techiesDireTheme } from "./techies-dire";
 import { techiesRadiantTheme } from "./techies-radiant";
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 import { tronBlueTheme } from "./tron-blue";
 import { tronOrangeTheme } from "./tron-orange";
 import { underwaterTheme } from "./underwater";

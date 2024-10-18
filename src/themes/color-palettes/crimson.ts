@@ -1,4 +1,4 @@
-import { Theme } from "../Theme";
+import type { Theme } from "../Theme";
 
 export const crimson: Theme = {
   size: 32,

@@ -280,7 +280,6 @@ const Tile = ({
   const resolveSprite = useCallback(
     (lt: LoadedTexture) => {
       if (Array.isArray(lt)) {
-        console.log("hash:", hashStr(game.uuid + ";" + x + ";" + y));
         return weightedPickRandom(
           lt,
           (i) => i.weight,

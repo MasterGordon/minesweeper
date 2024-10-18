@@ -151,7 +151,6 @@ export const userController = createController({
       const result = weightedPickRandom(lootbox.items, (i) =>
         getWeight(i.rarity),
       );
-      console.log(result);
       collection.entries.push({
         id: result.id,
         aquired: Date.now(),
