@@ -1,11 +1,14 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const MLGTheme: Theme = {
   size: 32,
   mine: () => import("../assets/themes/MLG/mine.png"),
   tile: () => import("../assets/themes/MLG/tile.png"),
   revealed: () => import("../assets/themes/MLG/revealed.png"),
-  flag: () => import("../assets/themes/MLG/flag-2.png"),
+  flag: even(
+    () => import("../assets/themes/MLG/flag-1.png"),
+    () => import("../assets/themes/MLG/flag-2.png")
+  ),
   questionMark: () => import("../assets/themes/MLG/question-mark.png"),
   lastPos: () => import("../assets/themes/MLG/last-pos.png"),
   1: () => import("../assets/themes/MLG/1.png"),

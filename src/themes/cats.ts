@@ -1,8 +1,11 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const catsTheme: Theme = {
   size: 32,
-  mine: () => import("../assets/themes/cats/mine-2.png"),
+  mine: even(
+    () => import("../assets/themes/cats/mine-1.png"),
+    () => import("../assets/themes/cats/mine-2.png")
+  ),
   tile: () => import("../assets/themes/cats/tile.png"),
   revealed: () => import("../assets/themes/cats/revealed.png"),
   flag: () => import("../assets/themes/cats/flag.png"),

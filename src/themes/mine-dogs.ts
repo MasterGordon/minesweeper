@@ -1,11 +1,14 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const mineDogsTheme: Theme = {
   size: 32,
   mine: () => import("../assets/themes/mine-dogs/mine.png"),
   tile: () => import("../assets/themes/mine-dogs/tile.png"),
   revealed: () => import("../assets/themes/mine-dogs/revealed.png"),
-  flag: () => import("../assets/themes/mine-dogs/flag-2.png"),
+  flag: even(
+    () => import("../assets/themes/mine-dogs/flag-1.png"),
+    () => import("../assets/themes/mine-dogs/flag-2.png")
+  ),
   questionMark: () => import("../assets/themes/mine-dogs/question-mark.png"),
   lastPos: () => import("../assets/themes/mine-dogs/last-pos.png"),
   1: () => import("../assets/themes/mine-dogs/1.png"),

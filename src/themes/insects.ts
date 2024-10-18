@@ -1,8 +1,11 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const insectsTheme: Theme = {
   size: 32,
-  mine: () => import("../assets/themes/insects/mine-1.png"),
+  mine: even(
+    () => import("../assets/themes/insects/mine-1.png"),
+    () => import("../assets/themes/insects/mine-2.png")
+  ),
   tile: () => import("../assets/themes/insects/tile.png"),
   revealed: () => import("../assets/themes/insects/revealed.png"),
   flag: () => import("../assets/themes/insects/flag.png"),

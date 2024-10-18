@@ -1,8 +1,12 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const isaacTheme: Theme = {
   size: 32,
-  mine: () => import("../assets/themes/isaac/mine-3.png"),
+  mine: even(
+    () => import("../assets/themes/isaac/mine-1.png"),
+    () => import("../assets/themes/isaac/mine-2.png"),
+    () => import("../assets/themes/isaac/mine-3.png")
+  ),
   tile: () => import("../assets/themes/isaac/tile.png"),
   revealed: () => import("../assets/themes/isaac/revealed.png"),
   flag: () => import("../assets/themes/isaac/flag.png"),

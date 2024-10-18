@@ -1,4 +1,4 @@
-import { even, type Theme } from "./Theme";
+import { even, mainWithSpecials, type Theme } from "./Theme";
 
 export const techiesDireTheme: Theme = {
   size: 32,
@@ -6,7 +6,11 @@ export const techiesDireTheme: Theme = {
     () => import("../assets/themes/techies/dire/mine-1.png"),
     () => import("../assets/themes/techies/dire/mine-2.png"),
   ),
-  tile: () => import("../assets/themes/techies/dire/tile-1.png"),
+  tile: mainWithSpecials(
+    () => import("../assets/themes/techies/dire/tile-1.png"),
+    () => import("../assets/themes/techies/dire/tile-2.png"),
+    () => import("../assets/themes/techies/dire/tile-3.png")
+  ),
   revealed: () => import("../assets/themes/techies/dire/revealed.png"),
   flag: () => import("../assets/themes/techies/flag.png"),
   questionMark: () => import("../assets/themes/techies/dire/question-mark.png"),

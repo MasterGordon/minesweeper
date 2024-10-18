@@ -1,8 +1,11 @@
-import type { Theme } from "./Theme";
+import { even, type Theme } from "./Theme";
 
 export const dinoTheme: Theme = {
   size: 32,
-  mine: () => import("../assets/themes/dinos/mine-1.png"),
+  mine: even(
+    () => import("../assets/themes/dinos/mine-1.png"),
+    () => import("../assets/themes/dinos/mine-2.png")
+  ),
   tile: () => import("../assets/themes/dinos/tile.png"),
   revealed: () => import("../assets/themes/dinos/revealed-1.png"),
   flag: () => import("../assets/themes/dinos/flag.png"),
