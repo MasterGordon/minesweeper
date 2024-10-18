@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ServerGame } from "../../shared/game";
+import type { ServerGame } from "../../shared/game";
 import { formatRelativeTime, formatTimeSpan } from "../../shared/time";
 import { Button } from "./Button";
 

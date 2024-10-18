@@ -24,7 +24,6 @@ const createWSClient = () => {
   let ws = new WebSocket(connectionString);
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 5;
-  let isAuthenticated = false;
 
   const connect = () => {
     ws = new WebSocket(connectionString);
@@ -35,7 +34,6 @@ const createWSClient = () => {
       if (token) {
         try {
           await dispatch("user.loginWithToken", { token: JSON.parse(token) });
-          isAuthenticated = true;
         } catch (e) {
           console.error("Re-authentication failed", e);
         }

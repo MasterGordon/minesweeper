@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { FeedItem } from "./components/Feed/FeedItem";
+import type { FeedItem } from "./components/Feed/FeedItem";
 
 export const gameIdAtom = atom<string | undefined>(undefined);
 export const loginTokenAtom = atomWithStorage<string | undefined>(

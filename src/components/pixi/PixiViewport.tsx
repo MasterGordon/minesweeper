@@ -1,6 +1,9 @@
 import React from "react";
 import type { Application } from "pixi.js";
-import { IClampZoomOptions, Viewport as PixiViewport } from "pixi-viewport";
+import {
+  type IClampZoomOptions,
+  Viewport as PixiViewport,
+} from "pixi-viewport";
 import { PixiComponent, useApp } from "@pixi/react";
 import { BaseTexture, SCALE_MODES } from "pixi.js";
 BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;

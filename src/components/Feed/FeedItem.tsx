@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { formatTimeSpan } from "../../../shared/time";
 import GemsIcon from "../GemIcon";
-import { Rarity as RarityType } from "../../../shared/lootboxes";
+import type { Rarity as RarityType } from "../../../shared/lootboxes";
 import { Rarity } from "../Rarity";
 import { themes } from "../../themes";
 
