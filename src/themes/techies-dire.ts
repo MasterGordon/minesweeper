@@ -1,8 +1,17 @@
-import { Theme } from "./Theme";
+import type { Theme } from "./Theme";
 
 export const techiesDireTheme: Theme = {
   size: 32,
-  mine: () => import("../assets/themes/techies/dire/mine-1.png"),
+  mine: [
+    {
+      weight: 0.5,
+      sprite: () => import("../assets/themes/techies/dire/mine-1.png"),
+    },
+    {
+      weight: 0.5,
+      sprite: () => import("../assets/themes/techies/dire/mine-2.png"),
+    },
+  ],
   tile: () => import("../assets/themes/techies/dire/tile-1.png"),
   revealed: () => import("../assets/themes/techies/dire/revealed.png"),
   flag: () => import("../assets/themes/techies/flag.png"),

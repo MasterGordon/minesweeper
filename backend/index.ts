@@ -15,6 +15,7 @@ const requestDuration = new Histogram({
   help: "Request duration",
   labelNames: ["action"],
 });
+// promClient.register.registerMetric(requestDuration);
 
 const metricsUser = process.env.METRICS_USER;
 const metricsPassword = process.env.METRICS_PASSWORD;

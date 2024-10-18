@@ -184,11 +184,11 @@ const Store = () => {
                   variant="outline"
                   size="default"
                   className="mx-auto items-center"
-                  onClick={() =>
+                  onClick={() => {
                     openLootbox
                       .mutateAsync({ id: lootbox.id })
-                      .then(() => refetch())
-                  }
+                      .then(() => refetch());
+                  }}
                 >
                   Buy for <b>{lootbox.priceText}</b> <GemsIcon />
                 </Button>
