@@ -41,6 +41,20 @@ export type LoadedTheme = Record<
   size: number;
 };
 
+export const even = (...sprites: LazySprite[]): WeightedLazySprites[] => {
+  return sprites.map((sprite) => ({ weight: 0.5, sprite }));
+};
+
+export const mainWithSpecials = (
+  ...sprites: LazySprite[]
+): WeightedLazySprites[] => {
+  const [main, ...specials] = sprites;
+  return [
+    { weight: 1, sprite: main },
+    ...specials.map((sprite) => ({ weight: 0.05, sprite })),
+  ];
+};
+
 export const useTheme = (theme: Theme) => {
   const [loadedTheme, setLoadedTheme] = useState<LoadedTheme | undefined>(
     undefined,
