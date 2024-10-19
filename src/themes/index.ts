@@ -3,7 +3,7 @@ import { blackAndWhiteTheme } from "./black-and-white";
 import { catsTheme } from "./cats";
 import { circuitTheme } from "./circuit";
 import { circuitBinaryTheme } from "./circuit-binary";
-import { crimson } from "./color-palettes/crimson";
+import { crimsonTheme } from "./color-palettes/crimson";
 import { nauticalTheme } from "./color-palettes/nautical";
 import { shadowWarriorTheme } from "./color-palettes/shadow-warrior";
 import { upInSmokeTheme } from "./color-palettes/up-in-smoke";
@@ -31,6 +31,7 @@ import { minecraftNetherTheme } from "./minecraft-nether";
 import { minecraftOverworldTheme } from "./minecraft-overworld";
 import { MLGTheme } from "./MLG";
 import { poopTheme } from "./poop";
+import { rainbowTheme } from "./rainbow";
 import { retroWaveTheme } from "./retro-wave";
 import { romanceTheme } from "./romance";
 import { techiesDireTheme } from "./techies-dire";
@@ -287,6 +288,12 @@ export const themes = [
     name: "Crimson",
     tags: [],
     id: "crimson",
-    theme: crimson,
+    theme: crimsonTheme,
+  },
+  {
+    name: "Rainbow",
+    tags: [],
+    id: "rainbow",
+    theme: rainbowTheme,
   },
 ] as const satisfies ThemeEntry[];

@@ -110,6 +110,10 @@ export const series1: Lootbox = {
       rarity: "uncommon",
     },
     {
+      id: "rainbow",
+      rarity: "uncommon",
+    },
+    {
       id: "flowers",
       rarity: "rare",
     },

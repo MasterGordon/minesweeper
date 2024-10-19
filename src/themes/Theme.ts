@@ -13,9 +13,9 @@ export interface Theme {
   size: number;
   mine: LazySprite | WeightedLazySprites[];
   tile: LazySprite | WeightedLazySprites[];
-  revealed: LazySprite;
+  revealed: LazySprite | WeightedLazySprites[];
   flag: LazySprite | WeightedLazySprites[];
-  questionMark: LazySprite;
+  questionMark: LazySprite | WeightedLazySprites[];
   lastPos: LazySprite;
   1: LazySprite;
   2: LazySprite;
@@ -57,7 +57,7 @@ export const mainWithSpecials = (
 
 export const useTheme = (theme: Theme) => {
   const [loadedTheme, setLoadedTheme] = useState<LoadedTheme | undefined>(
-    undefined,
+    undefined
   );
   useEffect(() => {
     const loadTheme = async () => {
@@ -74,12 +74,12 @@ export const useTheme = (theme: Theme) => {
                   weight: sprite.weight,
                   sprite: await Assets.load((await sprite.sprite()).default),
                 };
-              }),
+              })
             );
           }
 
           return [key, loaded] as const;
-        }),
+        })
       );
       setLoadedTheme(Object.fromEntries(loadedEntries) as LoadedTheme);
     };

@@ -1,6 +1,6 @@
 import type { Theme } from "../Theme";
 
-export const crimson: Theme = {
+export const crimsonTheme: Theme = {
   size: 32,
   mine: () => import("../../assets/themes/color-palettes/crimson/mine.png"),
   tile: () => import("../../assets/themes/color-palettes/crimson/tile.png"),
