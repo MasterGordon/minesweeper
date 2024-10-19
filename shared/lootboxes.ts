@@ -1,5 +1,6 @@
 import type { themes } from "../src/themes";
 import lootbox1 from "../src/assets/illustrations/lootbox1.png?w=360&inline";
+import lootboxEvent1 from "../src/assets/illustrations/lootbox-event1.png?w=360&inline";
 
 export const rarities = [
   {
@@ -217,7 +218,7 @@ export const halloween: Lootbox = {
   id: "halloween",
   price: 6000,
   priceText: "6.000",
-  image: lootbox1,
+  image: lootboxEvent1,
   items: [
     {
       id: "skeleton",
