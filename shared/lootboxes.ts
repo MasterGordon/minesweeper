@@ -37,6 +37,7 @@ interface Lootbox {
   price: number;
   priceText: string;
   image: string;
+  noDuplicates: boolean;
   items: {
     id: ThemeId;
     rarity: Rarity;
@@ -49,6 +50,7 @@ export const series1: Lootbox = {
   price: 5000,
   priceText: "5.000",
   image: lootbox1,
+  noDuplicates: false,
   items: [
     {
       id: "basic",
@@ -218,6 +220,7 @@ export const halloween: Lootbox = {
   id: "halloween",
   price: 6000,
   priceText: "6.000",
+  noDuplicates: true,
   image: lootboxEvent1,
   items: [
     {

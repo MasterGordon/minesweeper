@@ -147,10 +147,15 @@ export const userController = createController({
       if (!lootbox) {
         throw new Error("Lootbox not found");
       }
+      const itemsCopy = [...lootbox.items];
+      if (lootbox.noDuplicates) {
+        itemsCopy.filter((i) => !collection.entries.some((e) => e.id === i.id));
+      }
+      if (itemsCopy.length === 0) {
+        throw new Error("No items left");
+      }
       await removeGems(db, user, lootbox.price);
-      const result = weightedPickRandom(lootbox.items, (i) =>
-        getWeight(i.rarity),
-      );
+      const result = weightedPickRandom(itemsCopy, (i) => getWeight(i.rarity));
       collection.entries.push({
         id: result.id,
         aquired: Date.now(),
