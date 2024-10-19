@@ -21,6 +21,11 @@ import { eldenRingTheme } from "./elden-ring";
 import { farmTheme } from "./farm";
 import { flowersTheme } from "./flowers";
 import { halliGalliTheme } from "./halli-galli";
+import { ghostTheme } from "./halloween/ghost";
+import { pumpkinTheme } from "./halloween/pumpkin";
+import { skeletonTheme } from "./halloween/skeleton";
+import { vampireTheme } from "./halloween/vampire";
+import { zombieTheme } from "./halloween/zombie";
 import { insectsTheme } from "./insects";
 import { isaacTheme } from "./isaac";
 import { janitorTreshTheme } from "./janitor-tresh";
@@ -295,5 +300,35 @@ export const themes = [
     tags: [],
     id: "rainbow",
     theme: rainbowTheme,
+  },
+  {
+    name: "Ghost",
+    tags: ["halloween"],
+    id: "ghost",
+    theme: ghostTheme,
+  },
+  {
+    name: "Pumpkin",
+    tags: ["halloween"],
+    id: "pumpkin",
+    theme: pumpkinTheme,
+  },
+  {
+    name: "Skeleton",
+    tags: ["halloween"],
+    id: "skeleton",
+    theme: skeletonTheme,
+  },
+  {
+    name: "Vampire",
+    tags: ["halloween"],
+    id: "vampire",
+    theme: vampireTheme,
+  },
+  {
+    name: "Zombie",
+    tags: ["halloween"],
+    id: "zombie",
+    theme: zombieTheme,
   },
 ] as const satisfies ThemeEntry[];

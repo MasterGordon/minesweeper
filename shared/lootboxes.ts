@@ -212,4 +212,34 @@ export const series1: Lootbox = {
   ],
 };
 
-export const lootboxes = [series1];
+export const halloween: Lootbox = {
+  name: "Halloween",
+  id: "halloween",
+  price: 6000,
+  priceText: "6.000",
+  image: lootbox1,
+  items: [
+    {
+      id: "skeleton",
+      rarity: "rare",
+    },
+    {
+      id: "vampire",
+      rarity: "rare",
+    },
+    {
+      id: "ghost",
+      rarity: "rare",
+    },
+    {
+      id: "pumpkin",
+      rarity: "rare",
+    },
+    {
+      id: "zombie",
+      rarity: "rare",
+    },
+  ],
+};
+
+export const lootboxes = [series1, halloween];

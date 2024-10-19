@@ -1,12 +1,9 @@
-import { mainWithSpecials, type Theme } from "./Theme";
+import { type Theme } from "./Theme";
 
 export const leagueTeemoTheme: Theme = {
   size: 32,
   mine: () => import("../assets/themes/league/teemo/mine.png"),
-  tile: mainWithSpecials(
-    () => import("../assets/themes/league/tile-1.png"),
-    () => import("../assets/themes/league/tile-2.png")
-  ),
+  tile: () => import("../assets/themes/league/tile-1.png"),
   revealed: () => import("../assets/themes/league/revealed.png"),
   flag: () => import("../assets/themes/league/teemo/flag.png"),
   questionMark: () => import("../assets/themes/league/question-mark.png"),
