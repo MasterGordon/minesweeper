@@ -51,7 +51,7 @@ export const mainWithSpecials = (
   const [main, ...specials] = sprites;
   return [
     { weight: 1, sprite: main },
-    ...specials.map((sprite) => ({ weight: 0.3, sprite })),
+    ...specials.map((sprite) => ({ weight: 0.05, sprite })),
   ];
 };
 

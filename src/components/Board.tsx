@@ -42,7 +42,8 @@ import "@pixi/canvas-sprite-tiling";
 import "@pixi/canvas-sprite";
 import "@pixi/canvas-text";
 import { themes } from "../themes";
-import { hashStr, weightedPickRandom } from "../../shared/utils";
+import { weightedPickRandom } from "../../shared/utils";
+import gen from "random-seed";
 
 interface BoardProps {
   className?: string;
@@ -280,10 +281,11 @@ const Tile = ({
   const resolveSprite = useCallback(
     (lt: LoadedTexture) => {
       if (Array.isArray(lt)) {
+        const rng = gen.create(game.uuid + ";" + x + ";" + y);
         return weightedPickRandom(
           lt,
           (i) => i.weight,
-          (tw) => hashStr(game.uuid + ";" + x + ";" + y) * tw,
+          (tw) => rng.floatBetween(0, tw),
         ).sprite;
       }
       return lt;
