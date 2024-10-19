@@ -147,9 +147,11 @@ export const userController = createController({
       if (!lootbox) {
         throw new Error("Lootbox not found");
       }
-      const itemsCopy = [...lootbox.items];
+      let itemsCopy = [...lootbox.items];
       if (lootbox.noDuplicates) {
-        itemsCopy.filter((i) => !collection.entries.some((e) => e.id === i.id));
+        itemsCopy = itemsCopy.filter(
+          (i) => !collection.entries.some((e) => e.id === i.id),
+        );
       }
       if (itemsCopy.length === 0) {
         throw new Error("No items left");
