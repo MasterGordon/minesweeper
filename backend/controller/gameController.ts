@@ -18,13 +18,16 @@ import { pickRandom } from "../../shared/utils";
 import { addGems } from "../repositories/gemsRepository";
 import { getCollection } from "../repositories/collectionRepository";
 
+const safeGameState = (gameState: ServerGame) => {
+  return gameState.finished ? gameState : serverToClientGame(gameState);
+};
+
 export const gameController = createController({
   getGameState: createEndpoint(z.string(), async (uuid, ctx) => {
     const game = await getGame(ctx.db, uuid);
     const parsed = parseGameState(game.gameState);
     const gameState = await serverGame.parseAsync(parsed);
-    if (game.finished) return gameState;
-    return serverToClientGame(gameState);
+    return safeGameState(gameState);
   }),
   createGame: createEndpoint(z.null(), async (_, { user, db }) => {
     if (!user) throw new UnauthorizedError("Unauthorized");
@@ -63,6 +66,7 @@ export const gameController = createController({
       emit({
         type: "updateGame",
         game: dbGame.uuid,
+        gameState: safeGameState(serverGame),
       });
       if (ts === 0 && serverGame.finished !== 0) {
         emit({
@@ -96,6 +100,7 @@ export const gameController = createController({
       emit({
         type: "updateGame",
         game: dbGame.uuid,
+        gameState: safeGameState(serverGame),
       });
       if (ts === 0 && serverGame.finished !== 0) {
         emit({
@@ -128,6 +133,7 @@ export const gameController = createController({
       emit({
         type: "updateGame",
         game: dbGame.uuid,
+        gameState: safeGameState(serverGame),
       });
     },
   ),
@@ -143,6 +149,7 @@ export const gameController = createController({
       emit({
         type: "updateGame",
         game: dbGame.uuid,
+        gameState: safeGameState(serverGame),
       });
       if (ts === 0 && serverGame.finished !== 0) {
         emit({

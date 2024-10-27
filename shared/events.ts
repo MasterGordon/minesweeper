@@ -1,4 +1,5 @@
 import type { Rarity } from "../shared/lootboxes";
+import { ClientGame, ServerGame } from "./gameType";
 export type EventType = "new" | "finished" | "updateGame" | "updateStage";
 
 export type Events =
@@ -15,6 +16,7 @@ export type Events =
   | {
       type: "updateGame";
       game: string;
+      gameState: ServerGame | ClientGame;
     }
   | {
       type: "updateStage";
