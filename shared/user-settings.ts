@@ -5,6 +5,7 @@ export const userSettings = z.object({
   longPressOnDesktop: z.boolean().default(false),
   showRevealAnimation: z
     .boolean()
+    .optional()
     .transform((v) => typeof v === "undefined" || v),
 });
 
