@@ -54,7 +54,7 @@ export const getUser = async (
 export const getUserSettings = async (
   db: BunSQLiteDatabase,
   user: string,
-): Promise<UserSettingsType | undefined> => {
+): Promise<UserSettingsType> => {
   const userSettings = await db
     .select()
     .from(UserSettings)

@@ -84,13 +84,16 @@ export const userController = createController({
     const settings = await getUserSettings(db, user);
     return settings;
   }),
-  updateSettings: createEndpoint(userSettings, async (input, { db, user }) => {
-    if (!user) throw new UnauthorizedError("Unauthorized");
-    const settings = await getUserSettings(db, user);
-    const newSettings = { ...settings, ...input };
-    await upsertUserSettings(db, user, input);
-    return newSettings;
-  }),
+  updateSettings: createEndpoint(
+    userSettings.partial(),
+    async (input, { db, user }) => {
+      if (!user) throw new UnauthorizedError("Unauthorized");
+      const settings = await getUserSettings(db, user);
+      const newSettings = { ...settings, ...input };
+      await upsertUserSettings(db, user, newSettings);
+      return newSettings;
+    },
+  ),
   getUserCount: createEndpoint(z.null(), async (_, { db }) => {
     const count = await getUserCount(db);
     return count;
