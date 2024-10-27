@@ -58,7 +58,7 @@ const Settings = () => {
             }
             value={settings?.longPressOnDesktop ?? false}
             onChange={async (value) => {
-              updateSettings.mutateAsync({ longPressOnDesktop: value });
+              await updateSettings.mutateAsync({ longPressOnDesktop: value });
               refetch();
             }}
           />
@@ -67,7 +67,7 @@ const Settings = () => {
             description={<>Show an animation when a tile is revealed.</>}
             value={settings?.showRevealAnimation ?? true}
             onChange={async (value) => {
-              updateSettings.mutateAsync({ showRevealAnimation: value });
+              await updateSettings.mutateAsync({ showRevealAnimation: value });
               refetch();
             }}
           />
