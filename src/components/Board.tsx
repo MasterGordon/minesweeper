@@ -44,6 +44,7 @@ import "@pixi/canvas-text";
 import { themes } from "../themes";
 import { weightedPickRandom } from "../../shared/utils";
 import gen from "random-seed";
+import type { UserSettings } from "../../shared/user-settings";
 
 interface BoardProps {
   className?: string;
@@ -74,6 +75,7 @@ const toViewportInfo = (viewport: PixiViewport) => {
 const Board: React.FC<BoardProps> = (props) => {
   const { game, restartGame } = props;
   const { data: user } = useWSQuery("user.getSelf", null);
+  const { data: settings } = useWSQuery("user.getSettings", null);
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -246,6 +248,7 @@ const Board: React.FC<BoardProps> = (props) => {
                       showLastPos={showLastPos}
                       onLeftClick={props.onLeftClick}
                       onRightClick={props.onRightClick}
+                      userSettings={settings}
                     />
                   );
                 });
@@ -267,6 +270,7 @@ interface TileProps {
   showLastPos: boolean;
   onLeftClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
+  userSettings?: UserSettings | undefined;
 }
 
 const Tile = ({
@@ -277,6 +281,7 @@ const Tile = ({
   showLastPos,
   onRightClick,
   onLeftClick,
+  userSettings,
 }: TileProps) => {
   const resolveSprite = useCallback(
     (lt: LoadedTexture) => {
@@ -322,12 +327,13 @@ const Tile = ({
   const [doTick, setDoTick] = useState(true);
   const frame = useRef<number>(0);
   useEffect(() => {
+    if (userSettings?.showRevealAnimation === false) return;
     if (oldState.current !== `${isRevealed},${isMine},${value}`) {
       oldState.current = `${isRevealed},${isMine},${value}`;
       frame.current = 0;
       setDoTick(true);
     }
-  }, [isMine, isRevealed, value]);
+  }, [isMine, isRevealed, userSettings?.showRevealAnimation, value]);
   useTick((delta) => {
     frame.current += delta * 0.1;
     if (frame.current > 3) {

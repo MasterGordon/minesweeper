@@ -62,6 +62,15 @@ const Settings = () => {
               refetch();
             }}
           />
+          <BoolSetting
+            label="Show Reveal Animation"
+            description={<>Show an animation when a tile is revealed.</>}
+            value={settings?.showRevealAnimation ?? true}
+            onChange={async (value) => {
+              updateSettings.mutateAsync({ showRevealAnimation: value });
+              refetch();
+            }}
+          />
         </div>
       </div>
     </div>
