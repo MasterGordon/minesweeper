@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "motion";
 import { useAtom } from "jotai";
 import { feedItemsAtom, lootboxResultAtom } from "../../atoms";
 import FeedItemElement from "./FeedItem";

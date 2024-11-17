@@ -1,10 +1,10 @@
-import { animate, motion } from "framer-motion";
+import { animate } from "motion";
 import { useRef } from "react";
 
 const BounceImg = ({ src, className }: { src: string; className?: string }) => {
   const ref = useRef<HTMLImageElement>(null);
   return (
-    <motion.img
+    <img
       ref={ref}
       src={src}
       onClick={() => {
@@ -15,9 +15,6 @@ const BounceImg = ({ src, className }: { src: string; className?: string }) => {
               animate(ref.current, { scale: 1 }, { duration: 0.3 });
           }, 300);
         }
-      }}
-      transition={{
-        type: "spring",
       }}
       className={className}
     />
