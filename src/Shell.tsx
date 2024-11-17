@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
-import { motion } from "framer-motion";
+import { animate } from "motion";
 import {
   GitBranch,
   History,
@@ -51,7 +51,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className="bg-black min-h-screen">
-      <motion.div
+      <animate.div
         className="bg-black p-4 fixed h-screen w-64 flex border-white/10 border-1"
         ref={drawerRef}
         animate={{ x }}
@@ -107,21 +107,21 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             <Menu />
           </Button>
         </div>
-      </motion.div>
-      <motion.div className="flex max-w-[100vw]">
-        <motion.div
+      </animate.div>
+      <animate.div className="flex max-w-[100vw]">
+        <animate.div
           className="hidden md:block"
           animate={{ width: width }}
           transition={{ type: "tween" }}
           layout
         />
-        <motion.div className="flex flex-col gap-4 grow max-w-7xl mx-auto w-[calc(100vw-256px)]">
+        <animate.div className="flex flex-col gap-4 grow max-w-7xl mx-auto w-[calc(100vw-256px)]">
           <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
             <Header />
             {children}
           </div>
-        </motion.div>
-      </motion.div>
+        </animate.div>
+      </animate.div>
     </div>
   );
 };
