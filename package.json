@@ -35,7 +35,7 @@
     "drizzle-orm": "0.33.0",
     "framer-motion": "^11.11.8",
     "jotai": "^2.10.0",
-    "lucide-react": "^0.452.0",
+    "lucide-react": "^0.471.0",
     "pixi-viewport": "^5.0.3",
     "pixi.js": "^7.0.0",
     "pixi.js-legacy": "^7.4.2",
