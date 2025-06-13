@@ -14,6 +14,7 @@ import MatchHistory from "./views/match-history/MatchHistory.tsx";
 import Collection from "./views/collection/Collection.tsx";
 import { AnimatePresence } from "framer-motion";
 import Store from "./views/store/Store.tsx";
+import Profile from "./views/profile/Profile.tsx";
 
 const setup = async () => {
   const token = localStorage.getItem("loginToken");
@@ -44,6 +45,7 @@ setup().then(() => {
               <Route path="/settings" component={Settings} />
               <Route path="/collection" component={Collection} />
               <Route path="/store" component={Store} />
+              <Route path="/profile" component={Profile} />
             </Switch>
           </AnimatePresence>
         </Shell>

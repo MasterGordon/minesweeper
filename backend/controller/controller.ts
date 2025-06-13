@@ -2,10 +2,11 @@
 import type { ServerWebSocket } from "bun";
 import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 import type { z, ZodType } from "zod";
+import * as schema from "../schema";
 
 interface RequestContext {
   user?: string;
-  db: BunSQLiteDatabase;
+  db: BunSQLiteDatabase<typeof schema>;
   ws: ServerWebSocket<unknown>;
 }
 

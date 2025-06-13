@@ -246,4 +246,4 @@ export const halloween: Lootbox = {
   ],
 };
 
-export const lootboxes = [series1, halloween];
+export const lootboxes = [series1];

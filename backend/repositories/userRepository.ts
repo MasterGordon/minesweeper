@@ -5,9 +5,10 @@ import {
   userSettings as userSettingsSchema,
   type UserSettings as UserSettingsType,
 } from "../../shared/user-settings";
+import * as schema from "../schema";
 
 export const registerUser = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   name: string,
   password: string,
 ) => {
@@ -23,7 +24,7 @@ export const registerUser = async (
 };
 
 export const loginUser = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   name: string,
   password: string,
 ) => {
@@ -41,7 +42,7 @@ export const loginUser = async (
 };
 
 export const getUser = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   name: string,
 ): Promise<UserType | undefined> => {
   const user = await db
@@ -52,7 +53,7 @@ export const getUser = async (
 };
 
 export const getUserSettings = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   user: string,
 ): Promise<UserSettingsType> => {
   const userSettings = await db
@@ -64,7 +65,7 @@ export const getUserSettings = async (
 };
 
 export const upsertUserSettings = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   user: string,
   settings: UserSettingsType,
 ) => {
@@ -87,7 +88,7 @@ export const upsertUserSettings = async (
   }
 };
 
-export const getUserCount = async (db: BunSQLiteDatabase) => {
+export const getUserCount = async (db: BunSQLiteDatabase<typeof schema>) => {
   return (await db.select({ count: sql<number>`count(*)` }).from(User))[0]
     .count;
 };

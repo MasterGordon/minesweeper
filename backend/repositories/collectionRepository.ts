@@ -3,9 +3,10 @@ import { Collection, type CollectionType } from "../schema";
 import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 import { decode, encode } from "@msgpack/msgpack";
 import type { UserCollection } from "../../shared/gameType";
+import * as schema from "../schema";
 
 export const getCollection = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   user: string,
 ): Promise<UserCollection> => {
   const res = (
@@ -24,7 +25,7 @@ export const getCollection = async (
 };
 
 export const upsertCollection = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   user: string,
   collection: UserCollection,
 ) => {

@@ -3,12 +3,19 @@ import { Game, type GameType } from "../schema";
 import { eq, sql, desc, and, not } from "drizzle-orm";
 import type { ServerGame } from "../../shared/game";
 import { decode, encode } from "@msgpack/msgpack";
+import * as schema from "../schema";
 
-export const getGame = async (db: BunSQLiteDatabase, uuid: string) => {
+export const getGame = async (
+  db: BunSQLiteDatabase<typeof schema>,
+  uuid: string,
+) => {
   return (await db.select().from(Game).where(eq(Game.uuid, uuid)))[0];
 };
 
-export const getGames = async (db: BunSQLiteDatabase, user: string) => {
+export const getGames = async (
+  db: BunSQLiteDatabase<typeof schema>,
+  user: string,
+) => {
   return await db
     .select()
     .from(Game)
@@ -16,7 +23,10 @@ export const getGames = async (db: BunSQLiteDatabase, user: string) => {
     .orderBy(desc(Game.started));
 };
 
-export const getCurrentGame = async (db: BunSQLiteDatabase, user: string) => {
+export const getCurrentGame = async (
+  db: BunSQLiteDatabase<typeof schema>,
+  user: string,
+) => {
   return (
     await db
       .select()
@@ -27,7 +37,10 @@ export const getCurrentGame = async (db: BunSQLiteDatabase, user: string) => {
   )[0];
 };
 
-export const getGamesCount = async (db: BunSQLiteDatabase, user: string) => {
+export const getGamesCount = async (
+  db: BunSQLiteDatabase<typeof schema>,
+  user: string,
+) => {
   return (
     await db
       .select({ count: sql<number>`count(*)` })
@@ -36,7 +49,10 @@ export const getGamesCount = async (db: BunSQLiteDatabase, user: string) => {
   )[0].count;
 };
 
-export const upsertGame = async (db: BunSQLiteDatabase, game: GameType) => {
+export const upsertGame = async (
+  db: BunSQLiteDatabase<typeof schema>,
+  game: GameType,
+) => {
   const { uuid, user, stage, gameState, finished, started } = game;
   const games = await db.select().from(Game).where(eq(Game.uuid, uuid));
   if (games.length > 0) {
@@ -62,7 +78,7 @@ export const upsertGame = async (db: BunSQLiteDatabase, game: GameType) => {
 };
 
 export const upsertGameState = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   game: ServerGame,
 ) => {
   const { uuid, user, stage, finished, started } = game;
@@ -77,7 +93,7 @@ export const upsertGameState = async (
 };
 
 export const getTotalGamesPlayed = async (
-  db: BunSQLiteDatabase,
+  db: BunSQLiteDatabase<typeof schema>,
   user?: string,
 ) => {
   if (user)

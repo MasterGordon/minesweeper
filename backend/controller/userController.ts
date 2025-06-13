@@ -19,6 +19,9 @@ import {
 import { getWeight, lootboxes } from "../../shared/lootboxes";
 import { weightedPickRandom } from "../../shared/utils";
 import { emit } from "../events";
+import { Game } from "../schema";
+import { and, eq, gt } from "drizzle-orm";
+import dayjs from "dayjs";
 
 const secret = process.env.SECRET!;
 
@@ -174,6 +177,30 @@ export const userController = createController({
         reward: result.id,
         rarity: result.rarity,
       });
+    },
+  ),
+  getHeatmap: createEndpoint(
+    z.object({
+      id: z.string(),
+    }),
+    async ({ id }, { db }) => {
+      const now = dayjs();
+      const firstOfYear = now
+        .set("day", 0)
+        .set("month", 0)
+        .set("hour", 0)
+        .set("minute", 0);
+      const gamesOfUser = await db.query.Game.findMany({
+        where: and(eq(Game.user, id), gt(Game.finished, firstOfYear.valueOf())),
+      });
+      const heat = Array.from<number>({
+        length: now.diff(firstOfYear, "days") + 1,
+      }).fill(0);
+      gamesOfUser.forEach((game) => {
+        const day = dayjs(game.finished).diff(firstOfYear, "days");
+        heat[day] += 1;
+      });
+      return heat;
     },
   ),
 });
