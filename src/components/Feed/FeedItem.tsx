@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { PropsWithChildren } from "react";
 import { formatTimeSpan } from "../../../shared/time";
 import GemsIcon from "../GemIcon";

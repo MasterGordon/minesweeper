@@ -1,10 +1,10 @@
-import Board from "../../components/Board";
 import { useWSMutation, useWSQuery } from "../../hooks";
 import { useAtom } from "jotai";
 import { gameIdAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
 import { Fragment, useEffect } from "react";
+import { Board } from "../../components/LazyBoard";
 
 interface EndlessProps {
   gameId?: string;

@@ -16,9 +16,7 @@ import { lootboxResultAtom } from "../../atoms";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import { loadSeaAnemonePreset } from "@tsparticles/preset-sea-anemone";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import BounceImg from "../../components/BounceImg";
 
 const Store = () => {
@@ -29,17 +27,24 @@ const Store = () => {
 
   // this should be run only once per application lifetime
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-      // starting from v2 you can add only the features you need reducing the bundle size
-      //await loadAll(engine);
-      //await loadFull(engine);
-      await loadSlim(engine);
-      await loadSeaAnemonePreset(engine);
+    const cb = async () => {
+      const { loadSlim } = await import("@tsparticles/slim");
+      const { loadSeaAnemonePreset } = await import(
+        "@tsparticles/preset-sea-anemone"
+      );
+      initParticlesEngine(async (engine) => {
+        // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        //await loadAll(engine);
+        //await loadFull(engine);
+        await loadSlim(engine);
+        await loadSeaAnemonePreset(engine);
 
-      //await loadBasic(engine);
-    });
+        //await loadBasic(engine);
+      });
+    };
+    cb();
   }, []);
 
   return (

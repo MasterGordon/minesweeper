@@ -1,6 +1,6 @@
 import { Ellipsis } from "lucide-react";
 import { testBoard } from "../../../shared/testBoard";
-import Board from "../../components/Board";
+import { Board } from "../../components/LazyBoard";
 import { Button } from "../../components/Button";
 import { themes } from "../../themes";
 import {

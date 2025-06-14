@@ -40,7 +40,9 @@ const Profile: React.FC = () => {
         <div className="border-l-white border-l p-2 text-lg">
           <p>Total Games: {profile?.totalGames}</p>
           <p>Highest Stage: {profile?.highestStage}</p>
-          <p>Average Stage: {profile?.averageStage}</p>
+          <p>
+            Average Stage: {Math.round(profile?.averageStage ?? 1 * 100) / 100}
+          </p>
         </div>
       </div>
       <div className="flex flex-col gap-4">

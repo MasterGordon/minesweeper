@@ -4,7 +4,7 @@ import {
   useMotionTemplate,
   useScroll,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 
@@ -48,8 +48,10 @@ const Section = ({ text, image, left }: SectionProps) => {
         className="md:w-[50%] h-90"
         // float up and down
         animate={{
-          translateY: [0, 10, 0],
-          translateX: [0, 5, 0],
+          // translate: ["0 0", "5 10", "0 0"],
+          // transform: ["translate"]
+          x: [0, 10, 0],
+          y: [0, 5, 0],
         }}
         transition={{
           repeat: Infinity,
@@ -71,7 +73,7 @@ const Section = ({ text, image, left }: SectionProps) => {
               translateY,
             }}
             transition={{
-              type: "just",
+              type: "spring",
               delay: 0.5,
             }}
             srcSet={image.map((i) => `${i.src} ${i.width}w`).join(", ")}

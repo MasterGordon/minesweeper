@@ -10,8 +10,8 @@ import {
   type LoadedTexture,
   type LoadedTheme,
   type Theme,
-  useTheme,
 } from "../themes/Theme";
+import { useTheme } from "../themes/useTheme";
 import { Container, Sprite, Stage, useTick } from "@pixi/react";
 import Viewport from "./pixi/PixiViewport";
 import type { Viewport as PixiViewport } from "pixi-viewport";

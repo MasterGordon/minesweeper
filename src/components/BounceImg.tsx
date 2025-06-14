@@ -1,4 +1,4 @@
-import { animate, motion } from "framer-motion";
+import { animate, motion } from "motion/react";
 import { useRef } from "react";
 
 const BounceImg = ({ src, className }: { src: string; className?: string }) => {

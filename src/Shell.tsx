@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   GitBranch,
   History,

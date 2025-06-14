@@ -12,7 +12,7 @@ import Home from "./views/home/Home.tsx";
 import Settings from "./views/settings/Settings.tsx";
 import MatchHistory from "./views/match-history/MatchHistory.tsx";
 import Collection from "./views/collection/Collection.tsx";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import Store from "./views/store/Store.tsx";
 import Profile from "./views/profile/Profile.tsx";
 
