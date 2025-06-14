@@ -20,7 +20,7 @@ import { getWeight, lootboxes } from "../../shared/lootboxes";
 import { weightedPickRandom } from "../../shared/utils";
 import { emit } from "../events";
 import { Game } from "../schema";
-import { and, eq, gt } from "drizzle-orm";
+import { and, count, eq, gt, max, not, sum } from "drizzle-orm";
 import dayjs from "dayjs";
 
 const secret = process.env.SECRET!;
@@ -185,11 +185,7 @@ export const userController = createController({
     }),
     async ({ id }, { db }) => {
       const now = dayjs();
-      const firstOfYear = now
-        .set("day", 0)
-        .set("month", 0)
-        .set("hour", 0)
-        .set("minute", 0);
+      const firstOfYear = now.startOf("year");
       const gamesOfUser = await db.query.Game.findMany({
         where: and(eq(Game.user, id), gt(Game.finished, firstOfYear.valueOf())),
       });
@@ -201,6 +197,36 @@ export const userController = createController({
         heat[day] += 1;
       });
       return heat;
+    },
+  ),
+  getProfile: createEndpoint(
+    z.object({
+      id: z.string(),
+    }),
+    async ({ id }, { db }) => {
+      const [{ value: totalGames }] = await db
+        .select({
+          value: count(),
+        })
+        .from(Game)
+        .where(and(eq(Game.user, id), not(eq(Game.finished, 0))));
+      const [{ value: highestStage }] = await db
+        .select({
+          value: max(Game.stage),
+        })
+        .from(Game)
+        .where(and(eq(Game.user, id), not(eq(Game.finished, 0))));
+      const [{ value: totalStages }] = await db
+        .select({
+          value: sum(Game.stage),
+        })
+        .from(Game)
+        .where(and(eq(Game.user, id), not(eq(Game.finished, 0))));
+      return {
+        totalGames,
+        highestStage,
+        averageStage: Number(totalStages) / totalGames,
+      };
     },
   ),
 });

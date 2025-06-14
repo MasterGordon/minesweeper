@@ -1,20 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #D9AFD9;
+  --color-primary: #d9afd9;
   --color-input: color-mix(in srgb, var(--color-white, #fff) 20%, transparent);
   --color-background: black;
   --color-common: var(--color-sky-500);
   --color-uncommon: var(--color-green-400);
   --color-rare: var(--color-red-500);
   --color-legendary: var(--color-amber-500);
-  --bg-brand: -webkit-linear-gradient(225deg, rgb(251, 175, 21), rgb(251, 21, 242),             
-  rgb(21, 198, 251)) 0% 0% / 100% 300%;
-  --bg-secondary: linear-gradient(90deg, #D9AFD9 0%, #97D9E1 100%) 0% 0% / 100% 300%;
+  --bg-brand: -webkit-linear-gradient(
+      225deg,
+      rgb(251, 175, 21),
+      rgb(251, 21, 242),
+      rgb(21, 198, 251)
+    )
+    0% 0% / 100% 300%;
+  --bg-secondary: linear-gradient(90deg, #d9afd9 0%, #97d9e1 100%) 0% 0% / 100%
+    300%;
   --animate-gradientmove: gradientmove 1s ease 0s 1 normal forwards;
   @keyframes gradientmove {
-    0%{background-position: 0% 0%}
-    100%{background-position: 0% 100%}
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 0% 100%;
+    }
+  }
+}
+
+@layer components {
+  .bg-brand {
+    background: var(--bg-brand);
   }
 }
 
@@ -22,7 +38,7 @@ button {
   cursor: pointer;
 }
 
-.grid-border-b div:not(:nth-last-child(-n+3)) {
+.grid-border-b div:not(:nth-last-child(-n + 3)) {
   @apply border-b border-white/10;
 }
 
