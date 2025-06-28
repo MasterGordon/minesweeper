@@ -20,3 +20,8 @@ export const weightedPickRandom = <T>(
   }
   return arr[arr.length - 1];
 };
+
+export const round = (value: number, digits: number) => {
+  const factor = Math.pow(10, digits);
+  return Math.round(value * factor) / factor;
+};

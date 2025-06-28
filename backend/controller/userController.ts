@@ -17,9 +17,9 @@ import {
   upsertCollection,
 } from "../repositories/collectionRepository";
 import { getWeight, lootboxes } from "../../shared/lootboxes";
-import { weightedPickRandom } from "../../shared/utils";
+import { round, weightedPickRandom } from "../../shared/utils";
 import { emit } from "../events";
-import { Game } from "../schema";
+import { Game, Gems } from "../schema";
 import { and, count, eq, gt, max, not, sum } from "drizzle-orm";
 import dayjs from "dayjs";
 
@@ -222,10 +222,19 @@ export const userController = createController({
         })
         .from(Game)
         .where(and(eq(Game.user, id), not(eq(Game.finished, 0))));
+      const [{ totalGems, currentGems }] = await db
+        .select({
+          totalGems: Gems.totalCount,
+          currentGems: Gems.count,
+        })
+        .from(Gems)
+        .where(eq(Gems.user, id));
       return {
         totalGames,
         highestStage,
-        averageStage: Number(totalStages) / totalGames,
+        averageStage: round(Number(totalStages) / totalGames, 3),
+        totalGems,
+        currentGems,
       };
     },
   ),

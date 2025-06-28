@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { gameIdAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
-import { Fragment, useEffect } from "react";
+import { Fragment, startTransition, Suspense, useEffect } from "react";
 import { Board } from "../../components/LazyBoard";
 
 interface EndlessProps {
@@ -41,31 +41,33 @@ const Endless: React.FC<EndlessProps> = (props) => {
         <div className="grow" />
         <LeaderboardButton label="View Leaderboard" />
       </div>
-      <Board
-        game={game}
-        restartGame={async () => {
-          const gameId = await startGame.mutateAsync(null);
-          setGameId(gameId.uuid);
-        }}
-        onLeftClick={(x, y) => {
-          reveal.mutateAsync({ x, y });
-        }}
-        onRightClick={(x, y) => {
-          const isFlagged = game.isFlagged[x][y];
-          const isQuestionMark = game.isQuestionMark[x][y];
-          if (!isFlagged && !isQuestionMark) {
-            placeFlag.mutateAsync({ x, y });
-            return;
-          }
-          if (isFlagged && settings?.placeQuestionMark) {
-            placeQuestionMark.mutateAsync({ x, y });
-            return;
-          } else {
-            clearTile.mutateAsync({ x, y });
-            return;
-          }
-        }}
-      />
+      <Suspense>
+        <Board
+          game={game}
+          restartGame={async () => {
+            const gameId = await startGame.mutateAsync(null);
+            setGameId(gameId.uuid);
+          }}
+          onLeftClick={(x, y) => {
+            reveal.mutateAsync({ x, y });
+          }}
+          onRightClick={(x, y) => {
+            const isFlagged = game.isFlagged[x][y];
+            const isQuestionMark = game.isQuestionMark[x][y];
+            if (!isFlagged && !isQuestionMark) {
+              placeFlag.mutateAsync({ x, y });
+              return;
+            }
+            if (isFlagged && settings?.placeQuestionMark) {
+              placeQuestionMark.mutateAsync({ x, y });
+              return;
+            } else {
+              clearTile.mutateAsync({ x, y });
+              return;
+            }
+          }}
+        />
+      </Suspense>
     </>
   ) : (
     <div className="w-full grid md:grid-cols-[350px_1fr]">
@@ -76,7 +78,9 @@ const Endless: React.FC<EndlessProps> = (props) => {
           variant="primary"
           onClick={async () => {
             const gameId = await startGame.mutateAsync(null);
-            setGameId(gameId.uuid);
+            startTransition(() => {
+              setGameId(gameId.uuid);
+            });
           }}
         >
           Start Game

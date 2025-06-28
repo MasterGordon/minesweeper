@@ -11,6 +11,7 @@ import {
 } from "../../components/DropdownMenu";
 import { cn } from "../../lib/utils";
 import { useWSMutation, useWSQuery } from "../../hooks";
+import { Suspense } from "react";
 
 const Collection = () => {
   const { data: collection, refetch } = useWSQuery(
@@ -75,17 +76,19 @@ const Collection = () => {
                   </DropdownMenu>
                 )}
               </div>
-              <Board
-                game={testBoard(theme.id)}
-                onLeftClick={() => {}}
-                restartGame={() => {}}
-                onRightClick={() => {}}
-                width={11 * 32}
-                height={4 * 32}
-                className={cn(
-                  selected && "outline-primary outline-4 rounded-md",
-                )}
-              />
+              <Suspense>
+                <Board
+                  game={testBoard(theme.id)}
+                  onLeftClick={() => {}}
+                  restartGame={() => {}}
+                  onRightClick={() => {}}
+                  width={11 * 32}
+                  height={4 * 32}
+                  className={cn(
+                    selected && "outline-primary outline-4 rounded-md",
+                  )}
+                />
+              </Suspense>
             </div>
           );
         })}

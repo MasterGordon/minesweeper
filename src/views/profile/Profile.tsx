@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from "../../components/Tooltip";
 import PastMatch from "../../components/PastMatch";
+import GemsIcon from "../../components/GemIcon";
 
 const Profile: React.FC = () => {
   const { data: username } = useWSQuery("user.getSelf", null);
@@ -42,6 +43,11 @@ const Profile: React.FC = () => {
           <p>Highest Stage: {profile?.highestStage}</p>
           <p>
             Average Stage: {Math.round(profile?.averageStage ?? 1 * 100) / 100}
+          </p>
+          <p>
+            Gems Spend:{" "}
+            {(profile?.totalGems ?? 0) - (profile?.currentGems ?? 0)}{" "}
+            <GemsIcon />
           </p>
         </div>
       </div>
