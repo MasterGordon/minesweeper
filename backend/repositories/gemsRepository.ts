@@ -40,6 +40,6 @@ export const removeGems = async (
   if (count - gems < 0) throw new Error("Not enough gems");
   await db
     .update(Gems)
-    .set({ count: count - gems, totalCount: totalCount - gems })
+    .set({ count: count - gems, totalCount: totalCount })
     .where(eq(Gems.user, user));
 };

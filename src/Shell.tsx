@@ -57,7 +57,14 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
         animate={{ x }}
         transition={{ type: "tween" }}
       >
-        <div className="w-full p-2 flex flex-col gap-6">
+        <div
+          className="w-full p-2 flex flex-col gap-6"
+          onClick={() => {
+            if (isMobile) {
+              setIsOpen(false);
+            }
+          }}
+        >
           <h2 className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-3xl">
             Business
             <br />
@@ -101,7 +108,10 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           <Button
             className="absolute left-4 bg-black border-white/10 border-y-1 border-r-1 rounded-l-none"
             variant="ghost"
-            onClick={() => setIsOpen((isOpen) => !isOpen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen((isOpen) => !isOpen);
+            }}
             aria-label="Menu"
           >
             <Menu />

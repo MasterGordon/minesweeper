@@ -25,6 +25,17 @@ const createWSClient = () => {
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 5;
 
+  const tryReconnect = () => {
+    if (reconnectAttempts < maxReconnectAttempts) {
+      setTimeout(() => {
+        reconnectAttempts++;
+        connect();
+      }, 1000 * reconnectAttempts);
+    } else {
+      console.error("Max reconnect attempts reached");
+    }
+  };
+
   const connect = () => {
     ws = new WebSocket(connectionString);
 
@@ -42,16 +53,7 @@ const createWSClient = () => {
 
     ws.onmessage = emitMessage;
 
-    ws.onclose = () => {
-      if (reconnectAttempts < maxReconnectAttempts) {
-        setTimeout(() => {
-          reconnectAttempts++;
-          connect();
-        }, 1000 * reconnectAttempts);
-      } else {
-        console.error("Max reconnect attempts reached");
-      }
-    };
+    ws.onclose = tryReconnect;
 
     ws.onerror = (err) => {
       console.error("WebSocket error", err);
@@ -60,6 +62,11 @@ const createWSClient = () => {
   };
 
   connect();
+  document.addEventListener("focus", () => {
+    if (ws.readyState != ws.OPEN) {
+      tryReconnect();
+    }
+  });
 
   addMessageListener((event: MessageEvent) => {
     const data = JSON.parse(event.data) as Events;
