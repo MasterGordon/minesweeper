@@ -10,7 +10,7 @@ interface PastMatchProps {
 const PastMatch = ({ game }: PastMatchProps) => {
   return (
     <div className="flex flex-col gap-4 items-center w-full @container">
-      <div className="w-full bg-white/10 border-white/20 border-1 rounded-md grid justify-center grid-cols-4 @max-xl:grid-cols-3 p-4">
+      <div className="w-full bg-white/10 border-white/20 border-1 rounded-md grid justify-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
         <div className="flex-col flex">
           <div className="text-white/90 text-lg">Endless</div>
           <div className="text-white/50 text-lg">
@@ -24,10 +24,10 @@ const PastMatch = ({ game }: PastMatchProps) => {
             {game.minesCount - game.isFlagged.flat().filter((f) => f).length}
           </div>
         </div>
-        <div className="text-white/80 text-lg @max-xl:hidden">
+        <div className="text-white/80 text-lg hidden lg:block">
           <div>Duration: {formatTimeSpan(game.finished - game.started)}</div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-center sm:justify-end col-span-full sm:col-span-1">
           {/* @ts-expect-error as is cheaply typed */}
           <Button as={Link} href={`/play/${game.uuid}`} variant="outline">
             Show Board

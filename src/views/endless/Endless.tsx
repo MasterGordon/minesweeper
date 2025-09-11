@@ -1,10 +1,11 @@
 import { useWSMutation, useWSQuery } from "../../hooks";
 import { useAtom } from "jotai";
-import { gameIdAtom } from "../../atoms";
+import { gameIdAtom, loginTokenAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
 import { Fragment, startTransition, Suspense, useEffect } from "react";
 import { Board } from "../../components/LazyBoard";
+import RegisterButton from "../../components/Auth/RegisterButton";
 
 interface EndlessProps {
   gameId?: string;
@@ -12,6 +13,7 @@ interface EndlessProps {
 
 const Endless: React.FC<EndlessProps> = (props) => {
   const [gameId, setGameId] = useAtom(gameIdAtom);
+  const [loginToken] = useAtom(loginTokenAtom);
   const { data: game } = useWSQuery("game.getGameState", gameId!, !!gameId);
   const { data: settings } = useWSQuery("user.getSettings", null);
   const startGame = useWSMutation("game.createGame");
@@ -73,18 +75,22 @@ const Endless: React.FC<EndlessProps> = (props) => {
     <div className="w-full grid md:grid-cols-[350px_1fr]">
       <div className="flex flex-col md:border-r-white/10 md:border-r-1 gap-8 pr-12">
         <h2 className="text-white/90 text-xl">Minesweeper Endless</h2>
-        <Button
-          className="w-fit"
-          variant="primary"
-          onClick={async () => {
-            const gameId = await startGame.mutateAsync(null);
-            startTransition(() => {
-              setGameId(gameId.uuid);
-            });
-          }}
-        >
-          Start Game
-        </Button>
+        {loginToken ? (
+          <Button
+            className="w-fit"
+            variant="primary"
+            onClick={async () => {
+              const gameId = await startGame.mutateAsync(null);
+              startTransition(() => {
+                setGameId(gameId.uuid);
+              });
+            }}
+          >
+            Start Game
+          </Button>
+        ) : (
+          <RegisterButton />
+        )}
         <h2 className="text-white/80 text-lg mt-8">How to play</h2>
         <p className="text-white/90">
           Endless minesweeper is just like regular minesweeper but you

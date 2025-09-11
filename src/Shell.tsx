@@ -17,6 +17,8 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Header from "./components/Header";
 import { Tag } from "./components/Tag";
 import Feed from "./components/Feed/Feed";
+import { useAtom } from "jotai";
+import { loginTokenAtom } from "./atoms";
 
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
@@ -24,6 +26,7 @@ const drawerWidthWithPadding = drawerWidth;
 const Shell: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const [loginToken] = useAtom(loginTokenAtom);
 
   const x = isOpen ? 0 : -drawerWidthWithPadding;
   const width = isOpen ? drawerWidthWithPadding : 0;
@@ -79,22 +82,28 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             <Play />
             Play
           </NavLink>
-          <NavLink href="/history">
-            <History />
-            History
-          </NavLink>
+          {loginToken && (
+            <NavLink href="/history">
+              <History />
+              History
+            </NavLink>
+          )}
           <NavLink href="/store">
             <Store />
             Store
           </NavLink>
-          <NavLink href="/collection">
-            <Library />
-            Collection <Tag size="sm">NEW</Tag>
-          </NavLink>
-          <NavLink href="/settings">
-            <Settings />
-            Settings
-          </NavLink>
+          {loginToken && (
+            <NavLink href="/collection">
+              <Library />
+              Collection <Tag size="sm">NEW</Tag>
+            </NavLink>
+          )}
+          {loginToken && (
+            <NavLink href="/settings">
+              <Settings />
+              Settings
+            </NavLink>
+          )}
           <Hr />
           <Feed />
           {/* <Hr /> */}
@@ -125,7 +134,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
           transition={{ type: "tween" }}
           layout
         />
-        <motion.div className="flex flex-col gap-4 grow max-w-7xl mx-auto w-[calc(100vw-256px)]">
+        <motion.div className="flex flex-col gap-4 grow max-w-7xl mx-auto w-full md:w-[calc(100vw-256px)]">
           <div className="flex flex-col justify-center gap-4 sm:mx-16 mt-16 sm:mt-2 mx-2">
             <Header />
             {children}

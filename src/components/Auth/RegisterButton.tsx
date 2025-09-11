@@ -17,26 +17,31 @@ import { wsClient } from "../../wsClient";
 
 const RegisterButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const register = useWSMutation("user.register");
+  const login = useWSMutation("user.login");
   const [, setToken] = useAtom(loginTokenAtom);
 
   useEffect(() => {
     setUsername("");
     setPassword("");
+    setError("");
   }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="primary">Register</Button>
+        <Button variant="primary" className="self-start">
+          Register
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Register</DialogTitle>
+          <DialogTitle>{isLoginMode ? "Login" : "Register"}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <label className="text-white/70 font-bold">Username</label>
@@ -49,6 +54,18 @@ const RegisterButton = () => {
           <PasswordInput value={password} onChange={setPassword} />
         </div>
         {error && <p className="text-red-500">{error}</p>}
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setIsLoginMode(!isLoginMode);
+              setError("");
+            }}
+            className="text-sm text-white/60 hover:text-white/80"
+          >
+            {isLoginMode ? "Need an account? Register" : "Already have an account? Login"}
+          </Button>
+        </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => setIsOpen(false)}>
             Cancel
@@ -56,7 +73,8 @@ const RegisterButton = () => {
           <Button
             variant="primary"
             onClick={() => {
-              register
+              const mutation = isLoginMode ? login : register;
+              mutation
                 .mutateAsync({ username, password })
                 .then(async (res) => {
                   setToken(res.token);
@@ -64,13 +82,14 @@ const RegisterButton = () => {
                     token: res.token,
                   });
                   await queryClient.resetQueries();
+                  setIsOpen(false);
                 })
                 .catch((e) => {
                   setError(e);
                 });
             }}
           >
-            Register
+            {isLoginMode ? "Login" : "Register"}
           </Button>
         </DialogFooter>
       </DialogContent>

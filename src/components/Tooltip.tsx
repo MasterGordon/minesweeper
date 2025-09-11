@@ -6,12 +6,14 @@ import { cn } from "../lib/utils";
 
 function TooltipProvider({
   delayDuration = 0,
+  disableHoverableContent = false,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
   return (
     <TooltipPrimitive.Provider
       data-slot="tooltip-provider"
       delayDuration={delayDuration}
+      disableHoverableContent={disableHoverableContent}
       {...props}
     />
   );
