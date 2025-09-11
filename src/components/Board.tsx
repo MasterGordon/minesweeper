@@ -29,7 +29,7 @@ import Coords from "./Coords";
 import { cn } from "../lib/utils";
 import { Button } from "./Button";
 import { Maximize2, Minimize2, RotateCcw } from "lucide-react";
-import useSound from "use-sound";
+import { useAudio } from "../hooks/useAudio";
 import explosion from "../sound/explosion.mp3";
 import "@pixi/canvas-display";
 import "@pixi/canvas-extract";
@@ -80,7 +80,7 @@ const Board: React.FC<BoardProps> = (props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const showLastPos = game.user !== user || isServerGame(game);
-  const [playSound] = useSound(explosion, {
+  const [playSound] = useAudio(explosion, {
     volume: 0.5,
   });
 

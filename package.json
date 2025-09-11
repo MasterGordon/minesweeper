@@ -47,7 +47,6 @@
     "react-confetti-boom": "^1.0.0",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.5.3",
-    "use-sound": "^4.0.3",
     "wouter": "^3.3.5",
     "zod": "^3.23.8"
   },
