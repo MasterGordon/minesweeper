@@ -82,7 +82,7 @@ export const upsertGameState = async (
   game: ServerGame,
 ) => {
   const { uuid, user, stage, finished, started } = game;
-  upsertGame(db, {
+  await upsertGame(db, {
     uuid,
     user,
     stage,

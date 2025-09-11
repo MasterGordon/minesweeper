@@ -28,3 +28,4 @@ temp_dbs
 
 deploy.sh
 sqlite.db
+coverage

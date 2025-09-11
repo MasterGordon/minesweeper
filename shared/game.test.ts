@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import { getValue, ServerGame, serverToClientGame } from "./game";
+import { getValue, isServerGame, isClientGame, ServerGame, ClientGame, serverToClientGame } from "./game";
 
 describe("Game", () => {
   it("should get value", () => {
@@ -13,6 +13,46 @@ describe("Game", () => {
     expect(getValue(mines, 0, 1)).toEqual(3);
     expect(getValue(mines, 3, 0)).toEqual(0);
     expect(getValue(mines, 1, 3)).toEqual(8);
+  });
+
+  it("should identify server game", () => {
+    const serverGame: ServerGame = {
+      theme: "default",
+      mines: [[false]],
+      minesCount: 0,
+      isRevealed: [[false]],
+      isFlagged: [[false]],
+      isQuestionMark: [[false]],
+      started: Date.now(),
+      finished: 0,
+      lastClick: [0, 0],
+      uuid: "test-uuid",
+      width: 1,
+      height: 1,
+      user: "TestUser",
+      stage: 1,
+    };
+    expect(isServerGame(serverGame)).toBe(true);
+  });
+
+  it("should identify client game", () => {
+    const clientGame: ClientGame = {
+      theme: "default",
+      minesCount: 0,
+      isRevealed: [[false]],
+      isFlagged: [[false]],
+      isQuestionMark: [[false]],
+      values: [[0]],
+      started: Date.now(),
+      lastClick: [0, 0],
+      uuid: "test-uuid",
+      width: 1,
+      height: 1,
+      user: "TestUser",
+      stage: 1,
+    };
+    expect(isClientGame(clientGame)).toBe(true);
+    expect(isServerGame(clientGame)).toBe(false);
   });
 
   it("should convert server to client game", () => {
