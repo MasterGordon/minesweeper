@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { loginTokenAtom } from "../atoms";
 import Gems from "./Gems";
+import { ConnectionStatus } from "./ConnectionStatus";
 
 const Header = () => {
   const [, setLocation] = useLocation();
@@ -28,7 +29,8 @@ const Header = () => {
   const { data: gems } = useWSQuery("user.getOwnGems", null);
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full flex gap-4 items-center">
+      <ConnectionStatus />
       <div className="grow" />
 
       {username ? (

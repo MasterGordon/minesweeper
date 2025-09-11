@@ -1,6 +1,8 @@
 import type { Routes } from "../backend/router";
 import type { Events } from "../shared/events";
 import { queryClient } from "./queryClient";
+import { connectionStatusAtom } from "./atoms";
+import { getDefaultStore } from "jotai";
 
 const connectionString = import.meta.env.DEV
   ? "ws://localhost:8072/ws"
@@ -21,11 +23,43 @@ const emitMessage = (event: MessageEvent) => {
 };
 
 const createWSClient = () => {
+  const store = getDefaultStore();
   let ws = new WebSocket(connectionString);
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 5;
+  let heartbeatInterval: number | null = null;
+  let heartbeatTimeoutId: number | null = null;
+  const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+  const HEARTBEAT_TIMEOUT = 5000; // 5 seconds to wait for pong
+
+  const startHeartbeat = () => {
+    stopHeartbeat();
+    heartbeatInterval = window.setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: "ping", id: crypto.randomUUID() }));
+
+        heartbeatTimeoutId = window.setTimeout(() => {
+          console.warn("Heartbeat timeout - closing connection");
+          ws.close();
+        }, HEARTBEAT_TIMEOUT);
+      }
+    }, HEARTBEAT_INTERVAL);
+  };
+
+  const stopHeartbeat = () => {
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      heartbeatInterval = null;
+    }
+    if (heartbeatTimeoutId) {
+      clearTimeout(heartbeatTimeoutId);
+      heartbeatTimeoutId = null;
+    }
+  };
 
   const tryReconnect = () => {
+    store.set(connectionStatusAtom, "reconnecting");
+    stopHeartbeat();
     if (reconnectAttempts < maxReconnectAttempts) {
       setTimeout(() => {
         reconnectAttempts++;
@@ -33,14 +67,18 @@ const createWSClient = () => {
       }, 1000 * reconnectAttempts);
     } else {
       console.error("Max reconnect attempts reached");
+      store.set(connectionStatusAtom, "disconnected");
     }
   };
 
   const connect = () => {
+    store.set(connectionStatusAtom, "connecting");
     ws = new WebSocket(connectionString);
 
     ws.onopen = async () => {
       reconnectAttempts = 0;
+      store.set(connectionStatusAtom, "connected");
+      startHeartbeat();
       const token = localStorage.getItem("loginToken");
       if (token) {
         try {
@@ -69,25 +107,36 @@ const createWSClient = () => {
   });
 
   addMessageListener((event: MessageEvent) => {
-    const data = JSON.parse(event.data) as Events;
-    if (data.type === "updateGame") {
+    const data = JSON.parse(event.data);
+
+    // Handle pong response
+    if (data.type === "pong") {
+      if (heartbeatTimeoutId) {
+        clearTimeout(heartbeatTimeoutId);
+        heartbeatTimeoutId = null;
+      }
+      return;
+    }
+
+    const eventData = data as Events;
+    if (eventData.type === "updateGame") {
       queryClient.setQueryData(
-        ["game.getGameState", data.game],
-        data.gameState,
+        ["game.getGameState", eventData.game],
+        eventData.gameState,
       );
     }
-    if (data.type === "loss") {
+    if (eventData.type === "loss") {
       queryClient.invalidateQueries({
         queryKey: ["scoreboard.getScoreBoard", 10],
       });
     }
-    if (data.type === "gemsRewarded") {
+    if (eventData.type === "gemsRewarded") {
       queryClient.invalidateQueries({
         queryKey: ["user.getOwnGems", null],
       });
     }
     if (import.meta.env.DEV) {
-      console.log("Received message", data);
+      console.log("Received message", eventData);
     }
   });
 

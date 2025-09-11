@@ -37,12 +37,20 @@ export const handleRequest = async (
     !message ||
     !(typeof message === "object") ||
     !("type" in message) ||
-    !("payload" in message) ||
     !("id" in message)
   )
     return;
-  const { type, payload, id } = message;
+  const { type, id } = message;
   if (!(typeof type === "string")) return;
+
+  // Handle ping message
+  if (type === 'ping') {
+    ws.send(JSON.stringify({ type: 'pong', id }));
+    return;
+  }
+
+  if (!("payload" in message)) return;
+  const { payload } = message;
   const [controllerName, action] = type.split(".");
   if (!(controllerName in controllers)) return;
   try {
