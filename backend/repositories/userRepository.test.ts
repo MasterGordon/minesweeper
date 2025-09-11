@@ -1,6 +1,13 @@
 import { describe, it, expect } from "bun:test";
 import { getTestDb } from "../database/getTestDb";
-import { getUser, getUserCount, getUserSettings, loginUser, registerUser, upsertUserSettings } from "./userRepository";
+import {
+  getUser,
+  getUserCount,
+  getUserSettings,
+  loginUser,
+  registerUser,
+  upsertUserSettings,
+} from "./userRepository";
 
 describe("UserRepository", () => {
   it("should register a user", async () => {
@@ -57,7 +64,7 @@ describe("UserRepository", () => {
   it("should handle getUser for nonexistent user", async () => {
     const db = getTestDb();
     const user = await getUser(db, "NonexistentUser");
-    expect(user.name).toBeUndefined();
+    expect(user?.name).toBeUndefined();
   });
 
   it("should get user count", async () => {
@@ -101,7 +108,7 @@ describe("UserRepository", () => {
       soundEnabled: true,
     };
     await upsertUserSettings(db, "TestUser", initialSettings);
-    
+
     const updatedSettings = {
       placeQuestionMark: true,
       longPressOnDesktop: true,
@@ -109,7 +116,7 @@ describe("UserRepository", () => {
       soundEnabled: false,
     };
     await upsertUserSettings(db, "TestUser", updatedSettings);
-    
+
     const settings = await getUserSettings(db, "TestUser");
     expect(settings).toEqual(updatedSettings);
   });
