@@ -221,7 +221,23 @@ describe("GameRepository", () => {
   });
 
   it("should parse game state", () => {
-    const gameData = { test: "data", number: 42 };
+    const gameData = {
+      uuid: "TestUuid",
+      user: "TestUser",
+      stage: 1,
+      finished: 1,
+      started: Date.now(),
+      // Other ServerGame properties don't matter for this test
+      mines: [[false]],
+      width: 1,
+      height: 1,
+      isRevealed: [[false]],
+      isFlagged: [[false]],
+      isQuestionMark: [[false]],
+      minesCount: 0,
+      lastClick: [0, 0] as [number, number],
+      theme: "default" as const,
+    };
     const buffer = Buffer.from(encode(gameData));
     const parsed = parseGameState(buffer);
     expect(parsed).toEqual(gameData);
