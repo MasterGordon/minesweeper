@@ -71,6 +71,15 @@ const Settings = () => {
               refetch();
             }}
           />
+          <BoolSetting
+            label="Sound Effects"
+            description={<>Enable or disable sound effects in the game.</>}
+            value={settings?.soundEnabled ?? true}
+            onChange={async (value) => {
+              await updateSettings.mutateAsync({ soundEnabled: value });
+              refetch();
+            }}
+          />
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { useWSQuery } from '../hooks';
 
 interface AudioOptions {
   volume?: number;
@@ -7,8 +8,14 @@ interface AudioOptions {
 
 export const useAudio = (src: string, options: AudioOptions = {}) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { data: settings } = useWSQuery("user.getSettings", null);
 
   const play = useCallback(() => {
+    // Check if sound is disabled in settings
+    if (settings && settings.soundEnabled === false) {
+      return;
+    }
+
     if (!audioRef.current) {
       audioRef.current = new Audio(src);
       audioRef.current.volume = options.volume ?? 1;
@@ -20,7 +27,7 @@ export const useAudio = (src: string, options: AudioOptions = {}) => {
     audioRef.current.play().catch((error) => {
       console.warn('Audio play failed:', error);
     });
-  }, [src, options.volume, options.loop]);
+  }, [src, options.volume, options.loop, settings]);
 
   const pause = useCallback(() => {
     audioRef.current?.pause();
