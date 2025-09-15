@@ -5,6 +5,7 @@ import GemsIcon from "../GemIcon";
 import type { Rarity as RarityType } from "../../../shared/lootboxes";
 import { Rarity } from "../Rarity";
 import { themes } from "../../themes";
+import { Link } from "wouter";
 
 interface BaseFeedItem {
   decay: number;
@@ -14,6 +15,7 @@ interface BaseFeedItem {
 interface GameStartedItem extends BaseFeedItem {
   type: "gameStarted";
   user: string;
+  gameId: string;
 }
 
 interface GameFinishedItem extends BaseFeedItem {
@@ -59,7 +61,19 @@ const FeedItemWrapper: React.FC<PropsWithChildren> = ({ children }) => {
 const FeedItemElement: React.FC<{ item: FeedItem }> = ({ item }) => {
   switch (item.type) {
     case "gameStarted":
-      return <FeedItemWrapper>{item.user} started a game</FeedItemWrapper>;
+      return (
+        <FeedItemWrapper>
+          <span>
+            {item.user} started a game -{" "}
+            <Link
+              href={`/play/${item.gameId}`}
+              className="text-white/70 hover:text-white/90 underline underline-offset-2 decoration-white/30 hover:decoration-white/50"
+            >
+              spectate
+            </Link>
+          </span>
+        </FeedItemWrapper>
+      );
     case "gameFinished":
       return (
         <FeedItemWrapper>

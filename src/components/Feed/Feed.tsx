@@ -24,12 +24,19 @@ const Feed: React.FC = () => {
       const data = JSON.parse(event.data) as Events;
       const newItems = [...items];
       if (data.type === "new" && data.user !== user) {
-        newItems.push({
+        // Remove any existing gameStarted items for this user
+        const filteredItems = newItems.filter(
+          item => !(item.type === "gameStarted" && item.user === data.user)
+        );
+        filteredItems.push({
           type: "gameStarted",
           user: data.user,
+          gameId: data.gameId,
           id: crypto.randomUUID(),
           decay: Date.now() + 1000 * 3,
         });
+        setItems(filteredItems);
+        return;
       }
       if (data.type === "loss") {
         newItems.push({

@@ -6,6 +6,7 @@ export type Events =
   | {
       type: "new";
       user: string;
+      gameId: string;
     }
   | {
       type: "loss";

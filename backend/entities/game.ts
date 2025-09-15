@@ -233,7 +233,7 @@ export const game = {
       if (!isValid(serverGame, x, y)) return;
       if (isQuestionMark[x][y]) return;
       if (isFlagged[x][y]) return;
-      serverGame.lastClick = [x, y];
+      if (initial) serverGame.lastClick = [x, y];
 
       if (mines[x][y]) {
         serverGame.finished = Date.now();

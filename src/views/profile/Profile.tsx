@@ -73,7 +73,7 @@ const TouchTooltip = ({
 };
 
 interface ProfileProps {
-  username?: string;
+  username?: string | undefined;
 }
 
 const Profile: React.FC<ProfileProps> = ({ username: targetUsername }) => {

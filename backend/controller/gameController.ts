@@ -42,9 +42,11 @@ export const gameController = createController({
       theme: pickRandom(collection.entries.filter((e) => e.selected)).id,
     });
     upsertGameState(db, newGame);
+    // Emit new game event with gameId for spectating
     emit({
       type: "new",
       user,
+      gameId: uuid,
     });
     emit({
       type: "updateStage",
