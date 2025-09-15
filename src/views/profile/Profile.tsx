@@ -20,7 +20,7 @@ const TouchTooltip = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const timeoutRef = useRef<Timer>();
+  const timeoutRef = useRef<Timer | null>(null);
 
   useEffect(() => {
     // Detect if device supports touch

@@ -146,7 +146,7 @@ const createWSClient = () => {
   >(
     action: `${TController}.${TAction}`,
     // @ts-expect-error We dont care since this is internal api
-    payload: Routes[TController][TAction]["validate"]["_input"],
+    payload: z.input<Routes[TController][TAction]["validate"]>,
     // @ts-expect-error We dont care since this is internal api
   ): Promise<Awaited<ReturnType<Routes[TController][TAction]["handler"]>>> => {
     if (ws.readyState !== WebSocket.OPEN) {

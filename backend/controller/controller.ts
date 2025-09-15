@@ -18,13 +18,12 @@ export type Endpoint<TInputSchema extends ZodType, TResponse> = {
   ) => Promise<TResponse>;
 };
 
-export const createEndpoint = <
-  TInputSchema extends ZodType,
-  TResponse,
-  TInput = z.infer<TInputSchema>,
->(
+export const createEndpoint = <TInputSchema extends ZodType, TResponse>(
   validate: TInputSchema,
-  handler: (input: TInput, context: RequestContext) => Promise<TResponse>,
+  handler: (
+    input: z.infer<TInputSchema>,
+    context: RequestContext,
+  ) => Promise<TResponse>,
 ): Endpoint<TInputSchema, TResponse> => {
   return { validate, handler };
 };

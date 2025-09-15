@@ -22,7 +22,7 @@ export interface ViewportProps {
   };
   clampZoom?: IClampZoomOptions;
   onViewportChange?: (viewport: PixiViewport) => void;
-  viewportRef?: React.RefObject<PixiViewport>;
+  viewportRef?: React.RefObject<PixiViewport | null>;
 }
 
 export interface PixiComponentViewportProps extends ViewportProps {
@@ -62,7 +62,6 @@ const PixiComponentViewport = PixiComponent("Viewport", {
     });
 
     if (props.viewportRef) {
-      // @ts-expect-error We dont care since this is internal api
       props.viewportRef.current = viewport;
     }
 

@@ -23,6 +23,7 @@ export const useWSQuery = <
   // @ts-expect-error We dont care since this is internal api
   Awaited<ReturnType<Routes[TController][TAction]["handler"]>>
 > => {
+  // @ts-expect-error We dont care since this is internal api
   return useQuery({
     queryKey: [action, payload],
     queryFn: async () => {
