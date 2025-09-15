@@ -72,27 +72,35 @@ const TouchTooltip = ({
   );
 };
 
-const Profile: React.FC = () => {
+interface ProfileProps {
+  username?: string;
+}
+
+const Profile: React.FC<ProfileProps> = ({ username: targetUsername }) => {
   const [availableWeeks, setAvailableWeeks] = useState(16); // Default to 4 months
   const containerRef = useRef<HTMLDivElement>(null);
-  const { data: username } = useWSQuery("user.getSelf", null);
+  const { data: currentUsername } = useWSQuery("user.getSelf", null);
+
+  // Use targetUsername if provided, otherwise use current user's username
+  const profileUsername = targetUsername || currentUsername;
+
   const { data: heatmap } = useWSQuery(
     "user.getHeatmap",
-    { id: username! },
-    !!username,
+    { id: profileUsername! },
+    !!profileUsername,
   );
   const { data: profile } = useWSQuery(
     "user.getProfile",
-    { id: username! },
-    !!username,
+    { id: profileUsername! },
+    !!profileUsername,
   );
   const { data: pastGames } = useWSQuery(
     "game.getGames",
     {
-      user: username!,
+      user: profileUsername!,
       page: 0,
     },
-    !!username,
+    !!profileUsername,
   );
   const now = useMemo(() => dayjs(), []);
   const maxHeat = heatmap ? Math.max(...heatmap) : 0;
@@ -158,7 +166,7 @@ const Profile: React.FC = () => {
     <div className="grid md:[grid-template-columns:_2fr_3fr] gap-6 px-2 sm:px-0">
       <div className="mx-4 my-8 md:m-8 text-white flex flex-col sm:flex-row self-center">
         <div className="p-2 flex items-center text-2xl mb-2 sm:mb-0">
-          {username}
+          {profileUsername}
         </div>
         <div className="border-l-0 sm:border-l-white sm:border-l p-2 text-lg">
           <p>Total Games: {profile?.totalGames}</p>

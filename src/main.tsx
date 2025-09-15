@@ -45,7 +45,9 @@ setup().then(() => {
               <Route path="/settings" component={Settings} />
               <Route path="/collection" component={Collection} />
               <Route path="/store" component={Store} />
-              <Route path="/profile" component={Profile} />
+              <Route path="/profile/:username?">
+                {(params) => <Profile username={params.username} />}
+              </Route>
             </Switch>
           </AnimatePresence>
         </Shell>

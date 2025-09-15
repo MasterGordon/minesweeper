@@ -3,9 +3,11 @@ import { useAtom } from "jotai";
 import { gameIdAtom, loginTokenAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
+import { ShareButton } from "../../components/ShareButton";
 import { Fragment, startTransition, Suspense, useEffect } from "react";
 import { Board } from "../../components/LazyBoard";
 import RegisterButton from "../../components/Auth/RegisterButton";
+import { Link } from "wouter";
 
 interface EndlessProps {
   gameId?: string;
@@ -16,12 +18,16 @@ const Endless: React.FC<EndlessProps> = (props) => {
   const [loginToken] = useAtom(loginTokenAtom);
   const { data: game } = useWSQuery("game.getGameState", gameId!, !!gameId);
   const { data: settings } = useWSQuery("user.getSettings", null);
+  const { data: currentUsername } = useWSQuery("user.getSelf", null);
   const startGame = useWSMutation("game.createGame");
   const { data: leaderboard } = useWSQuery("scoreboard.getScoreBoard", 100);
   const reveal = useWSMutation("game.reveal");
   const placeFlag = useWSMutation("game.placeFlag");
   const placeQuestionMark = useWSMutation("game.placeQuestionMark");
   const clearTile = useWSMutation("game.clearTile");
+
+  // Check if current user is spectating someone else's game
+  const isSpectating = game && game.user !== currentUsername;
 
   useEffect(() => {
     if (props.gameId) {
@@ -41,6 +47,18 @@ const Endless: React.FC<EndlessProps> = (props) => {
           Stage {game.stage}
         </div>
         <div className="grow" />
+        {isSpectating && (
+          <div className="flex items-center gap-2 text-white/80">
+            <span>Spectating</span>
+            <Link
+              href={`/profile/${game.user}`}
+              className="text-white/90 hover:text-purple-400 font-bold transition-colors"
+            >
+              {game.user}
+            </Link>
+          </div>
+        )}
+        <ShareButton gameId={gameId!} />
         <LeaderboardButton label="View Leaderboard" />
       </div>
       <Suspense>
