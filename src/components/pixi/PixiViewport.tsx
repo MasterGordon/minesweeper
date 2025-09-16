@@ -1,14 +1,18 @@
-import React from "react";
-import type { Application } from "pixi.js";
-import {
-  type IClampZoomOptions,
-  Viewport as PixiViewport,
-} from "pixi-viewport";
-import { PixiComponent, useApp } from "@pixi/react";
-import { BaseTexture, SCALE_MODES } from "pixi.js";
-BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
+import React, { useLayoutEffect } from "react";
+import { type IClampZoomOptions, Viewport } from "pixi-viewport";
+import { extend, useApplication } from "@pixi/react";
 
-export interface ViewportProps {
+extend({ Viewport });
+
+import { type PixiReactElementProps } from "@pixi/react";
+
+declare module "@pixi/react" {
+  interface PixiElements {
+    pixiViewport: PixiReactElementProps<typeof Viewport>;
+  }
+}
+
+interface ViewportProps {
   width: number;
   height: number;
   worldWidth: number;
@@ -21,26 +25,18 @@ export interface ViewportProps {
     bottom: number;
   };
   clampZoom?: IClampZoomOptions;
-  onViewportChange?: (viewport: PixiViewport) => void;
-  viewportRef?: React.RefObject<PixiViewport | null>;
+  onViewportChange?: (viewport: Viewport) => void;
+  viewportRef?: React.RefObject<Viewport | null>;
 }
 
-export interface PixiComponentViewportProps extends ViewportProps {
-  app: Application;
-}
-
-const PixiComponentViewport = PixiComponent("Viewport", {
-  create: (props: PixiComponentViewportProps) => {
-    const viewport = new PixiViewport({
-      screenWidth: props.width,
-      screenHeight: props.height,
-      worldWidth: props.worldWidth,
-      worldHeight: props.worldHeight,
-      ticker: props.app.ticker,
-      events: props.app.renderer.events,
-      disableOnContextMenu: true,
-      allowPreserveDragOutside: true,
-    });
+const PixiViewport = (props: ViewportProps) => {
+  const { app } = useApplication();
+  const ref = React.useRef<Viewport | null>(null);
+  const { clamp, clampZoom, onViewportChange, viewportRef } = props;
+  useLayoutEffect(() => {
+    void app.renderer;
+    const viewport = ref.current;
+    if (!viewport) return () => {};
     viewport
       .drag({
         ignoreKeyToPressOnTouch: true,
@@ -48,52 +44,43 @@ const PixiComponentViewport = PixiComponent("Viewport", {
       })
       .pinch()
       .wheel();
-    if (props.clamp) {
-      viewport.clamp(props.clamp);
+    if (clamp) {
+      viewport.clamp(clamp);
     }
-    if (props.clampZoom) {
-      viewport.clampZoom(props.clampZoom);
+    if (clampZoom) {
+      viewport.clampZoom(clampZoom);
     }
     viewport.on("moved", () => {
-      props.onViewportChange?.(viewport);
+      onViewportChange?.(viewport);
     });
     viewport.on("zoomed-end", () => {
-      props.onViewportChange?.(viewport);
+      onViewportChange?.(viewport);
     });
 
-    if (props.viewportRef) {
-      props.viewportRef.current = viewport;
+    if (viewportRef) {
+      viewportRef.current = viewport;
     }
-
-    return viewport;
-  },
-  applyProps: (
-    viewport: PixiViewport,
-    oldProps: ViewportProps,
-    newProps: ViewportProps,
-  ) => {
-    if (
-      oldProps.width !== newProps.width ||
-      oldProps.height !== newProps.height ||
-      oldProps.worldWidth !== newProps.worldWidth ||
-      oldProps.worldHeight !== newProps.worldHeight
-    ) {
-      viewport.resize(
-        newProps.width,
-        newProps.height,
-        newProps.worldWidth,
-        newProps.worldHeight,
-      );
-    }
-    if (oldProps.clamp !== newProps.clamp) {
-      viewport.clamp(newProps.clamp);
-    }
-  },
-});
-
-const Viewport = (props: ViewportProps) => {
-  const app = useApp();
-  return <PixiComponentViewport app={app} {...props} />;
+    return () => {
+      viewport.off("moved");
+      viewport.off("zoomed-end");
+    };
+  }, [clamp, clampZoom, onViewportChange, viewportRef, app.renderer]);
+  if (!app.renderer) return null;
+  return (
+    <pixiViewport
+      ref={ref}
+      screenWidth={props.width}
+      screenHeight={props.height}
+      worldWidth={props.worldWidth}
+      worldHeight={props.worldHeight}
+      ticker={app.ticker}
+      events={app.renderer.events}
+      disableOnContextMenu
+      allowPreserveDragOutside
+    >
+      {props.children}
+    </pixiViewport>
+  );
 };
 
-export default Viewport;
+export default PixiViewport;

@@ -12,9 +12,10 @@ import {
   type Theme,
 } from "../themes/Theme";
 import { useTheme } from "../themes/useTheme";
-import { Container, Sprite, Stage, useTick } from "@pixi/react";
+import { extend, useTick, Application } from "@pixi/react";
 import Viewport from "./pixi/PixiViewport";
 import type { Viewport as PixiViewport } from "pixi-viewport";
+import { Container, FederatedPointerEvent, Sprite, Texture } from "pixi.js";
 import {
   type ClientGame,
   getValue,
@@ -22,7 +23,6 @@ import {
   type ServerGame,
 } from "../../shared/game";
 import { useWSQuery } from "../hooks";
-import { Texture } from "pixi.js";
 import { useAtom } from "jotai";
 import { cursorXAtom, cursorYAtom } from "../atoms";
 import Coords from "./Coords";
@@ -45,6 +45,11 @@ import { themes } from "../themes";
 import { weightedPickRandom } from "../../shared/utils";
 import gen from "random-seed";
 import type { UserSettings } from "../../shared/user-settings";
+
+extend({
+  Container,
+  Sprite,
+});
 
 interface BoardProps {
   className?: string;
@@ -157,6 +162,26 @@ const Board: React.FC<BoardProps> = (props) => {
     };
   }, []);
 
+  const clamp = useMemo(
+    () =>
+      theme &&
+      (props.width || props.height
+        ? { left: 0, right: boardWidth, top: 0, bottom: boardHeight }
+        : {
+            left: -theme.size,
+            right: boardWidth + theme.size,
+            top: -theme.size,
+            bottom: boardHeight + theme.size,
+          }),
+    [boardHeight, boardWidth, props.height, props.width, theme],
+  );
+  const clampZoom = useMemo(
+    () => ({
+      minScale: 1,
+    }),
+    [],
+  );
+
   return (
     <div className="flex flex-col w-full">
       <div
@@ -199,11 +224,13 @@ const Board: React.FC<BoardProps> = (props) => {
           )}
         </div>
         {theme && (
-          <Stage
-            options={{ hello: true, forceCanvas: !!props.width }}
+          <Application
+            hello
+            forceFallbackAdapter={!!props.width}
             width={width}
             height={height}
             className="select-none"
+            preference="webgl"
           >
             <Viewport
               viewportRef={viewportRef}
@@ -211,19 +238,8 @@ const Board: React.FC<BoardProps> = (props) => {
               worldHeight={boardHeight}
               width={width}
               height={height}
-              clamp={
-                props.width || props.height
-                  ? { left: 0, right: boardWidth, top: 0, bottom: boardHeight }
-                  : {
-                      left: -theme.size,
-                      right: boardWidth + theme.size,
-                      top: -theme.size,
-                      bottom: boardHeight + theme.size,
-                    }
-              }
-              clampZoom={{
-                minScale: 1,
-              }}
+              clamp={clamp}
+              clampZoom={clampZoom}
               onViewportChange={onViewportChange}
             >
               {Array.from({ length: game.width }).map((_, i) => {
@@ -254,7 +270,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 });
               })}
             </Viewport>
-          </Stage>
+          </Application>
         )}
       </div>
       {!props.width && !props.height && <Coords />}
@@ -311,13 +327,14 @@ const Tile = ({
   const isQuestionMark = game.isQuestionMark[i][j];
   const base =
     isRevealed || (isMine && !isFlagged) ? (
-      <Sprite key="b" texture={resolveSprite(theme.revealed)} />
+      <pixiSprite key="b" texture={resolveSprite(theme.revealed)} />
     ) : (
-      <Sprite key="b" texture={resolveSprite(theme.tile)} />
+      <pixiSprite key="b" texture={resolveSprite(theme.tile)} />
     );
   const extra = isLastPos ? (
-    <Sprite key="e" texture={resolveSprite(theme.lastPos)} />
+    <pixiSprite key="e" texture={resolveSprite(theme.lastPos)} />
   ) : null;
+
   const touchStart = useRef<number>(0);
   const isMove = useRef<boolean>(false);
   const startX = useRef<number>(0);
@@ -334,13 +351,16 @@ const Tile = ({
       setDoTick(true);
     }
   }, [isMine, isRevealed, userSettings?.showRevealAnimation, value]);
-  useTick((delta) => {
-    frame.current += delta * 0.1;
-    if (frame.current > 3) {
-      setDoTick(false);
-    }
-    setScale(Math.max(1, -2 * Math.pow(frame.current - 0.5, 2) + 1.2));
-  }, doTick);
+  useTick({
+    callback: (delta) => {
+      frame.current += delta.count * 0.1;
+      if (frame.current > 3) {
+        setDoTick(false);
+      }
+      setScale(Math.max(1, -2 * Math.pow(frame.current - 0.5, 2) + 1.2));
+    },
+    isEnabled: doTick,
+  });
   const baseProps = useMemo(
     () => ({
       scale,
@@ -353,18 +373,18 @@ const Tile = ({
   let content: ReactNode = null;
   if (isFlagged) {
     content = (
-      <Sprite key="c" texture={resolveSprite(theme.flag)} {...baseProps} />
+      <pixiSprite key="c" texture={resolveSprite(theme.flag)} {...baseProps} />
     );
   } else if (isMine) {
     content = (
-      <Sprite key="c" texture={resolveSprite(theme.mine)} {...baseProps} />
+      <pixiSprite key="c" texture={resolveSprite(theme.mine)} {...baseProps} />
     );
   } else if (value !== -1 && isRevealed) {
     const img = theme[value.toString() as keyof Theme] as Texture;
-    content = img ? <Sprite key="c" texture={img} {...baseProps} /> : null;
+    content = img ? <pixiSprite key="c" texture={img} {...baseProps} /> : null;
   } else if (isQuestionMark) {
     content = (
-      <Sprite
+      <pixiSprite
         key="c"
         texture={resolveSprite(theme.questionMark)}
         {...baseProps}
@@ -375,16 +395,16 @@ const Tile = ({
   const [, setCursorY] = useAtom(cursorYAtom);
 
   return (
-    <Container
+    <pixiContainer
       eventMode="static"
       interactive
       x={i * theme.size}
       y={j * theme.size}
       key={`${i},${j}`}
-      onrightup={() => {
+      onRightUp={() => {
         onRightClick(i, j);
       }}
-      onpointerup={(e) => {
+      onPointerUp={(e: FederatedPointerEvent) => {
         if (e.button !== 0) return;
         if (isMove.current) return;
         if (Date.now() - touchStart.current > 300) {
@@ -393,17 +413,17 @@ const Tile = ({
           onLeftClick(i, j);
         }
       }}
-      onpointerdown={(e) => {
+      onPointerDown={(e: FederatedPointerEvent) => {
         isMove.current = false;
         touchStart.current = Date.now();
         startX.current = e.global.x;
         startY.current = e.global.y;
       }}
-      onpointerenter={() => {
+      onPointerEnter={() => {
         setCursorX(i);
         setCursorY(j);
       }}
-      onpointermove={(e) => {
+      onPointerMove={(e: FederatedPointerEvent) => {
         if (
           Math.abs(startX.current - e.global.x) > 10 ||
           Math.abs(startY.current - e.global.y) > 10
@@ -415,7 +435,7 @@ const Tile = ({
       {base}
       {content}
       {extra}
-    </Container>
+    </pixiContainer>
   );
 };
 

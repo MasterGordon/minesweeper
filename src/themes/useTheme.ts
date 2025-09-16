@@ -1,4 +1,4 @@
-import { Assets } from "pixi.js";
+import { Assets, Texture } from "pixi.js";
 import { useState, useEffect } from "react";
 import type { Theme, LoadedTheme, WeightedLazySprites } from "./Theme";
 
@@ -12,14 +12,20 @@ export const useTheme = (theme: Theme) => {
         Object.entries(theme).map(async ([key, value]) => {
           let loaded = value;
           if (typeof value === "function") {
-            loaded = await Assets.load((await value()).default);
+            const texture = await Assets.load<Texture>((await value()).default);
+            texture.source.scaleMode = "nearest";
+            loaded = texture;
           }
           if (Array.isArray(value)) {
             loaded = await Promise.all(
               loaded.map(async (sprite: WeightedLazySprites) => {
+                const texture = await Assets.load<Texture>(
+                  (await sprite.sprite()).default,
+                );
+                texture.source.scaleMode = "nearest";
                 return {
                   weight: sprite.weight,
-                  sprite: await Assets.load((await sprite.sprite()).default),
+                  sprite: texture,
                 };
               }),
             );
