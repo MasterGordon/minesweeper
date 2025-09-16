@@ -1,6 +1,7 @@
 import { Ellipsis } from "lucide-react";
 import { testBoard } from "../../../shared/testBoard";
 import { Board } from "../../components/LazyBoard";
+import StaticBoardPreview from "../../components/StaticBoardPreview";
 import { Button } from "../../components/Button";
 import { themes } from "../../themes";
 import {
@@ -11,7 +12,7 @@ import {
 } from "../../components/DropdownMenu";
 import { cn } from "../../lib/utils";
 import { useWSMutation, useWSQuery } from "../../hooks";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 const Collection = () => {
   const { data: collection, refetch } = useWSQuery(
@@ -20,6 +21,7 @@ const Collection = () => {
   );
   const mutateSelected = useWSMutation("user.selectCollectionEntry");
   const mutateShuffle = useWSMutation("user.addCollectionEntryToShuffle");
+  const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -76,19 +78,35 @@ const Collection = () => {
                   </DropdownMenu>
                 )}
               </div>
-              <Suspense>
-                <Board
-                  game={testBoard(theme.id)}
-                  onLeftClick={() => {}}
-                  restartGame={() => {}}
-                  onRightClick={() => {}}
-                  width={11 * 32}
-                  height={4 * 32}
-                  className={cn(
-                    selected && "outline-primary outline-4 rounded-md",
-                  )}
-                />
-              </Suspense>
+              <div
+                onMouseEnter={() => setHoveredTheme(theme.id)}
+                onMouseLeave={() => setHoveredTheme(null)}
+              >
+                {hoveredTheme === theme.id ? (
+                  <Suspense>
+                    <Board
+                      game={testBoard(theme.id)}
+                      onLeftClick={() => {}}
+                      restartGame={() => {}}
+                      onRightClick={() => {}}
+                      width={11 * 32}
+                      height={4 * 32}
+                      className={cn(
+                        selected && "outline-primary outline-4 rounded-md",
+                      )}
+                    />
+                  </Suspense>
+                ) : (
+                  <StaticBoardPreview
+                    game={testBoard(theme.id)}
+                    width={11 * 32}
+                    height={4 * 32}
+                    className={cn(
+                      selected && "outline-primary outline-4 rounded-md",
+                    )}
+                  />
+                )}
+              </div>
             </div>
           );
         })}
