@@ -57,7 +57,7 @@ const expandBoard = (serverGame: ServerGame) => {
     const newHeight = Math.floor(Math.min(height + 7, height * 1.5));
     const newWidth = width;
     const newMinesCount = Math.floor(
-      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.095),
+      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.098),
     );
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
@@ -115,7 +115,7 @@ const expandBoard = (serverGame: ServerGame) => {
     const newWidth = Math.floor(Math.min(width + 7, width * 1.5));
     const newHeight = height;
     const newMinesCount = Math.floor(
-      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.095),
+      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.098),
     );
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
