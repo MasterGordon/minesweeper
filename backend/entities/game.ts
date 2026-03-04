@@ -45,20 +45,24 @@ const hasWon = (serverGame: ServerGame) => {
   return true;
 };
 
+const getNewMinesCount = (width: number, height: number, stage: number) => {
+  const minePercentage = Math.log10(30 * stage) * 0.092;
+  const newMinesCount = Math.floor(width * height * minePercentage);
+  return newMinesCount;
+};
+
 const expandBoard = (serverGame: ServerGame) => {
   const { width, height, stage, mines, isFlagged, isRevealed, isQuestionMark } =
     serverGame;
   let dir = stage % 2 === 0 ? "down" : "right";
-  if (stage > 13) {
+  if (stage > 15) {
     dir = "down";
   }
   // Expand the board by the current board size 8x8 -> 16x8
   if (dir === "down") {
     const newHeight = Math.floor(Math.min(height + 7, height * 1.5));
     const newWidth = width;
-    const newMinesCount = Math.floor(
-      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.098),
-    );
+    const newMinesCount = getNewMinesCount(width, newHeight - height, stage);
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
       new Array(newHeight).fill(false),
@@ -92,13 +96,18 @@ const expandBoard = (serverGame: ServerGame) => {
     }
     // generate new mines
     let remainingMines = newMinesCount;
-    while (remainingMines > 0) {
+    let runs = 0;
+    while (remainingMines > 0 && runs < width * height) {
       const x = Math.floor(Math.random() * width);
       const y = height + Math.floor(Math.random() * (newHeight - height));
       if (!newMines[x][y]) {
         newMines[x][y] = true;
         remainingMines--;
       }
+      runs++;
+    }
+    if (runs == width * height) {
+      console.error("Oops all mines!");
     }
     Object.assign(serverGame, {
       width: newWidth,
@@ -114,9 +123,7 @@ const expandBoard = (serverGame: ServerGame) => {
   if (dir === "right") {
     const newWidth = Math.floor(Math.min(width + 7, width * 1.5));
     const newHeight = height;
-    const newMinesCount = Math.floor(
-      width * height * 0.5 * (Math.log10(30 * (stage + 1)) * 0.098),
-    );
+    const newMinesCount = getNewMinesCount(newWidth - width, height, stage);
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
       new Array(newHeight).fill(false),
