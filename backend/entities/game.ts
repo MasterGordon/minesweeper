@@ -57,7 +57,7 @@ const expandBoard = (serverGame: ServerGame) => {
     const newHeight = Math.floor(Math.min(height + 7, height * 1.5));
     const newWidth = width;
     const newMinesCount = Math.floor(
-      width * height * 0.5 * (0.2 + 0.0015 * stage),
+      width * height * 0.5 * (Math.log10(30 * stage) * 0.1),
     );
     // expand mines array
     const newMines = Array.from({ length: newWidth }, () =>
