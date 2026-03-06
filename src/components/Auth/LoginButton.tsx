@@ -64,6 +64,7 @@ const LoginButton = () => {
                     token: res.token,
                   });
                   await queryClient.resetQueries();
+                  return;
                 })
                 .catch((e) => {
                   setError(e);

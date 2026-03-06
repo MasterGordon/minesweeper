@@ -30,3 +30,8 @@ bun dev
 - Questinmark after flag
 - Earn points for wins
 - Powerups
+
+## TODOs
+
+- Fix scoreboard modal
+- Fix fullscrean

@@ -28,7 +28,7 @@ const LeaderboardButton = ({
         <DialogHeader>
           <DialogTitle>Leaderboard</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-[min-content_2fr_1fr] grid-border-b">
+        <div className="grid grid-cols-[min-content_2fr_1fr] grid-border-b overflow-y-auto max-h-[60vh]">
           {leaderboard?.map((_, i) => (
             <Fragment key={i}>
               <div className="p-4 text-white/80 text-right">{i + 1}.</div>

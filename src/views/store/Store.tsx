@@ -15,7 +15,7 @@ import { Rarity } from "../../components/Rarity";
 import { lootboxResultAtom } from "../../atoms";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { initParticlesEngine, Particles as ParticlesComponent } from "@tsparticles/react";
 import { motion } from "motion/react";
 import BounceImg from "../../components/BounceImg";
 
@@ -29,9 +29,8 @@ const Store = () => {
   useEffect(() => {
     const cb = async () => {
       const { loadSlim } = await import("@tsparticles/slim");
-      const { loadSeaAnemonePreset } = await import(
-        "@tsparticles/preset-sea-anemone"
-      );
+      const { loadSeaAnemonePreset } =
+        await import("@tsparticles/preset-sea-anemone");
       initParticlesEngine(async (engine) => {
         // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
         // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
@@ -60,7 +59,7 @@ const Store = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="absolute flex h-full w-full flex-col items-center justify-center">
-            <Particles
+            <ParticlesComponent
               className="rounded-md"
               id="tsparticles"
               options={{

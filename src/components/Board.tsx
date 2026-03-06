@@ -143,6 +143,19 @@ const Board: React.FC<BoardProps> = (props) => {
 
   const viewportRef = useRef<PixiViewport>(null);
   const [zenMode, setZenMode] = useState(false);
+
+  // Force resize when zen mode changes - the layout needs time to settle
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (ref.current) {
+        setWidth(ref.current.clientWidth);
+        setHeight(ref.current.clientHeight);
+        if (viewportRef.current) onViewportChange(viewportRef.current);
+      }
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [zenMode, onViewportChange]);
+
   useEffect(() => {
     if (ref.current) {
       ref.current.addEventListener("wheel", (e) => {
@@ -187,7 +200,7 @@ const Board: React.FC<BoardProps> = (props) => {
       <div
         className={cn(
           "w-full h-[70vh] overflow-hidden outline-white/40 outline-2 flex flex-col",
-          zenMode && "fixed top-0 left-0 z-50 right-0 bottom-0 h-[100vh]",
+          zenMode && "fixed top-0 left-0 z-50 w-[100vw] h-[100vh]",
           props.className,
         )}
         style={{
@@ -225,6 +238,7 @@ const Board: React.FC<BoardProps> = (props) => {
         </div>
         {theme && (
           <Application
+            key={`${width}-${height}`}
             hello
             forceFallbackAdapter={!!props.width}
             width={width}

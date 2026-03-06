@@ -31,7 +31,7 @@ const setup = async () => {
 };
 
 setup().then(() => {
-  createRoot(document.getElementById("root")!).render(
+  return createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <Shell>

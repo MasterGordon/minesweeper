@@ -65,6 +65,7 @@ const PixiViewport = (props: ViewportProps) => {
       viewport.off("zoomed-end");
     };
   }, [clamp, clampZoom, onViewportChange, viewportRef, app.renderer]);
+
   if (!app.renderer) return null;
   return (
     <pixiViewport

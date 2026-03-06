@@ -83,6 +83,7 @@ const RegisterButton = () => {
                   });
                   await queryClient.resetQueries();
                   setIsOpen(false);
+                  return;
                 })
                 .catch((e) => {
                   setError(e);
