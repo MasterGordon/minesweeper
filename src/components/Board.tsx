@@ -68,7 +68,11 @@ interface ViewportInfo {
   y: number;
 }
 
-const toViewportInfo = (viewport: PixiViewport) => {
+const toViewportInfo = (viewport: PixiViewport | null) => {
+  // Viewport or its properties may be null during mount/unmount transitions
+  if (!viewport || viewport.x == null || viewport.y == null) {
+    return null;
+  }
   return {
     x: -viewport.x / viewport.scaled,
     y: -viewport.y / viewport.scaled,
@@ -102,9 +106,11 @@ const Board: React.FC<BoardProps> = (props) => {
     y: 0,
   });
 
-  const onViewportChange = useCallback((viewport: PixiViewport) => {
+  const onViewportChange = useCallback((viewport: PixiViewport | null) => {
     setViewport((v) => {
-      const { width, height, x, y } = toViewportInfo(viewport);
+      const info = toViewportInfo(viewport);
+      if (!info) return v;
+      const { width, height, x, y } = info;
       if (v.width !== width || v.height !== height) {
         return { width, height, x, y };
       }
@@ -115,9 +121,10 @@ const Board: React.FC<BoardProps> = (props) => {
     });
   }, []);
   useEffect(() => {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       if (viewportRef.current) onViewportChange(viewportRef.current);
     }, 200);
+    return () => clearInterval(intervalId);
   }, [game.width, game.height, onViewportChange]);
   useEffect(() => {
     if (!ref.current) return;

@@ -11,6 +11,35 @@ import Section from "./Section";
 import Hr from "../../components/Hr";
 import { Link } from "wouter";
 
+const taglines = [
+  "is the greatest experience",
+  "will blow your mind (literally)",
+  "99% luck, 1% skill, 100% rage",
+  "where clicking randomly is a strategy",
+  "sponsored by your cardiologist",
+  "teaching probability since 1990",
+  "the original trust issues simulator",
+  "50/50 has never felt so wrong",
+  "making grown adults say 'one more game'",
+  "it's not gambling, it's math",
+  "click responsibly",
+  "where every square is a life decision",
+  "the reason you have trust issues",
+  "now with 100% more explosions",
+  "technically a puzzle game",
+  "stress testing your mouse since 1990",
+  "flag it and pray",
+  "corner clicks are self-care",
+  "because therapy is expensive",
+  "sweeping mines, not floors",
+  "your daily dose of anxiety",
+  "where 1 means run",
+  "perfecting the art of guessing",
+  "the game that never forgives",
+];
+
+const randomTagline = taglines[Math.floor(Math.random() * taglines.length)];
+
 const Home = () => {
   const { data: userCount } = useWSQuery("user.getUserCount", null);
   const { data: gameCount } = useWSQuery("game.getTotalGamesPlayed", {});
@@ -45,7 +74,7 @@ const Home = () => {
           Business Minesweeper
           <br />
           <span className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-xl md:text-4xl text-center">
-            is the greatest experience
+            {randomTagline}
           </span>
         </h1>
         <span className="flex gap-8 items-center">
