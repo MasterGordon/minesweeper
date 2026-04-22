@@ -51,7 +51,7 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "next",
+    "@tailwindcss/vite": "^4.2.4",
     "@types/bun": "latest",
     "@types/random-seed": "^0.3.5",
     "@types/react": "^19.1.13",
@@ -59,7 +59,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "drizzle-kit": "0.31.4",
     "oxlint": "^1.51.0",
-    "tailwindcss": "^4.1.13",
+    "tailwindcss": "^4.2.4",
     "typescript": "^5.9.2",
     "vite": "^8.0.0-beta.14",
     "vite-bundle-analyzer": "^1.2.3",

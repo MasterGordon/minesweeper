@@ -1,6 +1,6 @@
 import { useWSMutation, useWSQuery } from "../../hooks";
 import { useAtom } from "jotai";
-import { gameIdAtom, loginTokenAtom } from "../../atoms";
+import { gameIdAtom } from "../../atoms";
 import { Button } from "../../components/Button";
 import LeaderboardButton from "../../components/LeaderboardButton";
 import { ShareButton } from "../../components/ShareButton";
@@ -15,7 +15,6 @@ interface EndlessProps {
 
 const Endless: React.FC<EndlessProps> = (props) => {
   const [gameId, setGameId] = useAtom(gameIdAtom);
-  const [loginToken] = useAtom(loginTokenAtom);
   const { data: game } = useWSQuery("game.getGameState", gameId!, !!gameId);
   const { data: settings } = useWSQuery("user.getSettings", null);
   const { data: currentUsername } = useWSQuery("user.getSelf", null);
@@ -93,7 +92,7 @@ const Endless: React.FC<EndlessProps> = (props) => {
     <div className="w-full grid md:grid-cols-[350px_1fr]">
       <div className="flex flex-col md:border-r-white/10 md:border-r-1 gap-8 pr-12">
         <h2 className="text-white/90 text-xl">Minesweeper Endless</h2>
-        {loginToken ? (
+        {currentUsername ? (
           <Button
             className="w-fit"
             variant="primary"
@@ -107,7 +106,7 @@ const Endless: React.FC<EndlessProps> = (props) => {
             Start Game
           </Button>
         ) : (
-          <RegisterButton />
+          <RegisterButton label="Sign in to Play" />
         )}
         <h2 className="text-white/80 text-lg mt-8">How to play</h2>
         <p className="text-white/90">

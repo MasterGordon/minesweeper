@@ -15,17 +15,49 @@ import Collection from "./views/collection/Collection.tsx";
 import { AnimatePresence } from "motion/react";
 import Store from "./views/store/Store.tsx";
 import Profile from "./views/profile/Profile.tsx";
+import { useWSQuery } from "./hooks.ts";
+import RegisterButton from "./components/Auth/RegisterButton.tsx";
+
+const ProtectedRoute: React.FC<{
+  component: React.ComponentType<any>;
+  path: string;
+}> = ({ component: Component, path }) => {
+  const { data: username, isLoading } = useWSQuery("user.getSelf", null);
+
+  return (
+    <Route path={path}>
+      {(params) => {
+        if (isLoading) return null;
+        if (!username) {
+          return (
+            <div className="flex flex-col items-center justify-center py-24 gap-6">
+              <h2 className="text-white/90 text-2xl font-bold">
+                This page is only available to logged-in users.
+              </h2>
+              <RegisterButton label="Login to access" />
+            </div>
+          );
+        }
+        return <Component {...params} />;
+      }}
+    </Route>
+  );
+};
 
 const setup = async () => {
   const token = localStorage.getItem("loginToken");
 
   if (token) {
     try {
-      await wsClient.dispatch("user.loginWithToken", {
+      const res = await wsClient.dispatch("user.loginWithToken", {
         token: JSON.parse(token),
       });
+      if (!res.success) {
+        localStorage.removeItem("loginToken");
+      }
     } catch (e) {
       console.error(e);
+      localStorage.removeItem("loginToken");
     }
   }
 };
@@ -41,9 +73,9 @@ setup().then(() => {
               <Route path="/play/:gameId?">
                 {(params) => <Endless gameId={params.gameId} />}
               </Route>
-              <Route path="/history" component={MatchHistory} />
-              <Route path="/settings" component={Settings} />
-              <Route path="/collection" component={Collection} />
+              <ProtectedRoute path="/history" component={MatchHistory} />
+              <ProtectedRoute path="/settings" component={Settings} />
+              <ProtectedRoute path="/collection" component={Collection} />
               <Route path="/store" component={Store} />
               <Route path="/profile/:username?">
                 {(params) => <Profile username={params.username} />}
