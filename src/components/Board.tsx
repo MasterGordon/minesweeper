@@ -188,11 +188,11 @@ const Board: React.FC<BoardProps> = (props) => {
       (props.width || props.height
         ? { left: 0, right: boardWidth, top: 0, bottom: boardHeight }
         : {
-            left: -theme.size,
-            right: boardWidth + theme.size,
-            top: -theme.size,
-            bottom: boardHeight + theme.size,
-          }),
+          left: -theme.size,
+          right: boardWidth + theme.size,
+          top: -theme.size,
+          bottom: boardHeight + theme.size,
+        }),
     [boardHeight, boardWidth, props.height, props.width, theme],
   );
   const clampZoom = useMemo(
