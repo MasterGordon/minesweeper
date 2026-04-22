@@ -15,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PasswordInput from "./PasswordInput";
 import { wsClient } from "../../wsClient";
 
-const RegisterButton = () => {
+const RegisterButton = ({ label }: { label?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [username, setUsername] = useState("");
@@ -36,7 +36,7 @@ const RegisterButton = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="primary" className="self-start">
-          Register
+          {label ?? "Register"}
         </Button>
       </DialogTrigger>
       <DialogContent>
