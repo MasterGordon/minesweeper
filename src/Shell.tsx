@@ -17,8 +17,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Header from "./components/Header";
 import { Tag } from "./components/Tag";
 import Feed from "./components/Feed/Feed";
-import { useAtom } from "jotai";
-import { loginTokenAtom } from "./atoms";
+import { useWSQuery } from "./hooks";
 
 const drawerWidth = 256;
 const drawerWidthWithPadding = drawerWidth;
@@ -26,7 +25,7 @@ const drawerWidthWithPadding = drawerWidth;
 const Shell: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
-  const [loginToken] = useAtom(loginTokenAtom);
+  const { data: username } = useWSQuery("user.getSelf", null);
 
   const x = isOpen ? 0 : -drawerWidthWithPadding;
   const width = isOpen ? drawerWidthWithPadding : 0;
@@ -82,7 +81,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             <Play />
             Play
           </NavLink>
-          {loginToken && (
+          {username && (
             <NavLink href="/history">
               <History />
               History
@@ -92,13 +91,13 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             <Store />
             Store
           </NavLink>
-          {loginToken && (
+          {username && (
             <NavLink href="/collection">
               <Library />
               Collection <Tag size="sm">NEW</Tag>
             </NavLink>
           )}
-          {loginToken && (
+          {username && (
             <NavLink href="/settings">
               <Settings />
               Settings

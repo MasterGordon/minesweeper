@@ -18,11 +18,13 @@ import { useEffect } from "react";
 import { initParticlesEngine, Particles as ParticlesComponent } from "@tsparticles/react";
 import { motion } from "motion/react";
 import BounceImg from "../../components/BounceImg";
+import RegisterButton from "../../components/Auth/RegisterButton";
 
 const Store = () => {
   const openLootbox = useWSMutation("user.openLootbox");
   const [lootboxResult, setLootboxResult] = useAtom(lootboxResultAtom);
   const currentLootbox = lootboxes.find((l) => l.id === lootboxResult?.lootbox);
+  const { data: username } = useWSQuery("user.getSelf", null);
   const { refetch } = useWSQuery("user.getOwnGems", null);
 
   // this should be run only once per application lifetime
@@ -184,18 +186,24 @@ const Store = () => {
                   </Dialog>
                 </div>
                 <BounceImg src={lootbox.image} className="w-[360px]" />
-                <Button
-                  variant="outline"
-                  size="default"
-                  className="mx-auto items-center"
-                  onClick={() => {
-                    openLootbox
-                      .mutateAsync({ id: lootbox.id })
-                      .then(() => refetch());
-                  }}
-                >
-                  Buy for <b>{lootbox.priceText}</b> <GemsIcon />
-                </Button>
+                {username ? (
+                  <Button
+                    variant="outline"
+                    size="default"
+                    className="mx-auto items-center"
+                    onClick={() => {
+                      openLootbox
+                        .mutateAsync({ id: lootbox.id })
+                        .then(() => refetch());
+                    }}
+                  >
+                    Buy for <b>{lootbox.priceText}</b> <GemsIcon />
+                  </Button>
+                ) : (
+                  <div className="flex justify-center">
+                    <RegisterButton label="Login to Buy" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
