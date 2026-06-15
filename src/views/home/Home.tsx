@@ -73,7 +73,7 @@ const Home = () => {
         <h1 className="text-white/80 font-black font-mono text-3xl md:text-6xl text-center">
           Business Minesweeper
           <br />
-          <span className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-xl md:text-4xl text-center">
+          <span className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text]! font-mono text-xl md:text-4xl text-center">
             {randomTagline}
           </span>
         </h1>

@@ -67,7 +67,7 @@ const Shell: React.FC<PropsWithChildren> = ({ children }) => {
             }
           }}
         >
-          <h2 className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text!important] font-mono text-3xl">
+          <h2 className="[background:var(--bg-brand)] [-webkit-text-fill-color:transparent] font-black [-webkit-background-clip:text]! font-mono text-3xl">
             Business
             <br />
             Minesweeper

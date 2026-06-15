@@ -12,7 +12,7 @@ const tagVariants = cva(
         outline:
           "bg-transparent text-white/95 hover:bg-white/05 border-white/10 border-1",
         outline2:
-          "bg-transparent [background:var(--bg-brand)] [-webkit-text-fill-color:transparent] [-webkit-background-clip:text!important] bg-white/05 border-primary border-1",
+          "bg-transparent [background:var(--bg-brand)] [-webkit-text-fill-color:transparent] [-webkit-background-clip:text]! bg-white/05 border-primary border-1",
         primary:
           "[background:var(--bg-brand)] text-white/95 hover:bg-white/05 hover:animate-gradientmove",
       },
