@@ -6,7 +6,7 @@ import { getDefaultStore } from "jotai";
 
 const connectionString = import.meta.env.DEV
   ? "ws://localhost:8072/ws"
-  : "wss://mbv2.gordon.business/ws";
+  : import.meta.env.VITE_BACKEND_URL!;
 
 const messageListeners = new Set<(event: MessageEvent) => void>();
 export const addMessageListener = (listener: (event: MessageEvent) => void) => {
