@@ -172,7 +172,7 @@ const Profile: React.FC<ProfileProps> = ({ username: targetUsername }) => {
           <p>Total Games: {profile?.totalGames}</p>
           <p>Highest Stage: {profile?.highestStage}</p>
           <p>
-            Average Stage: {Math.round(profile?.averageStage ?? 1 * 100) / 100}
+            Average Stage: {Math.round((profile?.averageStage ?? 1) * 100) / 100}
           </p>
           <p>
             Gems Spend:{" "}
