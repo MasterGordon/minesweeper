@@ -28,11 +28,15 @@ Deployment requires `VITE_BACKEND_URL` to be set
 - [Tailwind CSS v4](https://github.com/tailwindlabs/tailwindcss)
 - [React](https://github.com/facebook/react)
 
-## AI Disclaimer
+## ✨️ Themes
+
+All Ingame themes are created by [CutieCat2804](https://github.com/CutieCat2804)
+
+## 🤖 AI Disclaimer
 
 For the project itself no AI was used for coding (not vibecoded). I've just used this project to test out new AI Tools to see how it would to tasks.
 
-The low poly images are AI generated since I couldn't find any stock images related to minesweeper :). When you wanna create some new images (any style) feel free to put up a PR.
+The lowpoly images (src/assets/illustrations) are AI generated since I couldn't find any stock images related to minesweeper :). When you wanna create some new images (any style) feel free to put up a PR.
 
 ## 📋 Maybe TODO/Ideas
 
