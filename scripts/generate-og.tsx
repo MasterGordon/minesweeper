@@ -41,7 +41,7 @@ const targets: Target[] = [
     file: "og.png",
     title: "Business Minesweeper",
     subtitle:
-      "Endless multiplayer minesweeper — clear an ever-expanding board, climb the leaderboard, collect themes.",
+      "Endless minesweeper — clear an ever-expanding board, climb the leaderboard, collect themes.",
   },
 ];
 
