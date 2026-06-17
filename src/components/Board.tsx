@@ -70,7 +70,7 @@ interface ViewportInfo {
 
 const toViewportInfo = (viewport: PixiViewport | null) => {
   // Viewport or its properties may be null during mount/unmount transitions
-  if (!viewport || viewport.x == null || viewport.y == null) {
+  if (!viewport || viewport.destroyed || viewport.x == null || viewport.y == null) {
     return null;
   }
   return {
