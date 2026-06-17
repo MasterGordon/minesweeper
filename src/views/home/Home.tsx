@@ -97,7 +97,7 @@ const Home = () => {
       />
       <Hr />
       <Section
-        text="Add friends to watch the game and play with them. You can also challenge your friends to a game and see who can go further in a limited ammount of time."
+        text="Add friends to watch the game and play with them. You can also challenge your friends to a game and see who can go further in a limited amount of time. (COMING SOON)"
         image={mine}
         left
       />

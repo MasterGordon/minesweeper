@@ -118,6 +118,24 @@ const Endless: React.FC<EndlessProps> = (props) => {
           <br />
           Good luck!
         </p>
+        <h2 className="text-white/80 text-lg mt-8">Controls</h2>
+        <ul className="text-white/90 flex flex-col gap-2 list-disc pl-5">
+          <li>
+            <span className="font-bold">Left click</span> (or tap) to reveal a
+            tile.
+          </li>
+          <li>
+            <span className="font-bold">Right click</span> (or press and hold)
+            to place a flag.
+          </li>
+          <li>
+            Right click a flagged tile again to{" "}
+            {settings?.placeQuestionMark
+              ? "mark it with a question mark, then clear it"
+              : "clear it"}
+            .
+          </li>
+        </ul>
       </div>
       <div className="flex flex-col gap-4 pl-12">
         <h2 className="w-full text-center text-lg text-white/90">
