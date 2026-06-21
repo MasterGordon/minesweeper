@@ -81,6 +81,14 @@ const toViewportInfo = (viewport: PixiViewport | null) => {
   };
 };
 
+const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number]> = [
+  [-1, -1], [0, -1], [1, -1],
+  [-1, 0], [1, 0],
+  [-1, 1], [0, 1], [1, 1],
+];
+
+const EMPTY_PREVIEW: ReadonlySet<string> = new Set();
+
 const Board: React.FC<BoardProps> = (props) => {
   const { game, restartGame } = props;
   const { data: user } = useWSQuery("user.getSelf", null);
@@ -151,6 +159,47 @@ const Board: React.FC<BoardProps> = (props) => {
   const viewportRef = useRef<PixiViewport>(null);
   const [zenMode, setZenMode] = useState(false);
 
+  const [holdPreview, setHoldPreview] =
+    useState<ReadonlySet<string>>(EMPTY_PREVIEW);
+  const computeHoldPreview = useCallback(
+    (i: number, j: number): ReadonlySet<string> => {
+      if (isServerGame(game) && game.finished) return EMPTY_PREVIEW;
+      if (!game.isRevealed[i]?.[j]) return EMPTY_PREVIEW;
+      const value = isServerGame(game)
+        ? getValue(game.mines, i, j)
+        : game.values[i]?.[j];
+      if (value === undefined || value < 0) return EMPTY_PREVIEW;
+      let flagCount = 0;
+      for (const [dx, dy] of NEIGHBOR_OFFSETS) {
+        if (game.isFlagged[i + dx]?.[j + dy]) flagCount++;
+      }
+
+      const isSatisfied = flagCount === value;
+      if (isSatisfied) return EMPTY_PREVIEW;
+      const set = new Set<string>();
+      for (const [dx, dy] of NEIGHBOR_OFFSETS) {
+        const nx = i + dx;
+        const ny = j + dy;
+        if (nx < 0 || ny < 0 || nx >= game.width || ny >= game.height) continue;
+        if (game.isRevealed[nx]?.[ny]) continue;
+        if (game.isFlagged[nx]?.[ny]) continue;
+        if (game.isQuestionMark[nx]?.[ny]) continue;
+        set.add(`${nx},${ny}`);
+      }
+      return set;
+    },
+    [game],
+  );
+  const handleHoldPreviewStart = useCallback(
+    (i: number, j: number) => {
+      setHoldPreview(computeHoldPreview(i, j));
+    },
+    [computeHoldPreview],
+  );
+  const handleHoldPreviewClear = useCallback(() => {
+    setHoldPreview(EMPTY_PREVIEW);
+  }, []);
+
   // Force resize when zen mode changes - the layout needs time to settle
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -181,6 +230,15 @@ const Board: React.FC<BoardProps> = (props) => {
       document.removeEventListener("keydown", listener);
     };
   }, []);
+  useEffect(() => {
+    const onUp = () => handleHoldPreviewClear();
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, [handleHoldPreviewClear]);
 
   const clamp = useMemo(
     () =>
@@ -207,7 +265,7 @@ const Board: React.FC<BoardProps> = (props) => {
       <div
         className={cn(
           "w-full h-[70vh] overflow-hidden outline-white/40 outline-2 flex flex-col",
-          zenMode && "fixed top-0 left-0 z-50 w-[100vw] h-[100vh]",
+          zenMode && "fixed top-0 left-0 z-50 w-screen h-screen",
           props.className,
         )}
         style={{
@@ -286,6 +344,9 @@ const Board: React.FC<BoardProps> = (props) => {
                       onLeftClick={props.onLeftClick}
                       onRightClick={props.onRightClick}
                       userSettings={settings}
+                      highlighted={holdPreview.has(`${i},${j}`)}
+                      onHoldPreviewStart={handleHoldPreviewStart}
+                      onHoldPreviewClear={handleHoldPreviewClear}
                     />
                   );
                 });
@@ -308,6 +369,9 @@ interface TileProps {
   onLeftClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   userSettings?: UserSettings | undefined;
+  highlighted: boolean;
+  onHoldPreviewStart: (i: number, j: number) => void;
+  onHoldPreviewClear: () => void;
 }
 
 const Tile = ({
@@ -319,6 +383,9 @@ const Tile = ({
   onRightClick,
   onLeftClick,
   userSettings,
+  highlighted,
+  onHoldPreviewStart,
+  onHoldPreviewClear,
 }: TileProps) => {
   const resolveSprite = useCallback(
     (lt: LoadedTexture) => {
@@ -346,8 +413,9 @@ const Tile = ({
     : false;
   const isFlagged = game.isFlagged[i][j];
   const isQuestionMark = game.isQuestionMark[i][j];
+  const showAsPreview = !!highlighted;
   const base =
-    isRevealed || (isMine && !isFlagged) ? (
+    isRevealed || (isMine && !isFlagged) || showAsPreview ? (
       <pixiSprite key="b" texture={resolveSprite(theme.revealed)} />
     ) : (
       <pixiSprite key="b" texture={resolveSprite(theme.tile)} />
@@ -392,7 +460,9 @@ const Tile = ({
     [scale, theme.size],
   );
   let content: ReactNode = null;
-  if (isFlagged) {
+  if (showAsPreview) {
+    content = null;
+  } else if (isFlagged) {
     content = (
       <pixiSprite key="c" texture={resolveSprite(theme.flag)} {...baseProps} />
     );
@@ -427,6 +497,7 @@ const Tile = ({
       }}
       onPointerUp={(e: FederatedPointerEvent) => {
         if (e.button !== 0) return;
+        onHoldPreviewClear?.();
         if (isMove.current) return;
         if (Date.now() - touchStart.current > 300) {
           onRightClick(i, j);
@@ -435,10 +506,14 @@ const Tile = ({
         }
       }}
       onPointerDown={(e: FederatedPointerEvent) => {
+        if (e.button !== 0) return;
         isMove.current = false;
         touchStart.current = Date.now();
         startX.current = e.global.x;
         startY.current = e.global.y;
+        if (e.pointerType === "mouse" && onHoldPreviewStart) {
+          onHoldPreviewStart(i, j);
+        }
       }}
       onPointerEnter={() => {
         setCursorX(i);
@@ -450,6 +525,7 @@ const Tile = ({
           Math.abs(startY.current - e.global.y) > 10
         ) {
           isMove.current = true;
+          onHoldPreviewClear?.();
         }
       }}
     >
