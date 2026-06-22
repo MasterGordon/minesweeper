@@ -51,7 +51,22 @@ const getNewMinesCount = (width: number, height: number, stage: number) => {
   return newMinesCount;
 };
 
+// On a win every unrevealed tile is guaranteed to be a mine, so auto-flag them
+// all. expandBoard copies isFlagged into the new board, so these persist.
+const flagRemaining = (serverGame: ServerGame) => {
+  const { width, height, isRevealed, isFlagged, isQuestionMark } = serverGame;
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < height; j++) {
+      if (!isRevealed[i][j]) {
+        isFlagged[i][j] = true;
+        isQuestionMark[i][j] = false;
+      }
+    }
+  }
+};
+
 const expandBoard = (serverGame: ServerGame) => {
+  flagRemaining(serverGame);
   const { width, height, stage, mines, isFlagged, isRevealed, isQuestionMark } =
     serverGame;
   let dir = stage % 2 === 0 ? "down" : "right";
