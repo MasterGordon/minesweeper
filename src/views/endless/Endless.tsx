@@ -146,7 +146,16 @@ const Endless: React.FC<EndlessProps> = (props) => {
             <Fragment key={i}>
               <div className="p-4 text-white/80 text-right">{i + 1}.</div>
               <div className="p-4 text-white/90">
-                {leaderboard?.[i]?.user ?? "No User"}
+                {leaderboard?.[i]?.user ? (
+                  <Link
+                    href={`/profile/${leaderboard[i].user}`}
+                    className="hover:text-purple-400 transition-colors"
+                  >
+                    {leaderboard[i].user}
+                  </Link>
+                ) : (
+                  "No User"
+                )}
               </div>
               <div className="p-4 text-white/90">
                 Stage {leaderboard?.[i]?.stage ?? 0}

@@ -1,13 +1,16 @@
 import { Link } from "wouter";
 import type { ServerGame } from "../../shared/game";
+import { getRewards } from "../../shared/game";
 import { formatRelativeTime, formatTimeSpan } from "../../shared/time";
 import { Button } from "./Button";
+import GemsIcon from "./GemIcon";
 
 interface PastMatchProps {
   game: ServerGame;
 }
 
 const PastMatch = ({ game }: PastMatchProps) => {
+  const gems = getRewards(game);
   return (
     <div className="flex flex-col gap-4 items-center w-full @container">
       <div className="w-full bg-white/10 border-white/20 border-1 rounded-md grid justify-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
@@ -22,6 +25,9 @@ const PastMatch = ({ game }: PastMatchProps) => {
           <div>
             Mines Remaining:{" "}
             {game.minesCount - game.isFlagged.flat().filter((f) => f).length}
+          </div>
+          <div>
+            Gems Earned: {gems} <GemsIcon />
           </div>
         </div>
         <div className="text-white/80 text-lg hidden lg:block">

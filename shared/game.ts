@@ -20,6 +20,13 @@ export const getValue = (mines: boolean[][], x: number, y: number) => {
   return neighbors.filter((n) => n).length;
 };
 
+export const getRewards = (serverGame: Pick<ServerGame, "finished" | "stage">) => {
+  const { finished, stage } = serverGame;
+  if (finished == 0) return 0;
+  if (stage < 2) return 0;
+  return Math.floor(Math.pow(2, stage * 0.975) + stage * 2 + 3);
+};
+
 export const serverToClientGame = (game: ServerGame): ClientGame => {
   return {
     user: game.user,

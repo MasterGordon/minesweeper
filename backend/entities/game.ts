@@ -1,4 +1,4 @@
-import { getValue } from "../../shared/game";
+import { getValue, getRewards } from "../../shared/game";
 import type { ServerGame } from "../../shared/game";
 
 interface CreateGameOptions {
@@ -31,14 +31,14 @@ const getNeighborFlagCount = (game: ServerGame, x: number, y: number) => {
 };
 
 const hasWon = (serverGame: ServerGame) => {
-  const { mines, isRevealed, isFlagged, finished, width, height } = serverGame;
+  const { mines, isRevealed, finished, width, height } = serverGame;
   if (finished) return false;
 
+  // Win as soon as every safe (non-mine) tile is revealed. Remaining
+  // unrevealed tiles must all be mines, so flagging them is not required.
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
-      if (!isRevealed[i][j] && !isFlagged[i][j]) return false;
-      if (mines[i][j] && !isFlagged[i][j]) return false;
-      if (isFlagged[i][j] && !mines[i][j]) return false;
+      if (!mines[i][j] && !isRevealed[i][j]) return false;
     }
   }
 
@@ -314,10 +314,5 @@ export const game = {
       expandBoard(serverGame);
     }
   },
-  getRewards: (serverGame: ServerGame) => {
-    const { finished, stage } = serverGame;
-    if (finished == 0) return 0;
-    if (stage < 2) return 0;
-    return Math.floor(Math.pow(2, stage * 0.975) + stage * 2 + 3);
-  },
+  getRewards,
 };
