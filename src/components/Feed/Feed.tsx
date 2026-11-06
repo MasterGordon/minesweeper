@@ -26,7 +26,7 @@ const Feed: React.FC = () => {
       if (data.type === "new" && data.user !== user) {
         // Remove any existing gameStarted items for this user
         const filteredItems = newItems.filter(
-          item => !(item.type === "gameStarted" && item.user === data.user)
+          (item) => !(item.type === "gameStarted" && item.user === data.user),
         );
         filteredItems.push({
           type: "gameStarted",
@@ -70,10 +70,13 @@ const Feed: React.FC = () => {
         await new Promise((res) => setTimeout(res, 2_000));
       }
       if (data.type === "lootboxPurchased" && data.user === user) {
-        setLootboxResult({
-          lootbox: data.lootbox,
-          result: data.reward,
-        });
+        setLootboxResult((prev) => [
+          ...(prev ?? []),
+          {
+            lootbox: data.lootbox,
+            result: data.reward,
+          },
+        ]);
       }
       setItems(newItems);
     };

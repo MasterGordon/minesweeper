@@ -15,15 +15,23 @@ import { Rarity } from "../../components/Rarity";
 import { lootboxResultAtom } from "../../atoms";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { initParticlesEngine, Particles as ParticlesComponent } from "@tsparticles/react";
+import {
+  initParticlesEngine,
+  Particles as ParticlesComponent,
+} from "@tsparticles/react";
 import { motion } from "motion/react";
 import BounceImg from "../../components/BounceImg";
 import RegisterButton from "../../components/Auth/RegisterButton";
 
+const formatNumber = (value: number) =>
+  new Intl.NumberFormat("de-DE").format(value);
+
 const Store = () => {
   const openLootbox = useWSMutation("user.openLootbox");
   const [lootboxResult, setLootboxResult] = useAtom(lootboxResultAtom);
-  const currentLootbox = lootboxes.find((l) => l.id === lootboxResult?.lootbox);
+  const currentLootbox = lootboxes.find(
+    (l) => l.id === lootboxResult?.find((r) => r.lootbox === l.id)?.lootbox,
+  );
   const { data: username } = useWSQuery("user.getSelf", null);
   const { refetch } = useWSQuery("user.getOwnGems", null);
 
@@ -79,16 +87,19 @@ const Store = () => {
               }}
               transition={{ type: "spring", duration: 5 }}
             >
-              <Rarity
-                // @ts-expect-error Don't care
-                rarity={
-                  currentLootbox?.items.find(
-                    (i) => i.id == lootboxResult?.result,
-                  )?.rarity
-                }
-              >
-                {themes.find((t) => t.id === lootboxResult?.result)?.name}
-              </Rarity>
+              <div className="flex flex-col items-center gap-4 pointer-events-none">
+                {lootboxResult?.map((result) => (
+                  <Rarity
+                    // @ts-expect-error Don't care
+                    rarity={
+                      currentLootbox?.items.find((i) => i.id == result?.result)
+                        ?.rarity
+                    }
+                  >
+                    {themes.find((t) => t.id === result?.result)?.name}
+                  </Rarity>
+                ))}
+              </div>
             </motion.div>
           </div>
         </DialogContent>
@@ -187,18 +198,33 @@ const Store = () => {
                 </div>
                 <BounceImg src={lootbox.image} className="w-[360px]" />
                 {username ? (
-                  <Button
-                    variant="outline"
-                    size="default"
-                    className="mx-auto items-center"
-                    onClick={() => {
-                      openLootbox
-                        .mutateAsync({ id: lootbox.id })
-                        .then(() => refetch());
-                    }}
-                  >
-                    Buy for <b>{lootbox.priceText}</b> <GemsIcon />
-                  </Button>
+                  <div className="flex flex-row gap-2 mt-4">
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="mx-auto items-center text-nowrap"
+                      onClick={() => {
+                        openLootbox
+                          .mutateAsync({ id: lootbox.id })
+                          .then(() => refetch());
+                      }}
+                    >
+                      Buy for <b>{formatNumber(lootbox.price)}</b> <GemsIcon />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="mx-auto items-center text-nowrap"
+                      onClick={() => {
+                        openLootbox
+                          .mutateAsync({ id: lootbox.id, amount: 10 })
+                          .then(() => refetch());
+                      }}
+                    >
+                      Buy 10 for <b>{formatNumber(lootbox.price * 10)}</b>{" "}
+                      <GemsIcon />
+                    </Button>
+                  </div>
                 ) : (
                   <div className="flex justify-center">
                     <RegisterButton label="Login to Buy" />

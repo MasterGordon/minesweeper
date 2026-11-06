@@ -14,7 +14,7 @@ interface LootboxResult {
   result: string;
   lootbox: string;
 }
-export const lootboxResultAtom = atom<LootboxResult | undefined>();
+export const lootboxResultAtom = atom<LootboxResult[] | undefined>();
 
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'reconnecting';
 export const connectionStatusAtom = atom<ConnectionStatus>('connecting');

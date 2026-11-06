@@ -145,8 +145,9 @@ export const userController = createController({
   openLootbox: createEndpoint(
     z.object({
       id: z.string(),
+      amount: z.number().optional().default(1),
     }),
-    async ({ id }, { db, user }) => {
+    async ({ id, amount }, { db, user }) => {
       if (!user) throw new UnauthorizedError("Unauthorized");
       const collection = await getCollection(db, user);
       const lootbox = lootboxes.find((l) => l.id === id);
@@ -162,21 +163,26 @@ export const userController = createController({
       if (itemsCopy.length === 0) {
         throw new Error("No items left");
       }
-      await removeGems(db, user, lootbox.price);
-      const result = weightedPickRandom(itemsCopy, (i) => getWeight(i.rarity));
-      collection.entries.push({
-        id: result.id,
-        aquired: Date.now(),
-        selected: false,
-      });
-      await upsertCollection(db, user, collection);
-      emit({
-        type: "lootboxPurchased",
-        user,
-        lootbox: lootbox.id,
-        reward: result.id,
-        rarity: result.rarity,
-      });
+
+      let result;
+      for (let i = 0; i < amount; i++) {
+        await removeGems(db, user, lootbox.price);
+        result = weightedPickRandom(itemsCopy, (i) => getWeight(i.rarity));
+        collection.entries.push({
+          id: result.id,
+          aquired: Date.now(),
+          selected: false,
+        });
+
+        await upsertCollection(db, user, collection);
+        emit({
+          type: "lootboxPurchased",
+          user,
+          lootbox: lootbox.id,
+          reward: result.id,
+          rarity: result.rarity,
+        });
+      }
     },
   ),
   getHeatmap: createEndpoint(
