@@ -1,5 +1,5 @@
-import { useCallback, useRef } from 'react';
-import { useWSQuery } from '../hooks';
+import { useCallback, useRef } from "react";
+import { useWSQuery } from "../hooks";
 
 interface AudioOptions {
   volume?: number;
@@ -21,11 +21,11 @@ export const useAudio = (src: string, options: AudioOptions = {}) => {
       audioRef.current.volume = options.volume ?? 1;
       audioRef.current.loop = options.loop ?? false;
     }
-    
+
     // Reset to beginning and play
     audioRef.current.currentTime = 0;
     audioRef.current.play().catch((error) => {
-      console.warn('Audio play failed:', error);
+      console.warn("Audio play failed:", error);
     });
   }, [src, options.volume, options.loop, settings]);
 

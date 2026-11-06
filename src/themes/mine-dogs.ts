@@ -7,7 +7,7 @@ export const mineDogsTheme: Theme = {
   revealed: () => import("../assets/themes/mine-dogs/revealed.png"),
   flag: even(
     () => import("../assets/themes/mine-dogs/flag-1.png"),
-    () => import("../assets/themes/mine-dogs/flag-2.png")
+    () => import("../assets/themes/mine-dogs/flag-2.png"),
   ),
   questionMark: () => import("../assets/themes/mine-dogs/question-mark.png"),
   lastPos: () => import("../assets/themes/mine-dogs/last-pos.png"),

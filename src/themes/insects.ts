@@ -4,7 +4,7 @@ export const insectsTheme: Theme = {
   size: 32,
   mine: even(
     () => import("../assets/themes/insects/mine-1.png"),
-    () => import("../assets/themes/insects/mine-2.png")
+    () => import("../assets/themes/insects/mine-2.png"),
   ),
   tile: () => import("../assets/themes/insects/tile.png"),
   revealed: () => import("../assets/themes/insects/revealed.png"),

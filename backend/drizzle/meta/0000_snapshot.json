@@ -54,33 +54,22 @@
       "indexes": {
         "user_idx": {
           "name": "user_idx",
-          "columns": [
-            "user"
-          ],
+          "columns": ["user"],
           "isUnique": false
         },
         "started_idx": {
           "name": "started_idx",
-          "columns": [
-            "timestamp"
-          ],
+          "columns": ["timestamp"],
           "isUnique": false
         },
         "user_started_idx": {
           "name": "user_started_idx",
-          "columns": [
-            "user",
-            "timestamp"
-          ],
+          "columns": ["user", "timestamp"],
           "isUnique": false
         },
         "full_idx": {
           "name": "full_idx",
-          "columns": [
-            "user",
-            "timestamp",
-            "uuid"
-          ],
+          "columns": ["user", "timestamp", "uuid"],
           "isUnique": false
         }
       },
@@ -89,12 +78,8 @@
           "name": "games_user_users_name_fk",
           "tableFrom": "games",
           "tableTo": "users",
-          "columnsFrom": [
-            "user"
-          ],
-          "columnsTo": [
-            "name"
-          ],
+          "columnsFrom": ["user"],
+          "columnsTo": ["name"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

@@ -164,4 +164,3 @@ const StaticBoardPreview: React.FC<StaticBoardPreviewProps> = ({
 };
 
 export default StaticBoardPreview;
-

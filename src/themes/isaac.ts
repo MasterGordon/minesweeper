@@ -5,7 +5,7 @@ export const isaacTheme: Theme = {
   mine: even(
     () => import("../assets/themes/isaac/mine-1.png"),
     () => import("../assets/themes/isaac/mine-2.png"),
-    () => import("../assets/themes/isaac/mine-3.png")
+    () => import("../assets/themes/isaac/mine-3.png"),
   ),
   tile: () => import("../assets/themes/isaac/tile.png"),
   revealed: () => import("../assets/themes/isaac/revealed.png"),

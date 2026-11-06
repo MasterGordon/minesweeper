@@ -85,7 +85,7 @@ describe("ScoreRepository", () => {
     const result = await getScoreBoard(db);
     expect(result).toEqual([
       { stage: 25, user: "User2" },
-      { stage: 15, user: "User1" }
+      { stage: 15, user: "User1" },
     ]);
   });
 });

@@ -63,7 +63,9 @@ const RegisterButton = ({ label }: { label?: string }) => {
             }}
             className="text-sm text-white/60 hover:text-white/80"
           >
-            {isLoginMode ? "Need an account? Register" : "Already have an account? Login"}
+            {isLoginMode
+              ? "Need an account? Register"
+              : "Already have an account? Login"}
           </Button>
         </div>
         <DialogFooter>

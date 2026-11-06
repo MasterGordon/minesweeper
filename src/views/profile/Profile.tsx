@@ -172,7 +172,8 @@ const Profile: React.FC<ProfileProps> = ({ username: targetUsername }) => {
           <p>Total Games: {profile?.totalGames}</p>
           <p>Highest Stage: {profile?.highestStage}</p>
           <p>
-            Average Stage: {Math.round((profile?.averageStage ?? 1) * 100) / 100}
+            Average Stage:{" "}
+            {Math.round((profile?.averageStage ?? 1) * 100) / 100}
           </p>
           <p>
             Gems Spend:{" "}
@@ -182,9 +183,9 @@ const Profile: React.FC<ProfileProps> = ({ username: targetUsername }) => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {pastGames?.data
-          .slice(0, 4)
-          .map((game) => <PastMatch key={game.uuid} game={game} />)}
+        {pastGames?.data.slice(0, 4).map((game) => (
+          <PastMatch key={game.uuid} game={game} />
+        ))}
       </div>
       {heatmap && (
         <div className="col-span-full mb-8">

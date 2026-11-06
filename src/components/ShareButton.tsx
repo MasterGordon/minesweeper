@@ -6,7 +6,10 @@ interface ShareButtonProps {
   className?: string;
 }
 
-export const ShareButton: React.FC<ShareButtonProps> = ({ gameId, className }) => {
+export const ShareButton: React.FC<ShareButtonProps> = ({
+  gameId,
+  className,
+}) => {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {

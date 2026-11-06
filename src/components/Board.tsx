@@ -70,7 +70,12 @@ interface ViewportInfo {
 
 const toViewportInfo = (viewport: PixiViewport | null) => {
   // Viewport or its properties may be null during mount/unmount transitions
-  if (!viewport || viewport.destroyed || viewport.x == null || viewport.y == null) {
+  if (
+    !viewport ||
+    viewport.destroyed ||
+    viewport.x == null ||
+    viewport.y == null
+  ) {
     return null;
   }
   return {
@@ -82,9 +87,14 @@ const toViewportInfo = (viewport: PixiViewport | null) => {
 };
 
 const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number]> = [
-  [-1, -1], [0, -1], [1, -1],
-  [-1, 0], [1, 0],
-  [-1, 1], [0, 1], [1, 1],
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [-1, 0],
+  [1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
 ];
 
 const EMPTY_PREVIEW: ReadonlySet<string> = new Set();
@@ -246,11 +256,11 @@ const Board: React.FC<BoardProps> = (props) => {
       (props.width || props.height
         ? { left: 0, right: boardWidth, top: 0, bottom: boardHeight }
         : {
-          left: -theme.size,
-          right: boardWidth + theme.size,
-          top: -theme.size,
-          bottom: boardHeight + theme.size,
-        }),
+            left: -theme.size,
+            right: boardWidth + theme.size,
+            top: -theme.size,
+            bottom: boardHeight + theme.size,
+          }),
     [boardHeight, boardWidth, props.height, props.width, theme],
   );
   const clampZoom = useMemo(

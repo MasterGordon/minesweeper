@@ -4,7 +4,7 @@ export const catsTheme: Theme = {
   size: 32,
   mine: even(
     () => import("../assets/themes/cats/mine-1.png"),
-    () => import("../assets/themes/cats/mine-2.png")
+    () => import("../assets/themes/cats/mine-2.png"),
   ),
   tile: () => import("../assets/themes/cats/tile.png"),
   revealed: () => import("../assets/themes/cats/revealed.png"),

@@ -1,5 +1,12 @@
 import { describe, it, expect } from "bun:test";
-import { getValue, isServerGame, isClientGame, ServerGame, ClientGame, serverToClientGame } from "./game";
+import {
+  getValue,
+  isServerGame,
+  isClientGame,
+  ServerGame,
+  ClientGame,
+  serverToClientGame,
+} from "./game";
 
 describe("Game", () => {
   it("should get value", () => {

@@ -44,8 +44,8 @@ export const handleRequest = async (
   if (!(typeof type === "string")) return;
 
   // Handle ping message
-  if (type === 'ping') {
-    ws.send(JSON.stringify({ type: 'pong', id }));
+  if (type === "ping") {
+    ws.send(JSON.stringify({ type: "pong", id }));
     return;
   }
 

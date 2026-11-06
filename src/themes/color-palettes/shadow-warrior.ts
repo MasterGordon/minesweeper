@@ -11,9 +11,7 @@ export const shadowWarriorTheme: Theme = {
   flag: () =>
     import("../../assets/themes/color-palettes/shadow-warrior/flag.png"),
   questionMark: () =>
-    import(
-      "../../assets/themes/color-palettes/shadow-warrior/question-mark.png"
-    ),
+    import("../../assets/themes/color-palettes/shadow-warrior/question-mark.png"),
   lastPos: () =>
     import("../../assets/themes/color-palettes/shadow-warrior/last-pos.png"),
   1: () => import("../../assets/themes/color-palettes/shadow-warrior/1.png"),

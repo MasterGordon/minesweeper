@@ -10,7 +10,7 @@ export const rainbowTheme: Theme = {
     () => import("../assets/themes/colors/pink/tile.png"),
     () => import("../assets/themes/colors/red/tile.png"),
     () => import("../assets/themes/colors/turquoise/tile.png"),
-    () => import("../assets/themes/colors/yellow/tile.png")
+    () => import("../assets/themes/colors/yellow/tile.png"),
   ),
   revealed: even(
     () => import("../assets/themes/colors/blue/revealed.png"),
@@ -19,7 +19,7 @@ export const rainbowTheme: Theme = {
     () => import("../assets/themes/colors/pink/revealed.png"),
     () => import("../assets/themes/colors/red/revealed.png"),
     () => import("../assets/themes/colors/turquoise/revealed.png"),
-    () => import("../assets/themes/colors/yellow/revealed.png")
+    () => import("../assets/themes/colors/yellow/revealed.png"),
   ),
   flag: even(
     () => import("../assets/themes/colors/blue/flag.png"),
@@ -28,7 +28,7 @@ export const rainbowTheme: Theme = {
     () => import("../assets/themes/colors/pink/flag.png"),
     () => import("../assets/themes/colors/red/flag.png"),
     () => import("../assets/themes/colors/turquoise/flag.png"),
-    () => import("../assets/themes/colors/yellow/flag.png")
+    () => import("../assets/themes/colors/yellow/flag.png"),
   ),
   questionMark: even(
     () => import("../assets/themes/colors/blue/question-mark.png"),
@@ -37,7 +37,7 @@ export const rainbowTheme: Theme = {
     () => import("../assets/themes/colors/pink/question-mark.png"),
     () => import("../assets/themes/colors/red/question-mark.png"),
     () => import("../assets/themes/colors/turquoise/question-mark.png"),
-    () => import("../assets/themes/colors/yellow/question-mark.png")
+    () => import("../assets/themes/colors/yellow/question-mark.png"),
   ),
   lastPos: () => import("../assets/themes/colors/rainbow/last-pos.png"),
   1: () => import("../assets/themes/colors/blue/1.png"),

@@ -4,12 +4,12 @@ export const techiesRadiantTheme: Theme = {
   size: 32,
   mine: even(
     () => import("../assets/themes/techies/radiant/mine-1.png"),
-    () => import("../assets/themes/techies/radiant/mine-2.png")
+    () => import("../assets/themes/techies/radiant/mine-2.png"),
   ),
   tile: mainWithSpecials(
     () => import("../assets/themes/techies/radiant/tile-1.png"),
     () => import("../assets/themes/techies/radiant/tile-2.png"),
-    () => import("../assets/themes/techies/radiant/tile-3.png")
+    () => import("../assets/themes/techies/radiant/tile-3.png"),
   ),
   revealed: () => import("../assets/themes/techies/radiant/revealed-1.png"),
   flag: () => import("../assets/themes/techies/flag.png"),

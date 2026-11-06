@@ -9,7 +9,7 @@ export const techiesDireTheme: Theme = {
   tile: mainWithSpecials(
     () => import("../assets/themes/techies/dire/tile-1.png"),
     () => import("../assets/themes/techies/dire/tile-2.png"),
-    () => import("../assets/themes/techies/dire/tile-3.png")
+    () => import("../assets/themes/techies/dire/tile-3.png"),
   ),
   revealed: () => import("../assets/themes/techies/dire/revealed.png"),
   flag: () => import("../assets/themes/techies/flag.png"),

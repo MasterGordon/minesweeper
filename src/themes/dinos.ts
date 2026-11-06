@@ -4,7 +4,7 @@ export const dinoTheme: Theme = {
   size: 32,
   mine: even(
     () => import("../assets/themes/dinos/mine-1.png"),
-    () => import("../assets/themes/dinos/mine-2.png")
+    () => import("../assets/themes/dinos/mine-2.png"),
   ),
   tile: () => import("../assets/themes/dinos/tile.png"),
   revealed: () => import("../assets/themes/dinos/revealed-1.png"),

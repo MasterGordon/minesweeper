@@ -7,7 +7,7 @@ export const MLGTheme: Theme = {
   revealed: () => import("../assets/themes/MLG/revealed.png"),
   flag: even(
     () => import("../assets/themes/MLG/flag-1.png"),
-    () => import("../assets/themes/MLG/flag-2.png")
+    () => import("../assets/themes/MLG/flag-2.png"),
   ),
   questionMark: () => import("../assets/themes/MLG/question-mark.png"),
   lastPos: () => import("../assets/themes/MLG/last-pos.png"),

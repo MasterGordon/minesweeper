@@ -40,10 +40,7 @@ interface LootboxPurchasedItem extends BaseFeedItem {
 }
 
 export type FeedItem =
-  | GameStartedItem
-  | GameFinishedItem
-  | GemsEarnedItem
-  | LootboxPurchasedItem;
+  GameStartedItem | GameFinishedItem | GemsEarnedItem | LootboxPurchasedItem;
 
 const FeedItemWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   return (
