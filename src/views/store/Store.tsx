@@ -88,8 +88,9 @@ const Store = () => {
               transition={{ type: "spring", duration: 5 }}
             >
               <div className="flex flex-col items-center gap-4 pointer-events-none">
-                {lootboxResult?.map((result) => (
+                {lootboxResult?.map((result, index) => (
                   <Rarity
+                    key={index}
                     // @ts-expect-error Don't care
                     rarity={
                       currentLootbox?.items.find((i) => i.id == result?.result)
